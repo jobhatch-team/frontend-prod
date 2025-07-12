@@ -1,6 +1,6 @@
 // API Configuration
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.VITE_API_URL || 'https://backend-prod-dun.vercel.app/api'  // JobHatch team backend URL (main domain)
+  ? process.env.VITE_API_URL || 'https://backend-prod-team-jobhatchs-projects.vercel.app/api'  // JobHatch team backend URL (main domain)
   : 'http://localhost:8000/api';  // In development, direct backend connection
 
 export const API_ENDPOINTS = {
@@ -12,6 +12,9 @@ export const API_ENDPOINTS = {
   aiResume: `${API_BASE_URL}/ai_resume`, 
   aiCoverLetter: `${API_BASE_URL}/ai_cover_letter`,
   ai: `${API_BASE_URL}/ai`,
+  waitlist: `${API_BASE_URL}/waitlist`,
+  jobs: `${API_BASE_URL}/jobs`,
+  health: `${API_BASE_URL}/health`,
 };
 
 export default API_BASE_URL; 

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { API_ENDPOINTS } from '../../config/api';
 
 export interface Job {
   id: number;
@@ -44,7 +45,7 @@ export const thunkCreateJob = createAsyncThunk<
   Partial<Job>,
   { rejectValue: Record<string, string> }
 >('jobs/create', async (jobData, { rejectWithValue }) => {
-  const response = await fetch('/api/jobs/', {
+  const response = await fetch(API_ENDPOINTS.jobs, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -61,7 +62,7 @@ export const thunkCreateJob = createAsyncThunk<
 export const thunkFetchJobs = createAsyncThunk<Job[]>(
   'jobs/fetchAll',
   async () => {
-    const response = await fetch('/api/jobs/');
+    const response = await fetch(API_ENDPOINTS.jobs);
     const data = await response.json();
     return data.jobs;
   }
@@ -71,7 +72,7 @@ export const thunkFetchJobs = createAsyncThunk<Job[]>(
 export const thunkFetchJob = createAsyncThunk<Job, number>(
   'jobs/fetchOne',
   async (id) => {
-    const response = await fetch(`/api/jobs/${id}`);
+    const response = await fetch(`${API_ENDPOINTS.jobs}/${id}`);
     return await response.json();
   }
 );
@@ -82,7 +83,7 @@ export const thunkUpdateJob = createAsyncThunk<
   { id: number; updates: Partial<Job> },
   { rejectValue: Record<string, string> }
 >('jobs/update', async ({ id, updates }, { rejectWithValue }) => {
-  const response = await fetch(`/api/jobs/${id}`, {
+  const response = await fetch(`${API_ENDPOINTS.jobs}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -99,7 +100,7 @@ export const thunkUpdateJob = createAsyncThunk<
 export const thunkDeleteJob = createAsyncThunk<number, number>(
   'jobs/delete',
   async (id) => {
-    await fetch(`/api/jobs/${id}`, {
+    await fetch(`${API_ENDPOINTS.jobs}/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });

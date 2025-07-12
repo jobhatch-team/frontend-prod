@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_ENDPOINTS } from '../config/api';
 
 const ProfileCreationPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const ProfileCreationPage: React.FC = () => {
   const handleSubmit = async () => {
     try {
       // Create/update profile
-      const profileResponse = await fetch('/api/profiles', {
+      const profileResponse = await fetch(API_ENDPOINTS.profiles, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

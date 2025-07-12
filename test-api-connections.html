@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHatch API Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-width: 100px;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .endpoint-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .endpoint-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+        .endpoint-method {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .endpoint-url {
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 JobHatch API Connection Test</h1>
+        <p>This tool tests all frontend-to-backend API connections to ensure they work correctly.</p>
+        
+        <div class="info test-result">
+            <strong>Backend URL:</strong> <span id="backend-url"></span>
+            <br><strong>Test Time:</strong> <span id="test-time"></span>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="total-tests">0</div>
+                <div>Total Tests</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="passed-tests">0</div>
+                <div>Passed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="failed-tests">0</div>
+                <div>Failed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="success-rate">0%</div>
+                <div>Success Rate</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <button onclick="runAllTests()">🧪 Run All Tests</button>
+            <button onclick="runQuickTest()">⚡ Quick Test</button>
+            <button onclick="clearResults()">🗑️ Clear Results</button>
+        </div>
+
+        <div class="test-section">
+            <h2>📋 API Endpoints</h2>
+            <div class="endpoint-list" id="endpoint-list"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 Test Results</h2>
+            <div id="test-results"></div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'https://backend-prod-team-jobhatchs-projects.vercel.app/api';
+        
+        const API_ENDPOINTS = {
+            health: `${API_BASE_URL}/health`,
+            waitlist: `${API_BASE_URL}/waitlist`,
+            jobs: `${API_BASE_URL}/jobs`,
+            resumes: `${API_BASE_URL}/resumes`,
+            auth: `${API_BASE_URL}/auth`,
+            onboarding: `${API_BASE_URL}/onboarding`,
+            profiles: `${API_BASE_URL}/profiles`,
+            aiResume: `${API_BASE_URL}/ai_resume`,
+            aiCoverLetter: `${API_BASE_URL}/ai_cover_letter`,
+            ai: `${API_BASE_URL}/ai`,
+            docs: `${API_BASE_URL}/docs`,
+            test: `${API_BASE_URL}/test`,
+            deploymentTest: `${API_BASE_URL}/deployment-test`,
+        };
+
+        // Test configurations
+        const TESTS = [
+            // Critical health checks
+            { name: 'Health Check', url: API_ENDPOINTS.health, method: 'GET', critical: true },
+            { name: 'Deployment Test', url: API_ENDPOINTS.deploymentTest, method: 'GET', critical: true },
+            { name: 'API Test', url: API_ENDPOINTS.test, method: 'GET', critical: true },
+            
+            // Main functionality
+            { name: 'Waitlist Endpoint', url: API_ENDPOINTS.waitlist, method: 'GET', critical: true },
+            { name: 'Jobs Listing', url: API_ENDPOINTS.jobs, method: 'GET', critical: true },
+            { name: 'Authentication', url: API_ENDPOINTS.auth, method: 'GET', critical: false },
+            { name: 'Onboarding', url: API_ENDPOINTS.onboarding, method: 'GET', critical: false },
+            { name: 'Profiles', url: API_ENDPOINTS.profiles, method: 'GET', critical: false },
+            { name: 'Resumes', url: API_ENDPOINTS.resumes, method: 'GET', critical: false },
+            
+            // AI endpoints
+            { name: 'AI General', url: API_ENDPOINTS.ai, method: 'GET', critical: false },
+            
+            // Documentation
+            { name: 'API Documentation', url: API_ENDPOINTS.docs, method: 'GET', critical: false },
+        ];
+
+        let testResults = [];
+        let isRunning = false;
+
+        function initialize() {
+            document.getElementById('backend-url').textContent = API_BASE_URL;
+            document.getElementById('test-time').textContent = new Date().toLocaleString();
+            displayEndpoints();
+        }
+
+        function displayEndpoints() {
+            const container = document.getElementById('endpoint-list');
+            container.innerHTML = '';
+            
+            TESTS.forEach(test => {
+                const item = document.createElement('div');
+                item.className = 'endpoint-item';
+                item.innerHTML = `
+                    <div class="endpoint-method">${test.method}</div>
+                    <div class="endpoint-url">${test.url}</div>
+                    <div style="font-size: 12px; color: ${test.critical ? '#dc3545' : '#28a745'};">
+                        ${test.critical ? 'Critical' : 'Optional'}
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        async function testEndpoint(test) {
+            try {
+                const startTime = Date.now();
+                
+                const response = await fetch(test.url, {
+                    method: test.method,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+
+                let responseData;
+                try {
+                    responseData = await response.json();
+                } catch (e) {
+                    responseData = await response.text();
+                }
+
+                const result = {
+                    test: test.name,
+                    url: test.url,
+                    method: test.method,
+                    success: response.ok,
+                    status: response.status,
+                    responseTime: responseTime,
+                    data: responseData,
+                    critical: test.critical,
+                    timestamp: new Date().toISOString()
+                };
+
+                return result;
+            } catch (error) {
+                return {
+                    test: test.name,
+                    url: test.url,
+                    method: test.method,
+                    success: false,
+                    status: 0,
+                    responseTime: 0,
+                    error: error.message,
+                    critical: test.critical,
+                    timestamp: new Date().toISOString()
+                };
+            }
+        }
+
+        function displayResult(result) {
+            const container = document.getElementById('test-results');
+            const div = document.createElement('div');
+            div.className = `test-result ${result.success ? 'success' : 'error'}`;
+            
+            const icon = result.success ? '✅' : '❌';
+            const statusText = result.success ? 'PASS' : 'FAIL';
+            
+            div.innerHTML = `
+${icon} ${statusText} - ${result.test} (${result.responseTime}ms)
+URL: ${result.url}
+Status: ${result.status}
+Time: ${result.timestamp}
+${result.success ? 
+    `Response: ${JSON.stringify(result.data, null, 2)}` : 
+    `Error: ${result.error || 'HTTP ' + result.status}`
+}
+            `;
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateStats() {
+            const total = testResults.length;
+            const passed = testResults.filter(r => r.success).length;
+            const failed = total - passed;
+            const successRate = total > 0 ? Math.round((passed / total) * 100) : 0;
+
+            document.getElementById('total-tests').textContent = total;
+            document.getElementById('passed-tests').textContent = passed;
+            document.getElementById('failed-tests').textContent = failed;
+            document.getElementById('success-rate').textContent = successRate + '%';
+        }
+
+        async function runAllTests() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            testResults = [];
+            clearResults();
+            
+            const container = document.getElementById('test-results');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'test-result loading';
+            loadingDiv.textContent = '🔄 Running tests...';
+            container.appendChild(loadingDiv);
+            
+            try {
+                for (const test of TESTS) {
+                    const result = await testEndpoint(test);
+                    testResults.push(result);
+                    displayResult(result);
+                    updateStats();
+                    
+                    // Small delay between tests
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+            } finally {
+                container.removeChild(loadingDiv);
+                isRunning = false;
+                
+                // Final summary
+                const summary = document.createElement('div');
+                summary.className = 'test-result info';
+                const criticalFailed = testResults.filter(r => r.critical && !r.success).length;
+                summary.innerHTML = `
+🏁 Testing Complete!
+Total Tests: ${testResults.length}
+Passed: ${testResults.filter(r => r.success).length}
+Failed: ${testResults.filter(r => !r.success).length}
+Critical Failures: ${criticalFailed}
+
+${criticalFailed > 0 ? 
+    '⚠️ Critical endpoints failed! Frontend may not work properly.' : 
+    '🎉 All critical endpoints working! Frontend should work correctly.'
+}
+                `;
+                container.appendChild(summary);
+            }
+        }
+
+        async function runQuickTest() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            testResults = [];
+            clearResults();
+            
+            const criticalTests = TESTS.filter(t => t.critical);
+            
+            try {
+                for (const test of criticalTests) {
+                    const result = await testEndpoint(test);
+                    testResults.push(result);
+                    displayResult(result);
+                    updateStats();
+                }
+            } finally {
+                isRunning = false;
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+            testResults = [];
+            updateStats();
+        }
+
+        // Initialize on page load
+        window.onload = initialize;
+    </script>
+</body>
+</html> 

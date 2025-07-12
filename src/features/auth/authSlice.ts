@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import API_BASE_URL from '../../config/api';
+import API_BASE_URL, { debugFetch } from '../../config/api';
 
 interface User {
   id: number;
@@ -48,25 +48,31 @@ export const thunkLogin = createAsyncThunk<
   { rejectValue: Record<string, string> }
 >('auth/login', async (credentials, { rejectWithValue }) => {
   try {
+    console.log('[AUTH-LOGIN] Starting login process', { email: credentials.email });
+    
     // Ensure CSRF token is available
     await ensureCSRFToken();
     
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await debugFetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', 
       body: JSON.stringify(credentials),
     });
 
     if (response.ok) {
-      return await response.json();
+      const userData = await response.json();
+      console.log('[AUTH-LOGIN] ✅ Login successful', userData);
+      return userData;
     } else if (response.status < 500) {
       const data = await response.json();
+      console.log('[AUTH-LOGIN] ❌ Login failed (client error)', data);
       return rejectWithValue(data);
     } else {
+      console.log('[AUTH-LOGIN] ❌ Login failed (server error)', response.status);
       return rejectWithValue({ server: 'Something went wrong. Please try again' });
     }
   } catch (error) {
+    const err = error as Error;
+    console.error('[AUTH-LOGIN] ❌ Network error', err);
     return rejectWithValue({ server: 'Network error. Please try again.' });
   }
 });
@@ -135,20 +141,20 @@ export const thunkAuthenticate = createAsyncThunk<User | null>(
   'auth/authenticate',
   async () => {
     try {
-      console.log('Authenticating against:', `${API_BASE_URL}/auth/`);
-      const response = await fetch(`${API_BASE_URL}/auth/`, {
-        credentials: 'include',  
-      });
-      console.log('Authentication response status:', response.status);
+      console.log('[AUTH-AUTHENTICATE] Starting authentication check');
+      const response = await debugFetch(`${API_BASE_URL}/auth/`);
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Authentication response data:', data);
+        console.log('[AUTH-AUTHENTICATE] ✅ Authentication successful', data);
         return data.errors ? null : data;
+      } else {
+        console.log('[AUTH-AUTHENTICATE] ❌ Authentication failed', response.status);
+        return null;
       }
-      return null;
     } catch (error) {
-      console.error('Authentication error:', error);
+      const err = error as Error;
+      console.error('[AUTH-AUTHENTICATE] ❌ Authentication error', err);
       return null;
     }
   }

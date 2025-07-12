@@ -22,12 +22,25 @@ const OnboardingFlow: React.FC = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [isWaitlistUser, setIsWaitlistUser] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user, status } = useAppSelector((state) => state.auth);
 
-  // Check authentication status on component mount
+  // Check if user is coming from waitlist
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromWaitlist = urlParams.get('from') === 'waitlist';
+    const isWaitlistMode = document.referrer.includes('waitlist') || fromWaitlist;
+    
+    if (isWaitlistMode) {
+      setIsWaitlistUser(true);
+      setIsAuthenticating(false);
+      console.log('Waitlist user detected, skipping authentication check');
+      return;
+    }
+    
+    // Continue with normal authentication check for non-waitlist users
     const checkAuth = async () => {
       try {
         const result = await dispatch(thunkAuthenticate());
@@ -49,13 +62,13 @@ const OnboardingFlow: React.FC = () => {
     checkAuth();
   }, [dispatch, navigate]);
 
-  // Redirect to login if not authenticated
+  // Redirect to login if not authenticated (except for waitlist users)
   useEffect(() => {
-    if (!isAuthenticating && !user) {
+    if (!isAuthenticating && !user && !isWaitlistUser) {
       console.log('No user found, redirecting to login...');
       navigate('/login');
     }
-  }, [isAuthenticating, user, navigate]);
+  }, [isAuthenticating, user, isWaitlistUser, navigate]);
 
   const userTypes: UserTypeOption[] = [
     {
@@ -146,6 +159,23 @@ const OnboardingFlow: React.FC = () => {
     setIsLoading(true);
     try {
       console.log('Saving onboarding data:', { selectedUserType, selectedInterests });
+
+      // For waitlist users, save locally and navigate to waitlist completion
+      if (isWaitlistUser) {
+        console.log('Waitlist user - saving preferences locally');
+        localStorage.setItem('waitlist_preferences', JSON.stringify({
+          userType: selectedUserType,
+          interests: selectedInterests,
+          timestamp: new Date().toISOString()
+        }));
+        
+        // Navigate to a waitlist-specific completion or webapp
+        console.log('Waitlist user onboarding completed, redirecting to webapp');
+        navigate('/webapp?from=waitlist');
+        return;
+      }
+
+      // For authenticated users, save to backend
       console.log('API endpoint:', `${API_ENDPOINTS.onboarding}/user-type`);
       
       // Save user type
@@ -193,8 +223,8 @@ const OnboardingFlow: React.FC = () => {
       // Navigate to the next step in the onboarding flow
       navigate('/onboarding/upload');
     } catch (error) {
-      console.error('Onboarding error:', error);
-      alert(`Error during onboarding: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('Error saving onboarding data:', error);
+      alert('An error occurred while saving your preferences. Please try again.');
     } finally {
       setIsLoading(false);
     }

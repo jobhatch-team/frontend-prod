@@ -13,6 +13,7 @@ export default function WaitlistEmailForm() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [debugInfo, setDebugInfo] = useState<any[]>([]);
+  const [countdown, setCountdown] = useState(3);
 
   // Enhanced logging function
   const logWaitlist = (message: string, data?: any) => {
@@ -21,6 +22,25 @@ export default function WaitlistEmailForm() {
     console.log(`[WAITLIST-FORM ${timestamp}] ${message}`, data || '');
     setDebugInfo(prev => [...prev, logEntry]);
   };
+
+  // Countdown and redirect effect
+  React.useEffect(() => {
+    if (submitted) {
+      const timer = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            logWaitlist('Auto-redirecting to onboarding');
+            window.location.href = '/onboarding?from=waitlist';
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [submitted]);
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +151,17 @@ export default function WaitlistEmailForm() {
       <div className="text-center">
         <p className="text-white text-lg font-semibold">✅ Thanks! You're on our waitlist.</p>
         <p className="text-white opacity-80 text-sm mt-2">We'll keep you updated on JobHatch progress!</p>
+        <p className="text-white opacity-80 text-sm mt-2">
+          Taking you to the next step in <span className="font-semibold">{countdown}</span> seconds...
+        </p>
+        <div className="mt-4">
+          <button
+            onClick={() => window.location.href = '/onboarding?from=waitlist'}
+            className="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            Continue to Onboarding →
+          </button>
+        </div>
         
         {showDebugPanel && (
           <details className="mt-4 text-left">

@@ -31,16 +31,24 @@ const OnboardingFlow: React.FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const fromWaitlist = urlParams.get('from') === 'waitlist';
-    const isWaitlistMode = document.referrer.includes('waitlist') || fromWaitlist;
+    const referrerIsHomepage = document.referrer.includes(window.location.origin);
     
-    if (isWaitlistMode) {
+    console.log('OnboardingFlow: URL params:', urlParams.toString());
+    console.log('OnboardingFlow: fromWaitlist:', fromWaitlist);
+    console.log('OnboardingFlow: document.referrer:', document.referrer);
+    console.log('OnboardingFlow: referrerIsHomepage:', referrerIsHomepage);
+    console.log('OnboardingFlow: current URL:', window.location.href);
+    
+    // If the URL has ?from=waitlist parameter, treat as waitlist user
+    if (fromWaitlist) {
       setIsWaitlistUser(true);
       setIsAuthenticating(false);
-      console.log('Waitlist user detected, skipping authentication check');
+      console.log('✅ Waitlist user detected via URL parameter, skipping authentication check');
       return;
     }
     
     // Continue with normal authentication check for non-waitlist users
+    console.log('🔐 Non-waitlist user, proceeding with authentication check');
     const checkAuth = async () => {
       try {
         const result = await dispatch(thunkAuthenticate());
@@ -248,8 +256,17 @@ const OnboardingFlow: React.FC = () => {
   }
 
   // Don't render if not authenticated (will be redirected)
-  if (!user) {
-    return null;
+  if (!user && !isWaitlistUser) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
+            <span className="text-white font-bold text-sm">🐥</span>
+          </div>
+          <p className="text-gray-600">Redirecting to login...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -266,7 +283,9 @@ const OnboardingFlow: React.FC = () => {
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-              <span className="font-medium">Mia Yue</span>
+              <span className="font-medium">
+                {user?.username || user?.email || 'Guest User'}
+              </span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>

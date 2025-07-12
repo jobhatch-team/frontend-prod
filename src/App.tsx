@@ -18,6 +18,7 @@ import PricingPage from "./pages/PricingPage";
 import ProfileCreationPage from "./pages/ProfileCreationPage";
 import JobPreferencesPage from "./pages/JobPreferencesPage";
 import OnboardingCompletePage from "./pages/OnboardingCompletePage";
+import TestPage from "./pages/TestPage";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="/jobs/:id" element={<JobDetailPage />} />
           <Route path="/resumes" element={<ManageResumesPage />} />
           <Route path="/coverletters" element={<ManageCoverLettersPage />} />
+          <Route path="/test" element={<TestPage />} />
 
         </Routes>
       </BrowserRouter>

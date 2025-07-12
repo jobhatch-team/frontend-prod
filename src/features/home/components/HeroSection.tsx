@@ -8,11 +8,42 @@ const HeroSection = () => {
     
     if (!email) return;
 
-    // Submit email to waitlist
-    const form = new FormData();
-    form.append('entry.1305314608', email);   // Replace with actual entry ID
+    console.log('[GET-STARTED] Starting waitlist submission for:', email);
 
     try {
+      // Submit to JobHatch backend first
+      console.log('[GET-STARTED] Submitting to JobHatch backend...');
+      const backendResponse = await fetch('https://backend-prod-team-jobhatchs-projects.vercel.app/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          name: email.split('@')[0], // Use email prefix as name
+          message: 'Submitted via Get Started button',
+          source: 'homepage_get_started',
+          timestamp: new Date().toISOString()
+        }),
+      });
+
+      if (backendResponse.ok) {
+        const backendData = await backendResponse.json();
+        console.log('[GET-STARTED] ✅ Backend submission successful:', backendData);
+      } else {
+        console.log('[GET-STARTED] ⚠️ Backend submission failed, continuing with Google Forms');
+      }
+    } catch (backendError) {
+      console.error('[GET-STARTED] ❌ Backend submission error:', backendError);
+      console.log('[GET-STARTED] Continuing with Google Forms fallback');
+    }
+
+    try {
+      // Fallback to Google Forms
+      console.log('[GET-STARTED] Submitting to Google Forms...');
+      const form = new FormData();
+      form.append('entry.1305314608', email);   // Replace with actual entry ID
+
       await fetch(
         'https://docs.google.com/forms/d/e/1FAIpQLSfKUxYaAAkRuK-DgvKI1W_IVo1OVGgZ8Fm9I6-2mEvEkO2fKw/formResponse',
         {
@@ -21,12 +52,14 @@ const HeroSection = () => {
           body: form,
         }
       );
+      console.log('[GET-STARTED] ✅ Google Forms submission completed');
     } catch (error) {
-      console.error('Error submitting email:', error);
+      console.error('[GET-STARTED] ❌ Google Forms submission error:', error);
     }
 
-    // Redirect to onboarding flow
-    window.location.href = '/onboarding';
+    // Redirect to onboarding flow with waitlist parameter
+    console.log('[GET-STARTED] 🔄 Redirecting to onboarding...');
+    window.location.href = '/onboarding?from=waitlist';
   };
 
   return (

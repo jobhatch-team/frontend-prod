@@ -27,15 +27,25 @@ export default defineConfig({
     },
   },
   server: {
+    host: true, // Allow external connections
+    port: 5173,
     proxy: {
       '/api': {
-        // target: 'http://localhost:8000', 
-        // target: 'http://127.0.0.1:8000',
-        target: 'https://backend-prod-dun.vercel.app',
+        target: 'https://backend-prod-team-jobhatchs-projects.vercel.app',
         changeOrigin: true,
-        secure: false,
-        cookieDomainRewrite: 'localhost',
-        cookiePathRewrite: '/',
+        secure: true,
+        configure: (proxy, options) => {
+          console.log('[VITE-PROXY] Configuring proxy for /api -> https://backend-prod-team-jobhatchs-projects.vercel.app');
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            console.log(`[VITE-PROXY] Proxying: ${req.method} ${req.url} -> ${proxyReq.getHeader('host')}${proxyReq.path}`);
+          });
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            console.log(`[VITE-PROXY] Response: ${req.method} ${req.url} -> ${proxyRes.statusCode}`);
+          });
+          proxy.on('error', (err, req, res) => {
+            console.error(`[VITE-PROXY] Error: ${req.method} ${req.url}`, err.message);
+          });
+        },
       },
     },
   },

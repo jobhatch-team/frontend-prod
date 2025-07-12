@@ -13,7 +13,8 @@ logApiConfig('Environment Detection', {
   NODE_ENV: process.env.NODE_ENV,
   isDevelopment,
   isProduction,
-  VITE_API_URL: process.env.VITE_API_URL
+  VITE_API_URL: process.env.VITE_API_URL,
+  window_location: typeof window !== 'undefined' ? window.location.origin : 'server-side'
 });
 
 // API Base URL Configuration
@@ -28,16 +29,29 @@ const API_BASE_URL = (() => {
       url: baseUrl 
     });
   } else {
-    // Development configuration
-    baseUrl = 'http://localhost:8000/api';
-    logApiConfig('Using Development API URL', { url: baseUrl });
+    // Development configuration - use relative URLs to leverage Vite proxy
+    if (typeof window !== 'undefined' && window.location.origin.includes('localhost')) {
+      baseUrl = '/api'; // Use relative URL for localhost to leverage Vite proxy
+      logApiConfig('Using Relative API URL (localhost)', { 
+        reason: 'Localhost detected - using Vite proxy',
+        url: baseUrl,
+        resolvedUrl: window.location.origin + baseUrl
+      });
+    } else {
+      // Fallback to production URL if not localhost
+      baseUrl = 'https://backend-prod-team-jobhatchs-projects.vercel.app/api';
+      logApiConfig('Using Production API URL (fallback)', { 
+        reason: 'Not localhost - using production backend',
+        url: baseUrl 
+      });
+    }
   }
   
   return baseUrl;
 })();
 
 // Verify API URL format
-if (!API_BASE_URL.startsWith('http')) {
+if (!API_BASE_URL.startsWith('http') && !API_BASE_URL.startsWith('/')) {
   console.error('[API-CONFIG ERROR] Invalid API URL format:', API_BASE_URL);
 }
 
@@ -69,7 +83,7 @@ export const debugFetch = async (url: string, options: RequestInit = {}) => {
   console.log('🕐 Request Time:', timestamp);
   console.log('🌐 URL:', url);
   console.log('⚙️ Options:', options);
-  console.log('🏠 Origin:', window.location.origin);
+  console.log('🏠 Origin:', typeof window !== 'undefined' ? window.location.origin : 'server-side');
   console.log('📍 Environment:', process.env.NODE_ENV);
   
   try {
@@ -178,8 +192,8 @@ export const testBackendConnection = async () => {
   return results;
 };
 
-// Auto-test backend on production load
-if (isProduction && typeof window !== 'undefined') {
+// Auto-test backend on load (both development and production)
+if (typeof window !== 'undefined') {
   // Wait a bit for the app to load, then test
   setTimeout(() => {
     console.log('[AUTO-TEST] Running automatic backend connectivity test...');

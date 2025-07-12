@@ -7,7 +7,8 @@
 class APIService {
     constructor() {
         // Base URL for API calls
-        const API_BASE_URL = 'http://localhost:5001/api';
+        // const API_BASE_URL = 'http://localhost:5001/api';
+        const API_BASE_URL = 'https://backend-prod-dun.vercel.app/api';
         
         // Cache for API responses
         this.cache = {};

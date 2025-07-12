@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // For this demo, use username 'admin' and password 'password'
             // Replace with real API call
             try {
-                const res = await fetch('http://localhost:5001/api/login', {
+                const res = await fetch('http://:5001/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

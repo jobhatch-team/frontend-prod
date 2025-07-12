@@ -1,6 +1,6 @@
 // API Configuration
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '/api'  // In production, proxy handles backend requests
+  ? process.env.VITE_API_URL || 'https://backend-prod-dun.vercel.app//api'  // Replace with your actual backend URL
   : 'http://localhost:8000/api';  // In development, direct backend connection
 
 export const API_ENDPOINTS = {

@@ -52,11 +52,30 @@ const JobPreferencesPage: React.FC = () => {
       if (response.ok) {
         navigate('/onboarding/complete');
       } else {
-        throw new Error('Failed to save preferences');
+        const errorData = await response.json().catch(() => ({ error: 'Server error' }));
+        throw new Error(errorData.error || 'Failed to save preferences');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Preferences error:', error);
-      alert('Failed to save preferences. Please try again.');
+      
+      // Handle CORS and network errors gracefully
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        console.log('💾 Backend unavailable, saving job preferences locally');
+        localStorage.setItem('job_preferences', JSON.stringify({
+          ...preferences,
+          timestamp: new Date().toISOString(),
+          backendSaved: false
+        }));
+        
+        alert('Unable to save to server, but your job preferences have been saved locally. Continuing to complete onboarding...');
+        
+        // Navigate to complete the onboarding
+        setTimeout(() => {
+          navigate('/onboarding/complete');
+        }, 1000);
+      } else {
+        alert('Failed to save preferences. Please try again.');
+      }
     }
   };
 

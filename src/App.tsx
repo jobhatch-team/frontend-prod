@@ -19,6 +19,7 @@ import ProfileCreationPage from "./pages/ProfileCreationPage";
 import JobPreferencesPage from "./pages/JobPreferencesPage";
 import OnboardingCompletePage from "./pages/OnboardingCompletePage";
 import TestPage from "./pages/TestPage";
+import WaitlistPage from "./pages/WaitlistPage";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/jobs/:id" element={<JobDetailPage />} />
           <Route path="/resumes" element={<ManageResumesPage />} />
           <Route path="/coverletters" element={<ManageCoverLettersPage />} />
+          <Route path="/waitlist" element={<WaitlistPage />} />
           <Route path="/test" element={<TestPage />} />
 
         </Routes>

@@ -55,6 +55,7 @@ export const thunkLogin = createAsyncThunk<
     
     const response = await debugFetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify(credentials),
     });
 
@@ -142,7 +143,9 @@ export const thunkAuthenticate = createAsyncThunk<User | null>(
   async () => {
     try {
       console.log('[AUTH-AUTHENTICATE] Starting authentication check');
-      const response = await debugFetch(`${API_BASE_URL}/auth/`);
+      const response = await debugFetch(`${API_BASE_URL}/auth/`, {
+        credentials: 'include'
+      });
       
       if (response.ok) {
         const data = await response.json();

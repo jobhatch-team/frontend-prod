@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { debugFetch } from '../../../config/api';
 
 const HeroSection = () => {
   const [email, setEmail] = useState('');
@@ -13,11 +14,8 @@ const HeroSection = () => {
     try {
       // Submit to JobHatch backend first
       console.log('[GET-STARTED] Submitting to JobHatch backend...');
-      const backendResponse = await fetch('https://backend-prod-team-jobhatchs-projects.vercel.app/api/waitlist', {
+      const backendResponse = await debugFetch('https://backend-prod-team-jobhatchs-projects.vercel.app/api/waitlist', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           email: email,
           name: email.split('@')[0], // Use email prefix as name

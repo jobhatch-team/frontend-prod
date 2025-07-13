@@ -90,7 +90,6 @@ export const debugFetch = async (url: string, options: RequestInit = {}) => {
     const startTime = performance.now();
     const response = await fetch(url, {
       ...options,
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

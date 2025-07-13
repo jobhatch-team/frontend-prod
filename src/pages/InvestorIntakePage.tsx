@@ -37,7 +37,7 @@ const InvestorIntakePage: React.FC = () => {
     
     // Redirect to Founders Club page after a short delay (same as founders)
     setTimeout(() => {
-      navigate('/founders-club');
+      navigate('/foundersclub');
     }, 2000);
   };
 

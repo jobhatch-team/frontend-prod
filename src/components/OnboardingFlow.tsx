@@ -150,6 +150,30 @@ const OnboardingFlow: React.FC = () => {
 
   const handleUserTypeSelect = (userType: string) => {
     setSelectedUserType(userType);
+    
+    // If founder is selected, redirect to founder intake form
+    if (userType === 'founder') {
+      console.log('Founder selected - redirecting to founder intake form');
+      // Save the user type selection first
+      localStorage.setItem('onboarding_user_type', JSON.stringify({
+        userType: userType,
+        timestamp: new Date().toISOString(),
+        source: 'onboarding_selection'
+      }));
+      
+      // Navigate to founder intake page
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromWaitlist = urlParams.get('from') === 'waitlist';
+      
+      if (fromWaitlist) {
+        navigate('/onboarding/founder-intake?from=waitlist');
+      } else {
+        navigate('/onboarding/founder-intake');
+      }
+      return;
+    }
+    
+    // For other user types, continue with normal flow
     setCurrentStep('interests');
   };
 

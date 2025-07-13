@@ -18,6 +18,8 @@ import PricingPage from "./pages/PricingPage";
 import ProfileCreationPage from "./pages/ProfileCreationPage";
 import JobPreferencesPage from "./pages/JobPreferencesPage";
 import OnboardingCompletePage from "./pages/OnboardingCompletePage";
+import FounderIntakePage from "./pages/FounderIntakePage";
+import FoundersClubPage from "./pages/FoundersClubPage";
 import TestPage from "./pages/TestPage";
 import WaitlistPage from "./pages/WaitlistPage";
 
@@ -35,6 +37,8 @@ function App() {
           <Route path="/onboarding/pricing" element={<PricingPage />} />
           <Route path="/onboarding/profile" element={<ProfileCreationPage />} />
           <Route path="/onboarding/preferences" element={<JobPreferencesPage />} />
+          <Route path="/onboarding/founder-intake" element={<FounderIntakePage />} />
+          <Route path="/founders-club" element={<FoundersClubPage />} />
           <Route path="/onboarding/complete" element={<OnboardingCompletePage />} />
           <Route path="/webapp" element={<WebApp />} />
           <Route path="/login" element={<LoginForm />} />

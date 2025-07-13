@@ -87,7 +87,15 @@ const ResumeAnalysisPage: React.FC = () => {
           error: `Analysis failed with status ${response.status}` 
         }));
         console.error('Analysis failed:', errorData);
-        throw new Error(errorData.error || 'Analysis failed');
+        
+        // Handle specific HTTP status codes
+        if (response.status === 404) {
+          throw new Error('Analysis service is not available yet. This feature is being developed. You can skip this step and continue with your onboarding.');
+        } else if (response.status === 500) {
+          throw new Error('Analysis server error. Please try again later or skip this step to continue.');
+        } else {
+          throw new Error(errorData.error || 'Analysis failed');
+        }
       }
     } catch (error: any) {
       console.error('Analysis error:', error);
@@ -228,26 +236,47 @@ const ResumeAnalysisPage: React.FC = () => {
             </p>
             
             <div className="space-y-4">
-              <button
-                onClick={handleRetry}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-              >
-                Try Again {retryCount > 0 && `(${retryCount})`}
-              </button>
-              
-              <button
-                onClick={handleBackToUpload}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Back to Upload
-              </button>
-              
-              <button
-                onClick={handleContinue}
-                className="w-full text-gray-500 hover:text-gray-700 font-medium underline"
-              >
-                Skip Analysis & Continue
-              </button>
+              {/* Show prominent Skip button for 404 errors (service not available) */}
+              {error.includes('Analysis service is not available yet') ? (
+                <>
+                  <button
+                    onClick={handleContinue}
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Continue to Next Step →
+                  </button>
+                  
+                  <button
+                    onClick={handleBackToUpload}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Back to Upload
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleRetry}
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Try Again {retryCount > 0 && `(${retryCount})`}
+                  </button>
+                  
+                  <button
+                    onClick={handleBackToUpload}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Back to Upload
+                  </button>
+                  
+                  <button
+                    onClick={handleContinue}
+                    className="w-full text-gray-500 hover:text-gray-700 font-medium underline"
+                  >
+                    Skip Analysis & Continue
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

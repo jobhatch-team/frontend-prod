@@ -170,8 +170,10 @@ const ResumeUploadPage: React.FC = () => {
         setProgress(100);
         
         // Navigate to analysis page with resume ID
+        // Handle both response formats: {resume: {id: x}} and {id: x}
+        const resumeId = data.resume?.id || data.id;
         setTimeout(() => {
-          navigate(`/onboarding/analyze/${data.resume.id}`);
+          navigate(`/onboarding/analyze/${resumeId}`);
         }, 500);
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Server error' }));

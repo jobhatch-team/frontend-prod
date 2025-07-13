@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { debugFetch } from '../config/api';
 
 const HeroSection = () => {
   const [email, setEmail] = useState('');
   const [showHatchAnim, setShowHatchAnim] = useState(false);
   const [showXpAnim, setShowXpAnim] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleGetStarted = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email) return;
+    if (!email || isSubmitting) return;
 
+    setIsSubmitting(true);
     console.log('[GET-STARTED] Starting waitlist submission for:', email);
 
     try {
@@ -69,21 +72,37 @@ const HeroSection = () => {
   };
 
   const handleChickClick = () => {
+    // Clear any existing timeout to prevent multiple animations
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
     setShowHatchAnim(true);
     setShowXpAnim(true);
-    setTimeout(() => {
+    
+    timeoutRef.current = setTimeout(() => {
       setShowHatchAnim(false);
       setShowXpAnim(false);
+      timeoutRef.current = null;
     }, 2000);
   };
 
+  // Clean up timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <section className="bg-gradient-to-b from-blue-50 to-white py-20 relative overflow-hidden" style={{ fontFamily: 'Inter, sans-serif' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-8 sm:px-12 lg:px-16">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8 fade-in-up relative z-20">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight" style={{ fontFamily: 'Nunito, sans-serif' }}>
               <span className="text-orange-500">Hatch</span>{' '}
               <span className="text-blue-600">your</span>{' '}
               <span className="text-orange-500">career</span>
@@ -91,7 +110,7 @@ const HeroSection = () => {
               <span className="text-blue-600">Together</span>
             </h1>
             
-            <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
+            <p className="text-xl text-gray-600 leading-relaxed max-w-xl" style={{ fontFamily: 'Nunito, sans-serif' }}>
               Level up your career quest! 🐣 Team up, unlock daily wins, and hatch your dream job—no more solo grinding.
             </p>
 
@@ -104,15 +123,16 @@ const HeroSection = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter Your Email"
                   className="flex-1 px-6 py-4 rounded-full border-2 border-blue-200 focus:outline-none focus:border-blue-400 text-center sm:text-left w-full sm:w-80 text-lg shadow-sm"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  style={{ fontFamily: 'Nunito, sans-serif' }}
                   required
                 />
                 <button
                   type="submit"
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-8 rounded-full transition-colors w-full sm:w-auto text-lg shadow-lg hover:scale-105 transform transition-all"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  disabled={isSubmitting}
+                  className={`${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600 hover:scale-105'} text-white font-semibold py-4 px-8 rounded-full transition-colors w-full sm:w-auto text-lg shadow-lg transform transition-all`}
+                  style={{ fontFamily: 'Nunito, sans-serif' }}
                 >
-                  Get Started!
+                  {isSubmitting ? 'Submitting...' : 'Get Started!'}
                 </button>
               </div>
             </form>
@@ -120,8 +140,8 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 relative z-10">
               <button 
                 onClick={handleJoinWaitlist}
-                className="bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50 font-semibold py-4 px-8 rounded-full transition-colors w-full sm:w-auto text-lg shadow-lg hover:scale-105 transform transition-all"
-                style={{ fontFamily: 'Inter, sans-serif' }}
+                className="bg-white/90 backdrop-blur-sm border-2 border-orange-500 text-orange-500 hover:bg-orange-50 font-semibold py-4 px-8 rounded-full transition-colors w-full sm:w-auto text-lg shadow-lg hover:scale-105 transform transition-all"
+                style={{ fontFamily: 'Nunito, sans-serif' }}
               >
                 Join Our Waitlist Now
               </button>
@@ -139,7 +159,7 @@ const HeroSection = () => {
                   </div>
                 ))}
               </div>
-              <p className="text-gray-600 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>Join 1,200+ career builders</p>
+              <p className="text-gray-600 font-medium" style={{ fontFamily: 'Nunito, sans-serif' }}>Join 1,200+ career builders</p>
             </div>
           </div>
 
@@ -171,14 +191,14 @@ const HeroSection = () => {
               </div>
 
               {/* Feature Bubbles */}
-              <div className="absolute top-4 right-4 w-56 bg-white rounded-xl p-4 shadow-lg border border-gray-100 animate-pulse">
+              <div className="absolute top-12 right-12 w-56 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-100 animate-pulse">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                     <i className="fas fa-file-alt text-orange-600"></i>
                   </div>
                   <div>
-                    <p className="font-semibold text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>Resume Updated</p>
-                    <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>+25 XP</p>
+                    <p className="font-semibold text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Resume Updated</p>
+                    <p className="text-xs text-gray-500" style={{ fontFamily: 'Nunito, sans-serif' }}>+25 XP</p>
                     {showXpAnim && (
                       <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-green-500 font-bold animate-bounce">
                         +25 XP
@@ -188,26 +208,26 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              <div className="absolute bottom-16 left-4 w-56 bg-white rounded-xl p-4 shadow-lg border border-gray-100 animate-pulse" style={{ animationDelay: '1s' }}>
+              <div className="absolute bottom-24 left-12 w-56 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-100 animate-pulse" style={{ animationDelay: '1s' }}>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <i className="fas fa-users text-blue-600"></i>
                   </div>
                   <div>
-                    <p className="font-semibold text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>Buddy Matched!</p>
-                    <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>Meet your accountability partner</p>
+                    <p className="font-semibold text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Buddy Matched!</p>
+                    <p className="text-xs text-gray-500" style={{ fontFamily: 'Nunito, sans-serif' }}>Meet your accountability partner</p>
                   </div>
                 </div>
               </div>
 
-              <div className="absolute bottom-4 right-8 w-56 bg-white rounded-xl p-4 shadow-lg border border-gray-100 animate-pulse" style={{ animationDelay: '2s' }}>
+              <div className="absolute bottom-12 right-16 w-56 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-gray-100 animate-pulse" style={{ animationDelay: '2s' }}>
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <i className="fas fa-briefcase text-green-600"></i>
                   </div>
                   <div>
-                    <p className="font-semibold text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>Job Fair Attended</p>
-                    <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>3 new connections</p>
+                    <p className="font-semibold text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>Job Fair Attended</p>
+                    <p className="text-xs text-gray-500" style={{ fontFamily: 'Nunito, sans-serif' }}>3 new connections</p>
                   </div>
                 </div>
               </div>

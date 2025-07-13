@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 interface RoadmapStep {
   id: number;
@@ -12,6 +12,7 @@ interface RoadmapStep {
 
 const HowItWorksSection = () => {
   const [activeStep, setActiveStep] = useState<number | null>(null);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   const roadmapSteps: RoadmapStep[] = [
     {
@@ -86,9 +87,26 @@ const HowItWorksSection = () => {
   ];
 
   const handleStepClick = (stepId: number) => {
-    setActiveStep(stepId);
-    alert(`Step ${stepId}: ${roadmapSteps[stepId - 1].title}`);
+    // Debounce rapid clicks
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    
+    debounceRef.current = setTimeout(() => {
+      setActiveStep(stepId);
+      alert(`Step ${stepId}: ${roadmapSteps[stepId - 1].title}`);
+      debounceRef.current = null;
+    }, 100);
   };
+
+  // Clean up timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, []);
 
   const renderTitleWords = (titleColored: { text: string; color?: string }[]) => {
     return titleColored.map((part, index) => (
@@ -105,8 +123,8 @@ const HowItWorksSection = () => {
     <section className="py-16 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>How JobHatch Works</h2>
-          <p className="text-lg text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Nunito, sans-serif' }}>How JobHatch Works</h2>
+          <p className="text-lg text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>
             A quick, fun look at what makes us tick—no long reads, we promise
           </p>
         </div>
@@ -161,10 +179,10 @@ const HowItWorksSection = () => {
 
                   <div className="w-[40%] pl-6">
                     <div className="max-w-56">
-                      <div className="font-bold text-base mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <div className="font-bold text-base mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
                         {renderTitleWords(step.titleColored)}
                       </div>
-                      <div className="text-gray-600 text-xs leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <div className="text-gray-600 text-xs leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
                         {step.description}
                       </div>
                     </div>
@@ -174,10 +192,10 @@ const HowItWorksSection = () => {
                 <>
                   <div className="w-[40%] pr-6 text-right">
                     <div className="max-w-56 ml-auto">
-                      <div className="font-bold text-base mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <div className="font-bold text-base mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
                         {renderTitleWords(step.titleColored)}
                       </div>
-                      <div className="text-gray-600 text-xs leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <div className="text-gray-600 text-xs leading-relaxed" style={{ fontFamily: 'Nunito, sans-serif' }}>
                         {step.description}
                       </div>
                     </div>
@@ -225,10 +243,10 @@ const HowItWorksSection = () => {
                 alt={step.title} 
                 className="w-36 h-auto mx-auto mb-5"
               />
-              <div className="font-bold text-lg mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <div className="font-bold text-lg mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 {renderTitleWords(step.titleColored)}
               </div>
-              <div className="text-gray-600 text-sm max-w-xs mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <div className="text-gray-600 text-sm max-w-xs mx-auto" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 {step.description}
               </div>
             </div>
@@ -250,22 +268,24 @@ const HowItWorksSection = () => {
         {/* Testimonials Preview */}
         <div className="bg-gradient-to-b from-gray-800 to-gray-900 py-20">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <img
-              src="/images/Trophy.png"
-              alt="Trophy"
-              className="w-24 h-24 mx-auto mb-6"
-            />
-            <div className="flex justify-center gap-2 mb-6">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span key={star} className="text-yellow-400 text-2xl">
-                  ★
-                </span>
-              ))}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 shadow-2xl">
+              <img
+                src="/images/Trophy.png"
+                alt="Trophy"
+                className="w-24 h-24 mx-auto mb-6"
+              />
+              <div className="flex justify-center gap-2 mb-6">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span key={star} className="text-yellow-400 text-2xl">
+                    ★
+                  </span>
+                ))}
+              </div>
+              <h2 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Nunito, sans-serif' }}>What They Said</h2>
+              <p className="text-blue-200 text-lg" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                Real feedback from users who want a better job search experience.
+              </p>
             </div>
-            <h2 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>What They Said</h2>
-            <p className="text-blue-200 text-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Real feedback from users who want a better job search experience.
-            </p>
           </div>
         </div>
       </div>

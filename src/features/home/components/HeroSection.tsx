@@ -65,9 +65,8 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="relative">
           
-          {/* Left Side Feature Boxes */}
-          <div className="absolute left-0 top-24 space-y-6 hidden lg:block">
-            {/* No more ghosting */}
+          {/* No more ghosting - Independent positioning */}
+          <div className="absolute left-20 bottom-80 hidden lg:block">
             <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 w-64 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
@@ -79,9 +78,11 @@ const HeroSection = () => {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Mock Interview */}
-            <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 w-64 mt-48 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2">
+          {/* Mock Interview - Independent positioning */}
+          <div className="absolute left-40 bottom-32 hidden lg:block">
+            <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 w-64 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
                   <img src="/images/avatar-1.svg" alt="Interviewer" className="w-full h-full object-cover" />
@@ -97,9 +98,8 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Side Feature Box */}
-          <div className="absolute right-0 top-32 hidden lg:block">
-            {/* One click to apply */}
+          {/* One click to apply - Independent positioning */}
+          <div className="absolute right-20 bottom-72 hidden lg:block">
             <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 w-64 transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-2">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">

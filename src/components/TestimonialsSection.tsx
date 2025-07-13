@@ -79,17 +79,17 @@ const TestimonialsSection = () => {
 
   return (
     <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-8 sm:px-12 lg:px-16">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>Success Stories & User Feedback</h2>
-          <p className="text-lg text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Nunito, sans-serif' }}>Success Stories & User Feedback</h2>
+          <p className="text-lg text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>
             Hear what job seekers are saying about their dream job-seeking platform
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <div key={testimonial.id} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
               {/* Rating */}
               <div className="flex gap-1 mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
@@ -99,11 +99,11 @@ const TestimonialsSection = () => {
 
               {/* Quote */}
               <div className="mb-6">
-                <p className="text-gray-700 leading-relaxed text-justify italic mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-gray-700 leading-relaxed text-justify italic mb-3" style={{ fontFamily: 'Nunito, sans-serif' }}>
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
                 {testimonial.quoteTranslation && (
-                  <p className="text-gray-600 text-sm leading-relaxed text-justify" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-gray-600 text-sm leading-relaxed text-justify" style={{ fontFamily: 'Nunito, sans-serif' }}>
                     &ldquo;{testimonial.quoteTranslation}&rdquo;
                   </p>
                 )}
@@ -119,8 +119,8 @@ const TestimonialsSection = () => {
                   />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>{testimonial.author.name}</h4>
-                  <p className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>{testimonial.author.title}</p>
+                  <h4 className="font-semibold text-gray-900" style={{ fontFamily: 'Nunito, sans-serif' }}>{testimonial.author.name}</h4>
+                  <p className="text-sm text-gray-600" style={{ fontFamily: 'Nunito, sans-serif' }}>{testimonial.author.title}</p>
                 </div>
               </div>
             </div>

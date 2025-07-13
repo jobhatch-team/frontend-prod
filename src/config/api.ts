@@ -1,6 +1,6 @@
 // API Configuration with Enhanced Debugging
-const isDevelopment = process.env.NODE_ENV === 'development';
-const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = import.meta.env.MODE === 'development';
+const isProduction = import.meta.env.MODE === 'production';
 
 // Enhanced logging function
 const logApiConfig = (message: string, data?: any) => {
@@ -10,10 +10,10 @@ const logApiConfig = (message: string, data?: any) => {
 
 // Environment detection
 logApiConfig('Environment Detection', {
-  NODE_ENV: process.env.NODE_ENV,
+  MODE: import.meta.env.MODE,
   isDevelopment,
   isProduction,
-  VITE_API_URL: process.env.VITE_API_URL,
+  VITE_API_URL: import.meta.env.VITE_API_URL,
   window_location: typeof window !== 'undefined' ? window.location.origin : 'server-side'
 });
 
@@ -23,9 +23,9 @@ const API_BASE_URL = (() => {
   
   if (isProduction) {
     // Production configuration
-    baseUrl = process.env.VITE_API_URL || 'https://backend-prod-team-jobhatchs-projects.vercel.app/api';
+    baseUrl = import.meta.env.VITE_API_URL || 'https://backend-prod-team-jobhatchs-projects.vercel.app/api';
     logApiConfig('Using Production API URL', { 
-      source: process.env.VITE_API_URL ? 'Environment Variable' : 'Default',
+      source: import.meta.env.VITE_API_URL ? 'Environment Variable' : 'Default',
       url: baseUrl 
     });
   } else {
@@ -84,7 +84,7 @@ export const debugFetch = async (url: string, options: RequestInit = {}) => {
   console.log('🌐 URL:', url);
   console.log('⚙️ Options:', options);
   console.log('🏠 Origin:', typeof window !== 'undefined' ? window.location.origin : 'server-side');
-  console.log('📍 Environment:', process.env.NODE_ENV);
+  console.log('📍 Environment:', import.meta.env.MODE);
   
   try {
     const startTime = performance.now();

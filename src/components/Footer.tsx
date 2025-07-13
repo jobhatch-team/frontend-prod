@@ -34,7 +34,7 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             {/* Quick Links */}
             <div className="text-left">
-              <h3 className="font-bold text-blue-900 text-lg mb-3">
+              <h3 className="font-bold text-blue-900 text-lg mb-3" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 🧭 Quick Links
               </h3>
               <ul className="space-y-2">
@@ -42,6 +42,7 @@ const Footer = () => {
                   <a 
                     href="/webapp" 
                     className="text-gray-700 hover:text-blue-500 transition-colors"
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
                   >
                     Web App
                   </a>
@@ -50,6 +51,7 @@ const Footer = () => {
                   <a 
                     href="#download" 
                     className="text-gray-700 hover:text-blue-500 transition-colors"
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
                   >
                     Download Mobile App
                   </a>
@@ -59,7 +61,7 @@ const Footer = () => {
 
             {/* Community */}
             <div className="text-left">
-              <h3 className="font-bold text-blue-900 text-lg mb-3">
+              <h3 className="font-bold text-blue-900 text-lg mb-3" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 👥 Community
               </h3>
               <ul className="space-y-2">
@@ -67,6 +69,7 @@ const Footer = () => {
                   <a 
                     href="#" 
                     className="text-gray-700 hover:text-blue-500 transition-colors"
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
                   >
                     Ambassador Program
                   </a>
@@ -75,6 +78,7 @@ const Footer = () => {
                   <a 
                     href="#" 
                     className="text-gray-700 hover:text-blue-500 transition-colors"
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
                   >
                     Refer a Friend
                   </a>
@@ -84,7 +88,7 @@ const Footer = () => {
 
             {/* Company */}
             <div className="text-left">
-              <h3 className="font-bold text-blue-900 text-lg mb-3">
+              <h3 className="font-bold text-blue-900 text-lg mb-3" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 🏢 Company
               </h3>
               <ul className="space-y-2">
@@ -92,6 +96,7 @@ const Footer = () => {
                   <a 
                     href="#about" 
                     className="text-gray-700 hover:text-blue-500 transition-colors"
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
                   >
                     About Us
                   </a>
@@ -100,6 +105,7 @@ const Footer = () => {
                   <a 
                     href="#" 
                     className="text-gray-700 hover:text-blue-500 transition-colors"
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
                   >
                     Join Us
                   </a>
@@ -137,11 +143,13 @@ const Footer = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your Email"
               className="px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-80"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
               required
             />
             <button
               type="submit"
               className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors w-full sm:w-auto"
+              style={{ fontFamily: 'Nunito, sans-serif' }}
             >
               Contact Us
             </button>
@@ -156,10 +164,10 @@ const Footer = () => {
 
           {/* Bottom Copyright */}
           <div className="border-t border-gray-200 pt-6">
-            <p className="text-gray-600 mb-2">
+            <p className="text-gray-600 mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
               Designed with <i className="fas fa-heart text-red-500"></i> by the JobHatch Team
             </p>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>
               Copyright &copy; 2025 L3 INNO INC
             </p>
           </div>

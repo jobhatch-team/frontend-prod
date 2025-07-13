@@ -238,11 +238,11 @@ const TestimonialCard = memo(({ testimonial }: { testimonial: Testimonial }) => 
 
     {/* Quote */}
     <div className="mb-6">
-      <p className="text-sm md:text-base leading-relaxed text-justify mb-2">
+      <p className="text-sm md:text-base leading-relaxed text-justify mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
         "{testimonial.quote}"
       </p>
       {testimonial.translation && (
-        <p className="text-xs md:text-sm text-blue-200 italic text-justify">
+        <p className="text-xs md:text-sm text-blue-200 italic text-justify" style={{ fontFamily: 'Nunito, sans-serif' }}>
           {testimonial.translation}
         </p>
       )}
@@ -259,8 +259,8 @@ const TestimonialCard = memo(({ testimonial }: { testimonial: Testimonial }) => 
         className="rounded-full border-2 border-white/30"
       />
       <div>
-        <h4 className="font-semibold text-sm">{testimonial.author.name}</h4>
-        <p className="text-xs text-blue-200">{testimonial.author.title}</p>
+        <h4 className="font-semibold text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>{testimonial.author.name}</h4>
+        <p className="text-xs text-blue-200" style={{ fontFamily: 'Nunito, sans-serif' }}>{testimonial.author.title}</p>
       </div>
     </div>
   </div>
@@ -273,11 +273,11 @@ const TestimonialsSection: React.FC = () => {
   }, []);
 
   if (!mounted) {
-    return <div className="text-center text-white py-20">Loading testimonials...</div>;
+    return <div className="text-center text-white py-20" style={{ fontFamily: 'Nunito, sans-serif' }}>Loading testimonials...</div>;
   }
 
   return (
-    <section className="bg-gradient-to-b from-blue-900 to-blue-800 text-white py-20">
+    <section className="bg-gradient-to-b from-blue-900 to-blue-800 text-white py-20" style={{ fontFamily: 'Nunito, sans-serif' }}>
       {/* Top Curve */}
       <div className="relative -mt-20 mb-16">
         <svg viewBox="0 0 1440 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
@@ -303,8 +303,8 @@ const TestimonialsSection: React.FC = () => {
             ))}
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">What They Said</h2>
-          <p className="text-xl text-blue-200 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: 'Nunito, sans-serif' }}>What They Said</h2>
+          <p className="text-xl text-blue-200 max-w-2xl mx-auto" style={{ fontFamily: 'Nunito, sans-serif' }}>
             Real feedback from users who want a better job search experience.
           </p>
         </div>

@@ -75,120 +75,122 @@ const HowItWorksSection = () => {
   };
 
   return (
-    <section className="max-w-4xl mx-auto px-5 py-16 relative">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold mb-2">How JobHatch Works</h2>
-        <p className="text-gray-600 text-lg">A quick, fun look at what makes us tick—no long reads, we promise</p>
-      </div>
+    <div className="bg-gray-50 w-full">
+      <section className="max-w-4xl mx-auto px-5 py-16 relative" style={{ fontFamily: 'Nunito, sans-serif' }}>
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>How JobHatch Works</h2>
+          <p className="text-gray-600 text-lg" style={{ fontFamily: 'Nunito, sans-serif' }}>A quick, fun look at what makes us tick—no long reads, we promise</p>
+        </div>
 
-      {/* Desktop Layout */}
-      <div className="hidden lg:block relative min-h-[950px]">
-        {/* Road Path */}
-        <img 
-          src="/images/Road.png" 
-          alt="Road" 
-          className="absolute left-1/2 top-16 transform -translate-x-1/2 h-[820px] w-auto z-0"
-        />
+        {/* Desktop Layout */}
+        <div className="hidden lg:block relative min-h-[950px]">
+          {/* Road Path */}
+          <img 
+            src="/images/Road.png" 
+            alt="Road" 
+            className="absolute left-1/2 top-16 transform -translate-x-1/2 h-[820px] w-auto z-0"
+          />
 
-        {/* Roadmap Steps */}
-        {roadmapSteps.map((step) => (
-          <div key={step.id} style={step.style} className="flex justify-between items-center h-36">
-            {step.position === 'left' ? (
-              <>
-                {/* Image on left */}
-                <div className="w-2/5 flex justify-end pr-12">
-                  <img 
-                    src={step.image} 
-                    alt={step.title} 
-                    className="w-48 h-auto"
-                  />
-                </div>
+          {/* Roadmap Steps */}
+          {roadmapSteps.map((step) => (
+            <div key={step.id} style={step.style} className="flex justify-between items-center h-36">
+              {step.position === 'left' ? (
+                <>
+                  {/* Image on left */}
+                  <div className="w-2/5 flex justify-end pr-12">
+                    <img 
+                      src={step.image} 
+                      alt={step.title} 
+                      className="w-48 h-auto"
+                    />
+                  </div>
 
-                {/* Star Button */}
-                <button 
-                  className="relative z-10 w-20 h-20 bg-transparent border-none cursor-pointer transform transition-all hover:scale-110"
-                  onClick={() => handleStarClick(step.id)}
-                  aria-label={step.title}
-                >
-                  <img 
-                    src={pressedButton === step.id ? "/images/Button_Press.png" : "/images/Button_default.png"}
-                    alt={`star${step.id}`}
-                    className="w-20 h-20 pointer-events-none"
-                  />
-                </button>
+                  {/* Star Button */}
+                  <button 
+                    className="relative z-10 w-20 h-20 bg-transparent border-none cursor-pointer transform transition-all hover:scale-110"
+                    onClick={() => handleStarClick(step.id)}
+                    aria-label={step.title}
+                  >
+                    <img 
+                      src={pressedButton === step.id ? "/images/Button_Press.png" : "/images/Button_default.png"}
+                      alt={`star${step.id}`}
+                      className="w-20 h-20 pointer-events-none"
+                    />
+                  </button>
 
-                {/* Content on right */}
-                <div className="w-2/5 pl-12">
-                  <div className="max-w-xs">
-                    <div className="font-bold text-lg mb-1">
-                      {renderTitleWords(step.title)}
-                    </div>
-                    <div className="text-gray-600 text-sm">
-                      {step.description}
+                  {/* Content on right */}
+                  <div className="w-2/5 pl-12">
+                    <div className="max-w-xs">
+                      <div className="font-bold text-lg mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                        {renderTitleWords(step.title)}
+                      </div>
+                      <div className="text-gray-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                        {step.description}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Content on left */}
-                <div className="w-2/5 flex justify-end pr-12">
-                  <div className="max-w-xs text-right">
-                    <div className="font-bold text-lg mb-1">
-                      {renderTitleWords(step.title)}
-                    </div>
-                    <div className="text-gray-600 text-sm">
-                      {step.description}
+                </>
+              ) : (
+                <>
+                  {/* Content on left */}
+                  <div className="w-2/5 flex justify-end pr-12">
+                    <div className="max-w-xs text-right">
+                      <div className="font-bold text-lg mb-1" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                        {renderTitleWords(step.title)}
+                      </div>
+                      <div className="text-gray-600 text-sm" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                        {step.description}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Star Button */}
-                <button 
-                  className="relative z-10 w-20 h-20 bg-transparent border-none cursor-pointer transform transition-all hover:scale-110"
-                  onClick={() => handleStarClick(step.id)}
-                  aria-label={step.title}
-                >
-                  <img 
-                    src={pressedButton === step.id ? "/images/Button_Press.png" : "/images/Button_default.png"}
-                    alt={`star${step.id}`}
-                    className="w-20 h-20 pointer-events-none"
-                  />
-                </button>
+                  {/* Star Button */}
+                  <button 
+                    className="relative z-10 w-20 h-20 bg-transparent border-none cursor-pointer transform transition-all hover:scale-110"
+                    onClick={() => handleStarClick(step.id)}
+                    aria-label={step.title}
+                  >
+                    <img 
+                      src={pressedButton === step.id ? "/images/Button_Press.png" : "/images/Button_default.png"}
+                      alt={`star${step.id}`}
+                      className="w-20 h-20 pointer-events-none"
+                    />
+                  </button>
 
-                {/* Image on right */}
-                <div className="w-2/5 pl-12">
-                  <img 
-                    src={step.image} 
-                    alt={step.title} 
-                    className="w-48 h-auto"
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Mobile Layout */}
-      <div className="block lg:hidden">
-        {roadmapSteps.map((step) => (
-          <div key={step.id} className="mb-10 text-center">
-            <img 
-              src={step.image} 
-              alt={step.title} 
-              className="w-36 h-auto mx-auto mb-5"
-            />
-            <div className="font-bold text-lg mb-2">
-              {renderTitleWords(step.title)}
+                  {/* Image on right */}
+                  <div className="w-2/5 pl-12">
+                    <img 
+                      src={step.image} 
+                      alt={step.title} 
+                      className="w-48 h-auto"
+                    />
+                  </div>
+                </>
+              )}
             </div>
-            <div className="text-gray-600 text-sm max-w-xs mx-auto">
-              {step.description}
+          ))}
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="block lg:hidden">
+          {roadmapSteps.map((step) => (
+            <div key={step.id} className="mb-10 text-center">
+              <img 
+                src={step.image} 
+                alt={step.title} 
+                className="w-36 h-auto mx-auto mb-5"
+              />
+              <div className="font-bold text-lg mb-2" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                {renderTitleWords(step.title)}
+              </div>
+              <div className="text-gray-600 text-sm max-w-xs mx-auto" style={{ fontFamily: 'Nunito, sans-serif' }}>
+                {step.description}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 };
 

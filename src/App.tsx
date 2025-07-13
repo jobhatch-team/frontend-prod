@@ -23,6 +23,7 @@ import InvestorIntakePage from "./pages/InvestorIntakePage";
 import FoundersClubPage from "./pages/FoundersClubPage";
 import TestPage from "./pages/TestPage";
 import WaitlistPage from "./pages/WaitlistPage";
+import JoinUsBuilderPage from "./pages/JoinUsBuilderPage";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/coverletters" element={<ManageCoverLettersPage />} />
           <Route path="/waitlist" element={<WaitlistPage />} />
           <Route path="/test" element={<TestPage />} />
+          <Route path="/joinus-builder" element={<JoinUsBuilderPage />} />
 
         </Routes>
       </BrowserRouter>

@@ -88,7 +88,7 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
     }
 
     setIsSubmitting(true);
-    console.log('[INFO-INTAKE] Starting form submission for founder:', formData);
+    console.log(`[INFO-INTAKE] Starting form submission for ${userType}:`, formData);
 
     try {
       // Call onSubmit callback if provided
@@ -99,24 +99,47 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
       // Backend submission removed - using Google Forms as primary method
       console.log('[INFO-INTAKE] Submitting to Google Forms (primary method)...');
 
-      // Submit to Google Forms (primary submission) - using dedicated founder intake form
+      // Submit to Google Forms (primary submission) - using dedicated forms for founders and investors
       console.log('[INFO-INTAKE] Submitting to Google Forms...');
       const form = new FormData();
       
-      // Map form fields to Google Forms entry IDs for the founder intake form
-      // Form URL: https://docs.google.com/forms/d/1KexEBqOl5GMfwqiEABgUUlzdL6Nwz_GdXfRpxFvZvvQ/edit
-      // Fields in order: Name, Company, Position, Phone Number, Email
+      // Use different Google Forms based on user type for separate spreadsheets
+      let formUrl = '';
       
-      // Predicted entry IDs based on common Google Forms patterns:
-      // These are educated guesses based on the field order and typical Google Forms ID patterns
-      form.append('entry.1636224620', formData.name);         // Name (1st field)
-      form.append('entry.1047813905', formData.company);      // Company (2nd field)  
-      form.append('entry.370378145', formData.jobTitle);     // Position (3rd field)
-      form.append('entry.352052880', formData.phoneNumber);  // Phone Number (4th field)
-      form.append('entry.786807798', formData.email);        // Email (5th field)
-      
+      if (userType === 'investor') {
+        // Investor-specific Google Form
+        // Form URL: https://docs.google.com/forms/d/1jMCT5VZOv2dfoeqcQgG_e_da1nulEW1YLuEzllHzZrU/
+        // Fields in order: Name, Company, Position, Phone Number, Email
+        
+        formUrl = 'https://docs.google.com/forms/d/1jMCT5VZOv2dfoeqcQgG_e_da1nulEW1YLuEzllHzZrU/formResponse';
+        
+        // Entry IDs for investor form
+        form.append('entry.1636224620', formData.name);         // Name (1st field)
+        form.append('entry.1047813905', formData.company);      // Company (2nd field)  
+        form.append('entry.370378145', formData.jobTitle);      // Position (3rd field)
+        form.append('entry.352052880', formData.phoneNumber);   // Phone Number (4th field)
+        form.append('entry.786807798', formData.email);         // Email (5th field)
+        
+        console.log('[INFO-INTAKE] Using investor-specific Google Form');
+      } else {
+        // Founder-specific Google Form (existing)
+        // Form URL: https://docs.google.com/forms/d/1KexEBqOl5GMfwqiEABgUUlzdL6Nwz_GdXfRpxFvZvvQ/edit
+        // Fields in order: Name, Company, Position, Phone Number, Email
+        
+        formUrl = 'https://docs.google.com/forms/d/1KexEBqOl5GMfwqiEABgUUlzdL6Nwz_GdXfRpxFvZvvQ/formResponse';
+        
+        // Entry IDs for founder form
+        form.append('entry.1636224620', formData.name);         // Name (1st field)
+        form.append('entry.1047813905', formData.company);      // Company (2nd field)  
+        form.append('entry.370378145', formData.jobTitle);      // Position (3rd field)
+        form.append('entry.352052880', formData.phoneNumber);   // Phone Number (4th field)
+        form.append('entry.786807798', formData.email);         // Email (5th field)
+        
+        console.log('[INFO-INTAKE] Using founder-specific Google Form');
+      }
       
       console.log('[INFO-INTAKE] Form data being submitted:', {
+        userType: userType,
         name: formData.name,
         company: formData.company,
         jobTitle: formData.jobTitle,
@@ -124,15 +147,12 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
         email: formData.email
       });
 
-      // Using the dedicated founder intake form
-      await fetch(
-        'https://docs.google.com/forms/d/1KexEBqOl5GMfwqiEABgUUlzdL6Nwz_GdXfRpxFvZvvQ/formResponse',
-        {
-          method: 'POST',
-          mode: 'no-cors',
-          body: form,
-        }
-      );
+      // Submit to the appropriate form based on user type
+      await fetch(formUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: form,
+      });
       
       console.log('[INFO-INTAKE] ✅ Google Forms submission completed');
       
@@ -158,13 +178,18 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
       <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-white text-2xl">🚀</span>
+            <span className="text-white text-2xl">
+              {userType === 'investor' ? '💰' : '🚀'}
+            </span>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Welcome, Founder!
+            Welcome, {userType === 'investor' ? 'Investor' : 'Founder'}!
           </h2>
           <p className="text-gray-600">
-            Tell us about yourself and your company to get started with recruiting top talent.
+            {userType === 'investor' 
+              ? 'Tell us about yourself and your investment focus to get started with discovering promising startups.'
+              : 'Tell us about yourself and your company to get started with recruiting top talent.'
+            }
           </p>
         </div>
 
@@ -193,7 +218,7 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
           {/* Company Field */}
           <div>
             <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
-              Company Name *
+              {userType === 'investor' ? 'Investment Firm / Organization *' : 'Company Name *'}
             </label>
             <input
               type="text"
@@ -203,7 +228,7 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                 errors.company ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Enter your company name"
+              placeholder={userType === 'investor' ? 'Enter your investment firm or organization' : 'Enter your company name'}
               disabled={isSubmitting}
             />
             {errors.company && (
@@ -214,7 +239,7 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
           {/* Job Title Field */}
           <div>
             <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-2">
-              Job Title *
+              {userType === 'investor' ? 'Position / Role *' : 'Job Title *'}
             </label>
             <input
               type="text"
@@ -224,7 +249,7 @@ const InfoIntakeForm: React.FC<InfoIntakeFormProps> = ({
               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors ${
                 errors.jobTitle ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="e.g., CEO, Founder, Co-founder"
+              placeholder={userType === 'investor' ? 'e.g., Partner, Principal, Analyst, Angel Investor' : 'e.g., CEO, Founder, Co-founder'}
               disabled={isSubmitting}
             />
             {errors.jobTitle && (

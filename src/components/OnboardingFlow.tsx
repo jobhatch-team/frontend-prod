@@ -173,6 +173,28 @@ const OnboardingFlow: React.FC = () => {
       return;
     }
     
+    // If investor is selected, redirect to investor intake form
+    if (userType === 'investor') {
+      console.log('Investor selected - redirecting to investor intake form');
+      // Save the user type selection first
+      localStorage.setItem('onboarding_user_type', JSON.stringify({
+        userType: userType,
+        timestamp: new Date().toISOString(),
+        source: 'onboarding_selection'
+      }));
+      
+      // Navigate to investor intake page
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromWaitlist = urlParams.get('from') === 'waitlist';
+      
+      if (fromWaitlist) {
+        navigate('/onboarding/investor-intake?from=waitlist');
+      } else {
+        navigate('/onboarding/investor-intake');
+      }
+      return;
+    }
+    
     // For other user types, continue with normal flow
     setCurrentStep('interests');
   };

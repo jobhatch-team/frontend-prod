@@ -150,7 +150,7 @@ const HeroSection = () => {
               <p className="text-gray-600 text-lg mb-16 max-w-2xl mx-auto" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 Enter your email to connect with <span className="font-semibold text-orange-500">500+</span> startups and launch your <span className="font-semibold text-blue-600">first</span> job.
               </p>
-            </div>
+              </div>
 
             {/* Animated Character Image with dramatic bounce entrance */}
             <div 

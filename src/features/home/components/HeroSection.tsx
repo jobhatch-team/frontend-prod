@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { debugFetch } from '../../../config/api';
 
 const HeroSection = () => {
+  const [email, setEmail] = useState('');
   const [animationStep, setAnimationStep] = useState(0);
 
   useEffect(() => {
@@ -18,6 +20,62 @@ const HeroSection = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  const handleGetStarted = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) return;
+
+    console.log('[GET-STARTED] Starting waitlist submission for:', email);
+
+    try {
+      // Submit to JobHatch backend first
+      console.log('[GET-STARTED] Submitting to JobHatch backend...');
+      const backendResponse = await debugFetch('https://backend-prod-team-jobhatchs-projects.vercel.app/api/waitlist', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email,
+          name: email.split('@')[0], // Use email prefix as name
+          message: 'Submitted via Get Started button',
+          source: 'homepage_get_started',
+          timestamp: new Date().toISOString()
+        }),
+      });
+
+      if (backendResponse.ok) {
+        const backendData = await backendResponse.json();
+        console.log('[GET-STARTED] ✅ Backend submission successful:', backendData);
+      } else {
+        console.log('[GET-STARTED] ⚠️ Backend submission failed, continuing with Google Forms');
+      }
+    } catch (backendError) {
+      console.error('[GET-STARTED] ❌ Backend submission error:', backendError);
+      console.log('[GET-STARTED] Continuing with Google Forms fallback');
+    }
+
+    try {
+      // Fallback to Google Forms
+      console.log('[GET-STARTED] Submitting to Google Forms...');
+      const form = new FormData();
+      form.append('entry.1305314608', email);   // Replace with actual entry ID
+
+      await fetch(
+        'https://docs.google.com/forms/d/e/1FAIpQLSfKUxYaAAkRuK-DgvKI1W_IVo1OVGgZ8Fm9I6-2mEvEkO2fKw/formResponse',
+        {
+          method: 'POST',
+          mode: 'no-cors',
+          body: form,
+        }
+      );
+      console.log('[GET-STARTED] ✅ Google Forms submission completed');
+    } catch (error) {
+      console.error('[GET-STARTED] ❌ Google Forms submission error:', error);
+    }
+
+    // Redirect to onboarding flow with waitlist parameter
+    console.log('[GET-STARTED] 🔄 Redirecting to onboarding...');
+    window.location.href = '/onboarding?from=waitlist';
+  };
 
   return (
     <section className="relative min-h-screen flex items-center py-20" style={{ 
@@ -147,17 +205,46 @@ const HeroSection = () => {
               }`}
               style={{ transitionDelay: '1400ms' }}
             >
-              <p className="text-gray-600 text-lg mb-16 max-w-2xl mx-auto" style={{ fontFamily: 'Nunito, sans-serif' }}>
+              <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto" style={{ fontFamily: 'Nunito, sans-serif' }}>
                 Enter your email to connect with <span className="font-semibold text-orange-500">500+</span> startups and launch your <span className="font-semibold text-blue-600">first</span> job.
               </p>
-              </div>
+            </div>
+
+            {/* Animated Email Signup Form with bounce entrance */}
+            <div 
+              className={`transition-all duration-1000 ease-out ${
+                animationStep >= 4 ? 'opacity-100 translate-y-0 scale-100 blur-0' : 'opacity-0 translate-y-12 scale-85 blur-sm'
+              }`}
+              style={{ transitionDelay: '1600ms' }}
+            >
+              <form onSubmit={handleGetStarted} className="mb-16">
+                <div className="flex flex-col sm:flex-row gap-3 justify-center items-center max-w-lg mx-auto">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter Your Email"
+                    className={`flex-1 px-6 py-4 rounded-full border-2 border-blue-200 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-200 text-center sm:text-left w-full sm:w-80 text-lg shadow-lg hover:shadow-xl transition-all duration-300 ${animationStep >= 4 ? 'hover:scale-105' : ''}`}
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className={`bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 w-full sm:w-auto text-lg shadow-lg hover:shadow-xl transform ${animationStep >= 4 ? 'hover:scale-110 hover:-translate-y-1' : ''}`}
+                    style={{ fontFamily: 'Nunito, sans-serif' }}
+                  >
+                    Get started 🚀
+                  </button>
+                </div>
+              </form>
+            </div>
 
             {/* Animated Character Image with dramatic bounce entrance */}
             <div 
               className={`flex justify-center transition-all duration-1200 ease-out ${
                 animationStep >= 4 ? 'opacity-100 translate-y-0 scale-100 rotate-0 blur-0' : 'opacity-0 translate-y-16 scale-75 -rotate-6 blur-sm'
               }`}
-              style={{ transitionDelay: '1600ms' }}
+              style={{ transitionDelay: '1800ms' }}
             >
               <img 
                 src="/images/ChickenFriends1.png" 

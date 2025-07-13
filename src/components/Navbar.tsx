@@ -72,13 +72,6 @@ const Navbar = () => {
             >
               Download
             </Link>
-            <Link 
-              to="/webapp" 
-              className="app-link text-gray-600 hover:text-blue-500 px-3 py-2 text-sm font-medium transition-colors inline-flex items-center space-x-1"
-            >
-              <span>Web App</span>
-              <i className="fas fa-external-link-alt text-xs"></i>
-            </Link>
           </nav>
 
           {/* Desktop Auth and Mobile Menu Button */}
@@ -155,16 +148,6 @@ const Navbar = () => {
               className={`${activeTab === 'download' ? 'text-blue-500 bg-blue-50 border-l-4 border-blue-500' : 'text-gray-600 hover:text-blue-500 hover:bg-gray-50'} block px-3 py-2 text-base font-medium transition-colors`}
             >
               Download
-            </Link>
-            <Link 
-              to="/webapp" 
-              onClick={closeMobileMenu}
-              className="text-gray-600 hover:text-blue-500 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors"
-            >
-              <span className="inline-flex items-center space-x-1">
-                <span>Web App</span>
-                <i className="fas fa-external-link-alt text-xs"></i>
-              </span>
             </Link>
             
             {/* Mobile Auth Section */}

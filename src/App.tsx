@@ -40,7 +40,7 @@ function App() {
           <Route path="/onboarding/preferences" element={<JobPreferencesPage />} />
           <Route path="/onboarding/founder-intake" element={<FounderIntakePage />} />
           <Route path="/onboarding/investor-intake" element={<InvestorIntakePage />} />
-          <Route path="/founders-club" element={<FoundersClubPage />} />
+          <Route path="/foundersclub" element={<FoundersClubPage />} />
           <Route path="/onboarding/complete" element={<OnboardingCompletePage />} />
           <Route path="/webapp" element={<WebApp />} />
           <Route path="/login" element={<LoginForm />} />

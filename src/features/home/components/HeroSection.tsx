@@ -118,10 +118,12 @@ const HeroSection = () => {
             {/* Main Title */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-8" style={{ fontFamily: 'Inter, sans-serif' }}>
               <span className="text-orange-500">Find your </span>
+
               <span className="text-blue-600">first</span>
+              
               <span className="text-orange-500"> job within</span>
               <br />
-              <span className="text-blue-600">one week</span>
+              <span className="text-blue-600">weeks</span>
             </h1>
 
             {/* Subtitle */}

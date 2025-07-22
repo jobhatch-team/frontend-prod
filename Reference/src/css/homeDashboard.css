@@ -1,0 +1,497 @@
+/* Home Dashboard Component Styles */
+
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Left Column - Missions */
+.missions-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+}
+
+.missions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.missions-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+}
+
+.missions-progress {
+    font-size: 13px;
+    color: #F59E0B;
+    background-color: rgba(254, 243, 199, 0.5);
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.missions-progress-bar {
+    height: 6px;
+    background-color: #f3f4f6;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.missions-progress-fill {
+    height: 100%;
+    background-color: #F59E0B;
+    border-radius: 3px;
+    width: 33%; /* Default value, will be updated by JS */
+}
+
+/* Mission Items */
+.mission-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mission-item {
+    display: flex;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #f3f4f6;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.mission-item:hover {
+    border-color: #e5e7eb;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.mission-checkbox {
+    margin-right: 15px;
+}
+
+.mission-checkbox input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.mission-content {
+    flex-grow: 1;
+}
+
+.mission-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.mission-completed .mission-title {
+    text-decoration: line-through;
+    color: #9ca3af;
+}
+
+.mission-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mission-points {
+    font-size: 12px;
+    color: #5C93ED;
+}
+
+.mission-difficulty {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.difficulty-easy {
+    background-color: #DCFCE7;
+    color: #10B981;
+}
+
+.difficulty-medium {
+    background-color: #FEF3C7;
+    color: #F59E0B;
+}
+
+.difficulty-hard {
+    background-color: #FEE2E2;
+    color: #EF4444;
+}
+
+.add-task-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #5C93ED;
+    font-size: 14px;
+    padding: 10px 0;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.add-task-button i {
+    margin-right: 8px;
+}
+
+.add-task-button:hover {
+    color: #3B82F6;
+}
+
+/* Right Column */
+.pet-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pet-card h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.pet-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    background-color: #f9fafb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pet-image {
+    max-width: 120px;
+    max-height: 120px;
+}
+
+.egg-image {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.pet-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.pet-description {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 15px 0;
+}
+
+.hatching-progress-bar {
+    height: 8px;
+    background-color: #f3f4f6;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.hatching-progress-fill {
+    height: 100%;
+    background-color: #F59E0B;
+    border-radius: 4px;
+    width: 33%; /* Default value, will be updated by JS */
+}
+
+.hatching-percentage {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+/* Stats Card */
+.stats-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+}
+
+.stats-card h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+}
+
+.stat-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(92, 147, 237, 0.1);
+    color: #5C93ED;
+    font-size: 14px;
+    line-height: 32px;
+    margin-bottom: 10px;
+}
+
+.achievements-icon {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+}
+
+.network-icon {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 5px 0;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.network-growth {
+    padding-top: 5px;
+}
+
+.network-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.growth-indicator {
+    font-size: 14px;
+    color: #10B981;
+}
+
+.growth-percentage {
+    font-size: 12px;
+    color: #10B981;
+    background-color: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Schedule and Buddy Sections */
+.bottom-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.schedule-card, .buddy-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+}
+
+.section-header {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+/* Schedule Items */
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.schedule-item {
+    display: flex;
+    gap: 15px;
+}
+
+.schedule-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.interview-icon {
+    background-color: #3B82F6;
+}
+
+.webinar-icon {
+    background-color: #F59E0B;
+}
+
+.schedule-details {
+    flex-grow: 1;
+}
+
+.schedule-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.schedule-time {
+    font-size: 13px;
+    color: #666;
+}
+
+.view-schedule-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: #5C93ED;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.view-schedule-link i {
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+/* Buddy Styles */
+.buddy-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.buddy-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.buddy-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.buddy-info {
+    flex-grow: 1;
+}
+
+.buddy-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.buddy-title {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 5px 0;
+}
+
+.buddy-match {
+    display: inline-block;
+    font-size: 12px;
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.buddy-status {
+    font-size: 13px;
+    color: #10B981;
+    margin-bottom: 20px;
+}
+
+.message-button {
+    width: 100%;
+    background-color: #5C93ED;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.message-button:hover {
+    background-color: #3B82F6;
+}
+
+.find-buddies-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: #5C93ED;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.find-buddies-link i {
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .dashboard-container,
+    .bottom-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Completed Missions */
+.mission-item.completed {
+    background-color: #f9fafb;
+    opacity: 0.7;
+}
+
+.mission-item.completed .mission-checkbox input {
+    accent-color: #10B981;
+} 

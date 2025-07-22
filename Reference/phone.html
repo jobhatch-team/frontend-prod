@@ -1,0 +1,3159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHatch - Phone Demo</title>
+    <link rel="icon" href="src/assets/images/LOGO.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/app.css">
+    <link rel="stylesheet" href="src/css/phone.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+    
+    <!-- Demo Mode Styles -->
+    <style>
+        /* Mobile Demo View Styles */
+        body.mobile-demo-view {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #fff;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .mobile-demo-view .phone-device {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .mobile-demo-view .phone-frame,
+        .mobile-demo-view .notch-container,
+        .mobile-demo-view .home-indicator,
+        .mobile-demo-view .phone-status-bar {
+            display: none !important;
+        }
+        
+        .mobile-demo-view .phone-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+        
+        .mobile-demo-view .phone-content {
+            height: 100%;
+        }
+        
+        .mobile-demo-view .bottom-nav {
+            border-radius: 0;
+        }
+        
+        .mobile-demo-view header,
+        .mobile-demo-view footer,
+        .mobile-demo-view .section-title,
+        .mobile-demo-view .section-subtitle,
+        .mobile-demo-view main > .container {
+            display: none !important;
+        }
+        
+        .mobile-demo-view .phone-demo-container {
+            padding: 0;
+            height: 100vh;
+        }
+        
+        .mobile-demo-view main {
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+        }
+        
+        .mobile-demo-view .phone-section {
+            height: 100vh;
+            padding: 0;
+        }
+        
+        /* Demo Button */
+        .demo-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4fc3f7;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        
+        .demo-button:hover {
+            background: #1976d2;
+            transform: translateY(-3px);
+        }
+        
+        .demo-button i {
+            font-size: 18px;
+        }
+        
+        /* Exit Button */
+        .exit-demo-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .mobile-demo-view .exit-demo-button {
+            display: flex;
+        }
+        
+        .exit-demo-button:hover {
+            background: rgba(0,0,0,0.6);
+        }
+        
+        /* QR Modal */
+        .qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .qr-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .qr-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 350px;
+        }
+        
+        .qr-code-container {
+            margin: 20px 0;
+        }
+        
+        .qr-modal-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .qr-instruction {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .close-qr-modal {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* Course Selection Styles */
+        .courses-list {
+            padding: 20px 16px;
+            overflow-y: auto;
+            height: 100%;
+        }
+        
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        .course-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .course-card.active {
+            border-left: 4px solid #4fc3f7;
+        }
+        
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .course-card:nth-child(1) .course-icon {
+            background: linear-gradient(135deg, #e1f5fe, #b3e5fc);
+            color: #0277bd;
+        }
+        
+        .course-card:nth-child(2) .course-icon {
+            background: linear-gradient(135deg, #ffecb3, #ffd54f);
+            color: #ff8f00;
+        }
+        
+        .course-card:nth-child(3) .course-icon {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #2e7d32;
+        }
+        
+        .course-card:nth-child(4) .course-icon {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            color: #6a1b9a;
+        }
+        
+        .course-icon i {
+            font-size: 24px;
+        }
+        
+        .course-info {
+            flex: 1;
+        }
+        
+        .course-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 5px;
+        }
+        
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .course-level, .course-time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .course-progress-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .progress-bar-mini {
+            height: 5px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+            flex: 1;
+        }
+        
+        .progress-fill-mini {
+            height: 100%;
+            background: #4fc3f7;
+            border-radius: 3px;
+        }
+        
+        .progress-text-mini {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .course-action {
+            flex-shrink: 0;
+        }
+        
+        .continue-btn, .start-btn {
+            background: #4fc3f7;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .start-btn {
+            background: #9c27b0;
+        }
+        
+        .continue-btn:hover, .start-btn:hover {
+            filter: brightness(1.1);
+        }
+        
+        /* App Screen Adjustments for Flashcards */
+        #flashcardsScreen {
+            display: none;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        #flashcardsScreen.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Flashcard Styles */
+        .flashcard-container {
+            padding: 15px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            height: calc(100% - 50px); /* Allow space for navigation at bottom */
+            position: relative;
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .flashcard-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .flashcard {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 15px;
+            display: none;
+            height: auto;
+            min-height: 70%;
+        }
+        
+        .flashcard.active {
+            display: block;
+        }
+        
+        .question-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #9c27b0;
+            color: white;
+        }
+        
+        .question-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 22px;
+            height: 22px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+        
+        .question-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .flashcard-question {
+            padding: 15px 12px;
+        }
+        
+        .flashcard-question h3 {
+            font-size: 15px;
+            margin-top: 0;
+            margin-bottom: 18px;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 90px; /* Ensure space for navigation buttons */
+        }
+        
+        .answer-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .answer-option:hover {
+            background: #f5f5f5;
+            border-color: #bbb;
+        }
+        
+        .answer-option.selected {
+            background: rgba(79, 195, 247, 0.1);
+            border-color: #4fc3f7;
+        }
+        
+        .answer-option.correct {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4caf50;
+        }
+        
+        .answer-option.incorrect {
+            background: rgba(244, 67, 54, 0.1);
+            border-color: #f44336;
+        }
+        
+        .option-letter {
+            width: 24px;
+            height: 24px;
+            background: #eee;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+        
+        .option-text {
+            flex: 1;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        
+        .option-number {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eee;
+            border-radius: 50%;
+            font-size: 11px;
+            color: #666;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+        
+        .flashcard-hint {
+            padding: 0 12px 12px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .hint-button {
+            background: #f3e5f5;
+            color: #9c27b0;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .hint-button span {
+            background: #9c27b0;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+        }
+        
+        .flashcard-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 12px 20px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: transparent;
+            z-index: 10;
+        }
+        
+        .prev-button, .next-button {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .prev-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .next-button {
+            background: #4fc3f7;
+            color: white;
+        }
+        
+        .next-button:hover {
+            background: #29b6f6;
+        }
+        
+        /* Home indicator - repositioned for thinner bezels */
+        .home-indicator {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px; /* Slightly smaller */
+            height: 4px; /* Thinner */
+            background: #000;
+            border-radius: 2px;
+            z-index: 110;
+            opacity: 0.3; /* More subtle */
+        }
+        
+        /* Additional styles for home screen */
+        .home-screen {
+            background: #f8f9fa;
+            position: relative;
+            height: calc(100% - 80px); /* Adjust for bottom nav */
+            overflow-y: auto; /* Allow scrolling within the phone */
+            overflow-x: hidden;
+            padding-bottom: 20px;
+            /* Hide scrollbar */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            bottom: 80px; /* Create space for the bottom navigation */
+            border-bottom: none; /* Ensures no border between content and nav */
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .home-screen::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* App screens */
+        .app-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 80px); /* Adjust height to account for bottom nav */
+            display: none;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        /* Special handling for loading and login screens (full height) */
+        .loading-screen, .login-screen {
+            height: 100%; /* Override the app-screen height */
+        }
+        
+        .app-screen.active {
+            display: flex;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            background: #fffdf2;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .loading-logo img {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+        }
+        
+        .loading-bar {
+            width: 200px;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: #4fc3f7;
+            border-radius: 4px;
+            animation: loading 2s ease-in-out forwards;
+        }
+        
+        @keyframes loading {
+            0% { width: 0%; }
+            60% { width: 80%; }
+            100% { width: 100%; }
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            background: #fff;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 60px 30px 0;
+        }
+        
+        .login-mascot {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-mascot img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .login-input {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .login-input i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        
+        .login-input input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            background: #f9f9f9;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .login-input input::placeholder {
+            color: #bbb;
+        }
+        
+        .forgot-password {
+            align-self: flex-end;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+            text-decoration: none;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            background: #4fc3f7;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background 0.2s;
+        }
+        
+        .login-button:hover {
+            background: #1976d2;
+        }
+        
+        .signup-link {
+            font-size: 14px;
+            color: #666;
+            margin-top: auto;
+            margin-bottom: 20px;
+        }
+        
+        .signup-link a {
+            color: #4fc3f7;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        /* Home Screen Components */
+        .home-header {
+            background: #fff;
+            padding: 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .home-greeting {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .welcome-text {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 2px;
+        }
+        
+        .user-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eee;
+            overflow: hidden;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .today-challenge {
+            background: #4fc3f7;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 16px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
+        }
+        
+        .challenge-icon {
+            background: rgba(255,255,255,0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .challenge-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .challenge-desc {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .challenge-button {
+            background: white;
+            color: #4fc3f7;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Home Features grid improvement */
+        .home-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 16px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 15px 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 140px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+        }
+        
+        .your-progress {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0 16px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .progress-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .view-all {
+            font-size: 14px;
+            color: #4fc3f7;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 65%;
+            background: #4fc3f7;
+            border-radius: 4px;
+        }
+        
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .progress-stat {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Courses Screen Styles */
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #333;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .screen-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0;
+            color: #333;
+        }
+        
+        .header-action {
+            color: #666;
+            padding: 5px;
+            font-size: 18px;
+        }
+        
+        .course-progress {
+            padding: 12px 16px;
+            background: #f8f9fa;
+        }
+        
+        .course-progress-bar {
+            height: 5px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .course-progress-fill {
+            height: 100%;
+            background: #4fc3f7;
+            border-radius: 3px;
+        }
+        
+        .course-progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .course-progress-value {
+            color: #333;
+            font-size: 13px;
+        }
+        
+        .course-progress-points {
+            color: #9c27b0;
+            font-weight: 600;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="src/assets/images/LOGO.jpg" alt="JobHatch Logo" style="height:40px; width:auto;">
+                <span class="logo-text">JOBHATCH</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="tab-link active" data-tab="home">Home</a></li>
+                    <li><a href="#about" class="tab-link" data-tab="about">About</a></li>
+                    <li><a href="#testimonials" class="tab-link" data-tab="testimonials">Testimonials</a></li>
+                    <li><a href="#download" class="tab-link" data-tab="download">Download</a></li>
+                    <li><a href="webapp.html" class="app-link">Web App<i class="fas fa-external-link-alt"></i></a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn login-btn" id="loginBtn">Log in</a>
+                <a href="#" class="btn signup-btn" id="signupBtn">Sign up</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="phone-demo-main">
+        <section class="phone-section">
+            <div class="container">
+                <h1 class="section-title">JobHatch Phone Demo</h1>
+                <p class="section-subtitle">Experience our mobile app features with this interactive demo</p>
+                
+                <!-- Tab content for Phone Demo -->
+                <div class="phone-demo-container">
+                    <style>
+                        .phone-demo-container { display: flex; justify-content: center; padding: 0px 0; }
+                        .phone-device { position: relative; width: 320px; height: 650px; }
+                        
+                        /* iPhone frame design - improved with thinner bezels */
+                        .phone-frame { 
+                            position: absolute; 
+                            top: 0; 
+                            left: 0; 
+                            width: 100%; 
+                            height: 100%; 
+                            z-index: 10; 
+                            pointer-events: none; 
+                            border-radius: 45px;
+                            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+                            border: 4px solid #000; /* Reduced from 12px to 4px (1/3) and changed to pure black */
+                            box-sizing: border-box;
+                            overflow: hidden;
+                            background: transparent; /* Changed from black to transparent */
+                        }
+                        
+                        /* Screen styling - adjusted for thinner bezels */
+                        .phone-screen { 
+                            position: absolute; 
+                            top: 4px; /* Offset by border width */
+                            left: 4px; /* Offset by border width */
+                            width: calc(100% - 8px); /* Adjust for border width on both sides */
+                            height: calc(100% - 8px); /* Adjust for border width on top and bottom */
+                            background: #fff;
+                            border-radius: 40px; /* Adjusted for thinner bezels */
+                            overflow: hidden; 
+                            z-index: 1; 
+                        }
+                        
+                        /* Status bar with dynamic island (redesigned notch) */
+                        .phone-status-bar { 
+                            height: 44px; 
+                            width: 100%;
+                            position: relative;
+                            display: flex; 
+                            justify-content: space-between; 
+                            align-items: flex-end; 
+                            padding: 0 25px 8px 25px; 
+                            color: #000; 
+                            font-size: 14px;
+                            font-weight: 600;
+                            z-index: 20;
+                        }
+                        
+                        /* Dynamic Island design (replacing notch) */
+                        .notch-container {
+                            position: absolute;
+                            top: 16px; /* Adjusted position to fit with new bezels */
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 90px; /* Slightly smaller width */
+                            height: 26px; /* Slightly shorter */
+                            background: #000;
+                            border-radius: 18px; /* Pill shape, adjusted size */
+                            z-index: 20;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        
+                        /* Add subtle camera dot */
+                        .notch-container::after {
+                            content: '';
+                            position: absolute;
+                            right: 25px;
+                            width: 8px;
+                            height: 8px;
+                            background: rgba(60, 60, 60, 0.9);
+                            border-radius: 50%;
+                            box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.5);
+                        }
+                        
+                        .status-time { font-weight: 600; }
+                        .status-icons { 
+                            display: flex; 
+                            gap: 6px; 
+                            align-items: center;
+                        }
+                        
+                        .status-icons i {
+                            font-size: 12px; /* Smaller, more refined icons */
+                        }
+                        
+                        /* Feature icons redesign */
+                        .feature-icon {
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 16px; /* More modern rounded corners */
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-bottom: 15px;
+                            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* Subtle shadow */
+                            transition: transform 0.2s ease, box-shadow 0.2s ease;
+                        }
+                        
+                        .feature-icon i {
+                            font-size: 20px; /* Slightly smaller icons */
+                        }
+                        
+                        .match-icon {
+                            background: linear-gradient(135deg, #ffecb3, #ffd54f); /* Gradient background */
+                            color: #ff8f00;
+                        }
+                        
+                        .jobs-icon {
+                            background: linear-gradient(135deg, #e1f5fe, #b3e5fc); /* Gradient background */
+                            color: #0277bd;
+                        }
+                        
+                        .courses-icon {
+                            background: linear-gradient(135deg, #e8f5e9, #c8e6c9); /* Gradient background */
+                            color: #2e7d32;
+                        }
+                        
+                        .leaderboard-icon {
+                            background: linear-gradient(135deg, #f3e5f5, #e1bee7); /* Gradient background */
+                            color: #6a1b9a;
+                        }
+                        
+                        /* Main content area - adjust for thinner bezels */
+                        .phone-content { 
+                            height: calc(100% - 44px); 
+                            position: relative; 
+                            overflow: hidden; 
+                            z-index: 5;
+                        }
+                        
+                        /* Bottom Navigation - fixed to be within the phone frame */
+                        .bottom-nav {
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 80px; /* Fixed height for the nav */
+                            background: white;
+                            display: flex;
+                            justify-content: space-around;
+                            padding: 12px 0 25px;
+                            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+                            border-top: 1px solid #eee;
+                            z-index: 100;
+                            border-bottom-left-radius: 38px; /* Match phone corners */
+                            border-bottom-right-radius: 38px; /* Match phone corners */
+                        }
+                        
+                        /* Hide navigation when login or loading screens are active */
+                        .loading-screen.active ~ .bottom-nav,
+                        .login-screen.active ~ .bottom-nav {
+                            display: none !important;
+                        }
+                        
+                        .nav-item {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            color: #aaa;
+                            transition: color 0.2s ease;
+                        }
+                        
+                        .nav-item.active {
+                            color: #4fc3f7;
+                        }
+                        
+                        .nav-icon {
+                            font-size: 18px; /* Slightly smaller, more refined */
+                            margin-bottom: 4px;
+                        }
+                        
+                        .nav-label {
+                            font-size: 11px; /* Slightly smaller text */
+                            font-weight: 500;
+                        }
+
+                        /* Home indicator - repositioned for thinner bezels */
+                        .home-indicator {
+                            position: absolute;
+                            bottom: 10px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 90px; /* Slightly smaller */
+                            height: 4px; /* Thinner */
+                            background: #000;
+                            border-radius: 2px;
+                            z-index: 110;
+                            opacity: 0.3; /* More subtle */
+                        }
+                        
+                        /* Additional styles for home screen */
+                        .home-screen {
+                            background: #f8f9fa;
+                            position: relative;
+                            height: calc(100% - 80px); /* Adjust for bottom nav */
+                            overflow-y: auto; /* Allow scrolling within the phone */
+                            overflow-x: hidden;
+                            padding-bottom: 20px;
+                            /* Hide scrollbar */
+                            scrollbar-width: none; /* Firefox */
+                            -ms-overflow-style: none; /* IE and Edge */
+                            bottom: 80px; /* Create space for the bottom navigation */
+                            border-bottom: none; /* Ensures no border between content and nav */
+                        }
+                        
+                        /* Hide scrollbar for Chrome, Safari and Opera */
+                        .home-screen::-webkit-scrollbar {
+                            display: none;
+                        }
+                        
+                        /* App screens */
+                        .app-screen {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: calc(100% - 80px); /* Adjust height to account for bottom nav */
+                            display: none;
+                            flex-direction: column;
+                            transition: transform 0.3s ease-in-out;
+                        }
+                        
+                        /* Special handling for loading and login screens (full height) */
+                        .loading-screen, .login-screen {
+                            height: 100%; /* Override the app-screen height */
+                        }
+                        
+                        .app-screen.active {
+                            display: flex;
+                        }
+                        
+                        /* Loading Screen */
+                        .loading-screen {
+                            background: #fffdf2;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        
+                        .loading-logo {
+                            width: 150px;
+                            height: 150px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-bottom: 30px;
+                        }
+                        
+                        .loading-logo img {
+                            width: 120px;
+                            height: 120px;
+                            border-radius: 24px;
+                        }
+                        
+                        .loading-bar {
+                            width: 200px;
+                            height: 8px;
+                            background: #eee;
+                            border-radius: 4px;
+                            overflow: hidden;
+                            margin-bottom: 20px;
+                        }
+                        
+                        .loading-progress {
+                            height: 100%;
+                            width: 0%;
+                            background: #4fc3f7;
+                            border-radius: 4px;
+                            animation: loading 2s ease-in-out forwards;
+                        }
+                        
+                        @keyframes loading {
+                            0% { width: 0%; }
+                            60% { width: 80%; }
+                            100% { width: 100%; }
+                        }
+                        
+                        /* Login Screen */
+                        .login-screen {
+                            background: #fff;
+                            justify-content: flex-start;
+                            align-items: center;
+                            padding: 60px 30px 0;
+                        }
+                        
+                        .login-mascot {
+                            width: 120px;
+                            height: 120px;
+                            margin-bottom: 30px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        
+                        .login-mascot img {
+                            width: 100%;
+                            height: auto;
+                        }
+                        
+                        .login-form {
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                        }
+                        
+                        .login-title {
+                            font-size: 24px;
+                            font-weight: 700;
+                            margin-bottom: 30px;
+                            color: #333;
+                        }
+                        
+                        .login-input {
+                            position: relative;
+                            width: 100%;
+                            margin-bottom: 15px;
+                        }
+                        
+                        .login-input i {
+                            position: absolute;
+                            left: 15px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            color: #aaa;
+                        }
+                        
+                        .login-input input {
+                            width: 100%;
+                            padding: 15px 15px 15px 45px;
+                            border-radius: 12px;
+                            border: 1px solid #eee;
+                            background: #f9f9f9;
+                            font-size: 16px;
+                            outline: none;
+                        }
+                        
+                        .login-input input::placeholder {
+                            color: #bbb;
+                        }
+                        
+                        .forgot-password {
+                            align-self: flex-end;
+                            font-size: 14px;
+                            color: #666;
+                            margin-bottom: 25px;
+                            text-decoration: none;
+                        }
+                        
+                        .login-button {
+                            width: 100%;
+                            padding: 16px;
+                            border-radius: 12px;
+                            background: #4fc3f7;
+                            color: white;
+                            font-size: 16px;
+                            font-weight: 600;
+                            border: none;
+                            cursor: pointer;
+                            margin-bottom: 20px;
+                            transition: background 0.2s;
+                        }
+                        
+                        .login-button:hover {
+                            background: #1976d2;
+                        }
+                        
+                        .signup-link {
+                            font-size: 14px;
+                            color: #666;
+                            margin-top: auto;
+                            margin-bottom: 20px;
+                        }
+                        
+                        .signup-link a {
+                            color: #4fc3f7;
+                            font-weight: 600;
+                            text-decoration: none;
+                        }
+                        
+                        /* Home Screen Components */
+                        .home-header {
+                            background: #fff;
+                            padding: 20px 16px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                        }
+                        
+                        .home-greeting {
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        
+                        .welcome-text {
+                            font-size: 14px;
+                            color: #888;
+                            margin-bottom: 2px;
+                        }
+                        
+                        .user-name {
+                            font-size: 18px;
+                            font-weight: 700;
+                            color: #333;
+                        }
+                        
+                        .profile-avatar {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 20px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background: #eee;
+                            overflow: hidden;
+                        }
+                        
+                        .profile-avatar img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                        
+                        .today-challenge {
+                            background: #4fc3f7;
+                            border-radius: 16px;
+                            padding: 20px;
+                            margin: 20px 16px;
+                            color: white;
+                            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
+                        }
+                        
+                        .challenge-icon {
+                            background: rgba(255,255,255,0.2);
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 20px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin-bottom: 10px;
+                        }
+                        
+                        .challenge-title {
+                            font-size: 18px;
+                            font-weight: 700;
+                            margin-bottom: 5px;
+                        }
+                        
+                        .challenge-desc {
+                            font-size: 14px;
+                            opacity: 0.9;
+                            margin-bottom: 15px;
+                        }
+                        
+                        .challenge-button {
+                            background: white;
+                            color: #4fc3f7;
+                            border: none;
+                            padding: 8px 16px;
+                            border-radius: 20px;
+                            font-size: 14px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        }
+                        
+                        /* Home Features grid improvement */
+                        .home-features {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 15px;
+                            padding: 0 16px;
+                            margin-bottom: 20px;
+                        }
+                        
+                        .feature-card {
+                            background: white;
+                            border-radius: 16px;
+                            padding: 15px 10px;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            height: 140px;
+                            cursor: pointer;
+                            transition: transform 0.2s, box-shadow 0.2s;
+                        }
+                        
+                        .feature-card:hover {
+                            transform: translateY(-5px);
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                        }
+                        
+                        .feature-title {
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: #333;
+                            text-align: center;
+                        }
+                        
+                        .your-progress {
+                            background: white;
+                            border-radius: 16px;
+                            padding: 20px;
+                            margin: 0 16px 20px;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+                        }
+                        
+                        .progress-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+                        }
+                        
+                        .progress-title {
+                            font-size: 18px;
+                            font-weight: 700;
+                            color: #333;
+                        }
+                        
+                        .view-all {
+                            font-size: 14px;
+                            color: #4fc3f7;
+                            font-weight: 600;
+                        }
+                        
+                        .progress-bar {
+                            height: 8px;
+                            background: #eee;
+                            border-radius: 4px;
+                            overflow: hidden;
+                            margin-bottom: 10px;
+                        }
+                        
+                        .progress-fill {
+                            height: 100%;
+                            width: 65%;
+                            background: #4fc3f7;
+                            border-radius: 4px;
+                        }
+                        
+                        .progress-stats {
+                            display: flex;
+                            justify-content: space-between;
+                        }
+                        
+                        .progress-stat {
+                            font-size: 14px;
+                            color: #666;
+                        }
+                        
+                        @keyframes float {
+                            0% { transform: translateY(0px); }
+                            50% { transform: translateY(-15px); }
+                            100% { transform: translateY(0px); }
+                        }
+                        
+                        /* Courses Screen Styles */
+                        .screen-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 14px 16px;
+                            background: white;
+                            border-bottom: 1px solid #eee;
+                        }
+                        
+                        .back-button {
+                            background: none;
+                            border: none;
+                            font-size: 18px;
+                            color: #333;
+                            cursor: pointer;
+                            padding: 5px;
+                        }
+                        
+                        .screen-title {
+                            font-size: 17px;
+                            font-weight: 600;
+                            margin: 0;
+                            color: #333;
+                        }
+                        
+                        .header-action {
+                            color: #666;
+                            padding: 5px;
+                            font-size: 18px;
+                        }
+                        
+                        .course-progress {
+                            padding: 12px 16px;
+                            background: #f8f9fa;
+                        }
+                        
+                        .course-progress-bar {
+                            height: 5px;
+                            background: #eee;
+                            border-radius: 3px;
+                            overflow: hidden;
+                            margin-bottom: 8px;
+                        }
+                        
+                        .course-progress-fill {
+                            height: 100%;
+                            background: #4fc3f7;
+                            border-radius: 3px;
+                        }
+                        
+                        .course-progress-text {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: 14px;
+                            color: #666;
+                        }
+                        
+                        .course-progress-value {
+                            color: #333;
+                            font-size: 13px;
+                        }
+                        
+                        .course-progress-points {
+                            color: #9c27b0;
+                            font-weight: 600;
+                            font-size: 13px;
+                        }
+                        
+                        /* Flashcard Styles */
+                        .flashcard-container {
+                            padding: 15px 12px;
+                            flex: 1;
+                            display: flex;
+                            flex-direction: column;
+                            overflow-y: auto;
+                        }
+                        
+                        .flashcard {
+                            background: white;
+                            border-radius: 16px;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                            overflow: hidden;
+                            margin-bottom: 20px;
+                            display: none;
+                            max-height: calc(100% - 60px);
+                        }
+                        
+                        .flashcard.active {
+                            display: block;
+                        }
+                        
+                        .question-indicator {
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            padding: 10px 16px;
+                            background: #9c27b0;
+                            color: white;
+                        }
+                        
+                        .question-icon {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 22px;
+                            height: 22px;
+                            background: rgba(255,255,255,0.2);
+                            border-radius: 50%;
+                        }
+                        
+                        .question-text {
+                            font-size: 14px;
+                            font-weight: 600;
+                        }
+                        
+                        .flashcard-question {
+                            padding: 15px 12px;
+                        }
+                        
+                        .flashcard-question h3 {
+                            font-size: 15px;
+                            margin-top: 0;
+                            margin-bottom: 18px;
+                            color: #333;
+                            line-height: 1.4;
+                        }
+                        
+                        .answer-options {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+                        
+                        .answer-option {
+                            display: flex;
+                            align-items: center;
+                            padding: 10px;
+                            border: 1px solid #ddd;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                        }
+                        
+                        .answer-option:hover {
+                            background: #f5f5f5;
+                            border-color: #bbb;
+                        }
+                        
+                        .answer-option.selected {
+                            background: rgba(79, 195, 247, 0.1);
+                            border-color: #4fc3f7;
+                        }
+                        
+                        .answer-option.correct {
+                            background: rgba(76, 175, 80, 0.1);
+                            border-color: #4caf50;
+                        }
+                        
+                        .answer-option.incorrect {
+                            background: rgba(244, 67, 54, 0.1);
+                            border-color: #f44336;
+                        }
+                        
+                        .option-letter {
+                            width: 24px;
+                            height: 24px;
+                            background: #eee;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-weight: 600;
+                            margin-right: 10px;
+                            flex-shrink: 0;
+                            font-size: 13px;
+                        }
+                        
+                        .option-text {
+                            flex: 1;
+                            font-size: 13px;
+                            line-height: 1.3;
+                        }
+                        
+                        .option-number {
+                            width: 18px;
+                            height: 18px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background: #eee;
+                            border-radius: 50%;
+                            font-size: 11px;
+                            color: #666;
+                            margin-left: 8px;
+                            flex-shrink: 0;
+                        }
+                        
+                        .flashcard-hint {
+                            padding: 0 12px 12px;
+                            display: flex;
+                            justify-content: center;
+                        }
+                        
+                        .hint-button {
+                            background: #f3e5f5;
+                            color: #9c27b0;
+                            border: none;
+                            border-radius: 20px;
+                            padding: 6px 14px;
+                            font-size: 13px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                        }
+                        
+                        .hint-button span {
+                            background: #9c27b0;
+                            color: white;
+                            width: 16px;
+                            height: 16px;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 11px;
+                        }
+                        
+                        .flashcard-navigation {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-top: auto;
+                            padding-top: 12px;
+                            padding-bottom: 10px;
+                        }
+                        
+                        .prev-button, .next-button {
+                            background: #f5f5f5;
+                            border: none;
+                            border-radius: 20px;
+                            padding: 8px 14px;
+                            font-size: 13px;
+                            font-weight: 600;
+                            color: #333;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                        }
+                        
+                        .prev-button:disabled {
+                            opacity: 0.5;
+                            cursor: not-allowed;
+                        }
+                        
+                        .next-button {
+                            background: #4fc3f7;
+                            color: white;
+                        }
+                        
+                        .next-button:hover {
+                            background: #29b6f6;
+                        }
+                    </style>
+                    
+                    <div class="phone-device">
+                        <!-- iPhone frame -->
+                        <div class="phone-frame">
+                            <!-- Frame is now styled in CSS -->
+                        </div>
+                        
+                        <div class="phone-screen">
+                            <!-- Status bar with notch -->
+                            <div class="phone-status-bar">
+                                <div class="notch-container"></div>
+                                <div class="status-time">11:32</div>
+                                <div class="status-icons">
+                                    <i class="fas fa-signal"></i>
+                                    <i class="fas fa-wifi"></i>
+                                    <i class="fas fa-battery-full"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="phone-content">
+                                <!-- Loading Screen -->
+                                <div class="app-screen loading-screen" id="loadingScreen">
+                                    <div class="loading-logo">
+                                        <img src="src/assets/images/LOGO.jpg" alt="JobHatch Logo">
+                                    </div>
+                                    <div class="loading-bar">
+                                        <div class="loading-progress"></div>
+                                    </div>
+                                    <div class="loading-text">Loading...</div>
+                                </div>
+                                
+                                <!-- Login Screen -->
+                                <div class="app-screen login-screen" id="loginScreen">
+                                    <div class="login-mascot">
+                                        <img src="src/assets/images/chickoffer.png" alt="JobHatch Mascot">
+                                    </div>
+                                    <div class="login-form">
+                                        <h2 class="login-title">Login to your account</h2>
+                                        <div class="login-input">
+                                            <i class="fas fa-user"></i>
+                                            <input type="text" placeholder="Username">
+                                        </div>
+                                        <div class="login-input">
+                                            <i class="fas fa-lock"></i>
+                                            <input type="password" placeholder="Password">
+                                        </div>
+                                        <a href="#" class="forgot-password">Forgot Password?</a>
+                                        <button class="login-button" id="loginButton">Login</button>
+                                        <div class="signup-link">
+                                            Don't have an account? <a href="#">Sign up</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Home Screen -->
+                                <div class="app-screen home-screen" id="homeScreen">
+                                    <div class="home-header">
+                                        <div class="home-greeting">
+                                            <span class="welcome-text">Welcome back</span>
+                                            <span class="user-name">Simon!</span>
+                                        </div>
+                                        <div class="profile-avatar">
+                                            <img src="src/assets/images/founder-simon.jpeg" alt="Profile">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="today-challenge">
+                                        <div class="challenge-icon">
+                                            <i class="fas fa-trophy"></i>
+                                        </div>
+                                        <h3 class="challenge-title">Today's Challenge</h3>
+                                        <p class="challenge-desc">Take this lesson to earn new milestone</p>
+                                        <button class="challenge-button">Tap to Start</button>
+                                    </div>
+                                    
+                                    <div class="home-features">
+                                        <div class="feature-card" id="matchFeature">
+                                            <div class="feature-icon match-icon">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <h3 class="feature-title">Your Match</h3>
+                                        </div>
+                                        
+                                        <div class="feature-card" id="jobsFeature">
+                                            <div class="feature-icon jobs-icon">
+                                                <i class="fas fa-briefcase"></i>
+                                            </div>
+                                            <h3 class="feature-title">Browse Jobs</h3>
+                                        </div>
+                                        
+                                        <div class="feature-card" id="coursesFeature">
+                                            <div class="feature-icon courses-icon">
+                                                <i class="fas fa-graduation-cap"></i>
+                                            </div>
+                                            <h3 class="feature-title">Daily Courses</h3>
+                                        </div>
+                                        
+                                        <div class="feature-card" id="leaderboardFeature">
+                                            <div class="feature-icon leaderboard-icon">
+                                                <i class="fas fa-chart-line"></i>
+                                            </div>
+                                            <h3 class="feature-title">Leaderboard</h3>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="your-progress">
+                                        <div class="progress-header">
+                                            <h3 class="progress-title">Your Progress</h3>
+                                            <span class="view-all">View all</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill"></div>
+                                        </div>
+                                        <div class="progress-stats">
+                                            <span class="progress-stat">Current Progress: 65%</span>
+                                            <span class="progress-stat">35% to go</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Courses Screen - Flashcards for AI Product Manager -->
+                                <div class="app-screen" id="coursesScreen">
+                                    <div class="screen-header">
+                                        <button class="back-button" id="coursesBackButton"><i class="fas fa-arrow-left"></i></button>
+                                        <h2 class="screen-title">Daily Courses</h2>
+                                        <div class="header-action"><i class="fas fa-ellipsis-v"></i></div>
+                                    </div>
+                                    
+                                    <div class="courses-list">
+                                        <div class="section-title">
+                                            <h3>Popular Courses</h3>
+                                            <span class="view-all">View all</span>
+                                        </div>
+                                        
+                                        <div class="course-cards">
+                                            <div class="course-card active" id="aipmCourse">
+                                                <div class="course-icon">
+                                                    <i class="fas fa-robot"></i>
+                                                </div>
+                                                <div class="course-info">
+                                                    <h4 class="course-title">AI Product Management</h4>
+                                                    <div class="course-meta">
+                                                        <span class="course-level"><i class="fas fa-signal"></i> Beginner</span>
+                                                        <span class="course-time"><i class="far fa-clock"></i> 20 min</span>
+                                                    </div>
+                                                    <div class="course-progress-mini">
+                                                        <div class="progress-bar-mini">
+                                                            <div class="progress-fill-mini" style="width: 30%;"></div>
+                                                        </div>
+                                                        <span class="progress-text-mini">30%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="course-action">
+                                                    <button class="continue-btn">Continue</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="course-card" id="pmCourse">
+                                                <div class="course-icon">
+                                                    <i class="fas fa-tasks"></i>
+                                                </div>
+                                                <div class="course-info">
+                                                    <h4 class="course-title">Product Management Basics</h4>
+                                                    <div class="course-meta">
+                                                        <span class="course-level"><i class="fas fa-signal"></i> Beginner</span>
+                                                        <span class="course-time"><i class="far fa-clock"></i> 15 min</span>
+                                                    </div>
+                                                    <div class="course-progress-mini">
+                                                        <div class="progress-bar-mini">
+                                                            <div class="progress-fill-mini" style="width: 60%;"></div>
+                                                        </div>
+                                                        <span class="progress-text-mini">60%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="course-action">
+                                                    <button class="continue-btn">Continue</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="course-card" id="dataAnalyticsCourse">
+                                                <div class="course-icon">
+                                                    <i class="fas fa-chart-pie"></i>
+                                                </div>
+                                                <div class="course-info">
+                                                    <h4 class="course-title">Data Analytics for PMs</h4>
+                                                    <div class="course-meta">
+                                                        <span class="course-level"><i class="fas fa-signal"></i> Intermediate</span>
+                                                        <span class="course-time"><i class="far fa-clock"></i> 25 min</span>
+                                                    </div>
+                                                    <div class="course-progress-mini">
+                                                        <div class="progress-bar-mini">
+                                                            <div class="progress-fill-mini" style="width: 15%;"></div>
+                                                        </div>
+                                                        <span class="progress-text-mini">15%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="course-action">
+                                                    <button class="continue-btn">Continue</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="section-title">
+                                            <h3>Recommended for You</h3>
+                                            <span class="view-all">View all</span>
+                                        </div>
+                                        
+                                        <div class="course-cards">
+                                            <div class="course-card" id="uxCourse">
+                                                <div class="course-icon">
+                                                    <i class="fas fa-paint-brush"></i>
+                                                </div>
+                                                <div class="course-info">
+                                                    <h4 class="course-title">UX Fundamentals</h4>
+                                                    <div class="course-meta">
+                                                        <span class="course-level"><i class="fas fa-signal"></i> Beginner</span>
+                                                        <span class="course-time"><i class="far fa-clock"></i> 18 min</span>
+                                                    </div>
+                                                    <div class="course-progress-mini">
+                                                        <div class="progress-bar-mini">
+                                                            <div class="progress-fill-mini" style="width: 0%;"></div>
+                                                        </div>
+                                                        <span class="progress-text-mini">0%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="course-action">
+                                                    <button class="start-btn">Start</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Flashcards Screen -->
+                                <div class="app-screen" id="flashcardsScreen">
+                                    <div class="screen-header">
+                                        <button class="back-button" id="flashcardsBackButton"><i class="fas fa-arrow-left"></i></button>
+                                        <h2 class="screen-title">Daily Courses</h2>
+                                        <div class="header-action"><i class="fas fa-ellipsis-v"></i></div>
+                                    </div>
+                                    
+                                    <div class="course-progress">
+                                        <div class="course-progress-bar">
+                                            <div class="course-progress-fill" style="width: 30%;"></div>
+                                        </div>
+                                        <div class="course-progress-text">
+                                            <span class="course-progress-value">3/10</span>
+                                            <span class="course-progress-points">20 XP</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flashcard-container">
+                                        <div class="flashcard active" id="flashcard1">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>Which of the following is NOT a primary responsibility of an AI Product Manager?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Defining product requirements</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Writing AI algorithms</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Stakeholder management</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Roadmap planning</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard2">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What is a key consideration when defining metrics for an AI product?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Using only technical metrics</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Focusing only on business KPIs</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Balancing technical and business metrics</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Using only competitor metrics</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard3">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>When evaluating model performance, what should an AI PM prioritize?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Technical accuracy only</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Speed of inference only</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Cost efficiency only</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">User experience impact</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard4">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What is the concept of "ground truth" in AI product development?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Accurate labeled data for training</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Market research findings</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Budget constraints</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Competitor analysis</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard5">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What is a key ethical consideration when developing AI products?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Maximizing profit margins</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Reducing development time</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Addressing bias in training data</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Marketing positioning</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard6">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What is "model drift" in AI products?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">A design trend in UI/UX</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Degradation of model performance over time</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Moving from one cloud provider to another</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Change in product leadership</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard7">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What is an effective approach to gathering user feedback for AI products?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Only track technical metrics</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Wait until full product launch</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Rely only on AI predictions</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Continuous user testing with diverse feedback channels</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard8">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What is "explainability" in AI product management?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Internal documentation process</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Ability to understand why AI made a decision</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Marketing messaging strategy</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">User interface design approach</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard9">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What is a primary benefit of A/B testing in AI product development?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Reduces development costs</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Eliminates the need for user feedback</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Validates performance improvements with real users</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Simplifies the tech stack</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flashcard" id="flashcard10">
+                                            <div class="question-indicator">
+                                                <div class="question-icon"><i class="fas fa-question"></i></div>
+                                                <div class="question-text">QUESTION</div>
+                                            </div>
+                                            <div class="flashcard-question">
+                                                <h3>What's the recommended approach for launching a new AI feature?</h3>
+                                                <div class="answer-options">
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">A</div>
+                                                        <div class="option-text">Big bang release to all users</div>
+                                                        <div class="option-number">1</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="true">
+                                                        <div class="option-letter">B</div>
+                                                        <div class="option-text">Phased rollout with monitoring</div>
+                                                        <div class="option-number">2</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">C</div>
+                                                        <div class="option-text">Wait for 100% accuracy</div>
+                                                        <div class="option-number">3</div>
+                                                    </div>
+                                                    <div class="answer-option" data-correct="false">
+                                                        <div class="option-letter">D</div>
+                                                        <div class="option-text">Release only after competitor launches</div>
+                                                        <div class="option-number">4</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flashcard-hint">
+                                                <button class="hint-button"><i class="fas fa-lightbulb"></i> Hint <span>1</span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flashcard-navigation">
+                                        <button class="prev-button" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                                        <button class="next-button">Next <i class="fas fa-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Bottom Navigation moved outside of homeScreen but inside phone-content -->
+                                <div class="bottom-nav">
+                                    <div class="nav-item active">
+                                        <div class="nav-icon">
+                                            <i class="fas fa-home"></i>
+                                        </div>
+                                        <span class="nav-label">Home</span>
+                                    </div>
+                                    
+                                    <div class="nav-item">
+                                        <div class="nav-icon">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                        <span class="nav-label">Search</span>
+                                    </div>
+                                    
+                                    <div class="nav-item">
+                                        <div class="nav-icon">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        <span class="nav-label">Planner</span>
+                                    </div>
+                                    
+                                    <div class="nav-item">
+                                        <div class="nav-icon">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <span class="nav-label">Profile</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Home Indicator -->
+                                <div class="home-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="footer-logo">
+                        <img src="src/assets/images/LOGO.jpg" alt="JobHatch Logo" style="height:35px; width:auto;">
+                        <span>JOBHATCH</span>
+                    </a>
+                    <p>Gamified career platform helping job seekers break through isolation and anxiety with daily wins.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html#home">Home</a></li>
+                            <li><a href="index.html#about">About Us</a></li>
+                            <li><a href="index.html#how-it-works">How It Works</a></li>
+                            <li><a href="webapp.html">Dashboard</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Career Guides</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Subscribe</h4>
+                        <p>Stay updated with our latest career tips and features</p>
+                        <form class="subscribe-form">
+                            <input type="email" placeholder="Enter your email">
+                            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>Designed with <i class="fas fa-heart"></i> by the JobHatch Team</p>
+                <p>&copy; 2025 JobHatch. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="src/js/main.js"></script>
+
+    <!-- Demo Button and Modal Elements -->
+    <button class="demo-button" id="launchDemoButton">
+        <i class="fas fa-mobile-alt"></i>
+        Try App Demo
+    </button>
+
+    <button class="exit-demo-button" id="exitDemoButton">
+        <i class="fas fa-times"></i>
+    </button>
+
+    <div class="qr-modal" id="qrModal">
+        <div class="qr-modal-content">
+            <h3 class="qr-modal-title">Scan to try on your phone</h3>
+            <p class="qr-instruction">Scan this QR code with your phone's camera to experience the app demo in full-screen mode</p>
+            <div class="qr-code-container" id="qrCodeContainer"></div>
+            <button class="close-qr-modal" id="closeQrModal">Close</button>
+        </div>
+    </div>
+
+    <!-- Phone App Demo Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get screen elements
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loginScreen = document.getElementById('loginScreen');
+            const homeScreen = document.getElementById('homeScreen');
+            const coursesScreen = document.getElementById('coursesScreen');
+            const flashcardsScreen = document.getElementById('flashcardsScreen');
+            const bottomNav = document.querySelector('.bottom-nav');
+            
+            // Initially hide the bottom navigation
+            if (bottomNav) {
+                bottomNav.style.display = 'none';
+            }
+            
+            // Set loading screen as active first
+            loadingScreen.classList.add('active');
+            loginScreen.classList.remove('active');
+            homeScreen.classList.remove('active');
+            coursesScreen.classList.remove('active');
+            flashcardsScreen.classList.remove('active');
+            
+            // Simulate app loading
+            setTimeout(() => {
+                // Switch to login screen after loading completes
+                loadingScreen.classList.remove('active');
+                loginScreen.classList.add('active');
+            }, 2500);
+            
+            // Login button click handler
+            const loginButton = document.getElementById('loginButton');
+            if (loginButton) {
+                loginButton.addEventListener('click', function() {
+                    // Transition to home screen
+                    loginScreen.classList.remove('active');
+                    homeScreen.classList.add('active');
+                    
+                    // Show the bottom navigation when home screen is active
+                    if (bottomNav) {
+                        bottomNav.style.display = 'flex';
+                    }
+                });
+            }
+            
+            // Setup feature card click handlers
+            const featureCards = {
+                matchFeature: document.getElementById('matchFeature'),
+                jobsFeature: document.getElementById('jobsFeature'),
+                coursesFeature: document.getElementById('coursesFeature'),
+                leaderboardFeature: document.getElementById('leaderboardFeature')
+            };
+            
+            // Match Feature
+            if (featureCards.matchFeature) {
+                featureCards.matchFeature.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-5px)';
+                        showNotification("Your Match", 'info');
+                    }, 200);
+                });
+            }
+            
+            // Jobs Feature
+            if (featureCards.jobsFeature) {
+                featureCards.jobsFeature.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-5px)';
+                        showNotification("Browse Jobs", 'info');
+                    }, 200);
+                });
+            }
+            
+            // Courses Feature
+            if (featureCards.coursesFeature) {
+                featureCards.coursesFeature.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-5px)';
+                        // Navigate to courses selection screen
+                        homeScreen.classList.remove('active');
+                        coursesScreen.classList.add('active');
+                        // Hide bottom nav when in courses
+                        if (bottomNav) {
+                            bottomNav.style.display = 'none';
+                        }
+                    }, 200);
+                });
+            }
+            
+            // Leaderboard Feature
+            if (featureCards.leaderboardFeature) {
+                featureCards.leaderboardFeature.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-5px)';
+                        showNotification("Leaderboard", 'info');
+                    }, 200);
+                });
+            }
+            
+            // Courses Back Button - return to home
+            const coursesBackButton = document.getElementById('coursesBackButton');
+            if (coursesBackButton) {
+                coursesBackButton.addEventListener('click', function() {
+                    // Navigate back to home screen
+                    coursesScreen.classList.remove('active');
+                    homeScreen.classList.add('active');
+                    // Show bottom nav when back to home
+                    if (bottomNav) {
+                        bottomNav.style.display = 'flex';
+                    }
+                });
+            }
+            
+            // Flashcards Back Button - return to courses selection
+            const flashcardsBackButton = document.getElementById('flashcardsBackButton');
+            if (flashcardsBackButton) {
+                flashcardsBackButton.addEventListener('click', function() {
+                    // Navigate back to courses screen
+                    flashcardsScreen.classList.remove('active');
+                    coursesScreen.classList.add('active');
+                });
+            }
+            
+            // Course card click handlers
+            const courseCards = document.querySelectorAll('.course-card');
+            courseCards.forEach(card => {
+                const continueBtn = card.querySelector('.continue-btn');
+                const startBtn = card.querySelector('.start-btn');
+                
+                // Continue/Start button click
+                if (continueBtn) {
+                    continueBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent card click
+                        // Navigate to flashcards screen
+                        coursesScreen.classList.remove('active');
+                        flashcardsScreen.classList.add('active');
+                        
+                        // Reset to first flashcard
+                        resetFlashcards();
+                    });
+                }
+                
+                if (startBtn) {
+                    startBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent card click
+                        // Navigate to flashcards screen
+                        coursesScreen.classList.remove('active');
+                        flashcardsScreen.classList.add('active');
+                        
+                        // Reset to first flashcard
+                        resetFlashcards();
+                    });
+                }
+                
+                // Card click also navigates to flashcards
+                card.addEventListener('click', function() {
+                    // Remove active class from all cards
+                    courseCards.forEach(c => c.classList.remove('active'));
+                    // Add active class to clicked card
+                    this.classList.add('active');
+                    
+                    // Navigate to flashcards screen
+                    coursesScreen.classList.remove('active');
+                    flashcardsScreen.classList.add('active');
+                    
+                    // Reset to first flashcard
+                    resetFlashcards();
+                });
+            });
+            
+            // Flashcard functionality
+            const flashcards = document.querySelectorAll('.flashcard');
+            const nextButton = document.querySelector('.next-button');
+            const prevButton = document.querySelector('.prev-button');
+            let currentCard = 0;
+            
+            // Function to reset flashcards to initial state
+            function resetFlashcards() {
+                flashcards.forEach(card => card.classList.remove('active'));
+                flashcards[0].classList.add('active');
+                currentCard = 0;
+                
+                // Reset navigation buttons
+                prevButton.disabled = true;
+                nextButton.disabled = false;
+                
+                // Reset card display styles
+                flashcards.forEach(card => {
+                    card.querySelectorAll('.answer-option').forEach(option => {
+                        option.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                });
+                
+                // Update progress indicator
+                updateProgressIndicator();
+            }
+            
+            // Function to update progress indicator
+            function updateProgressIndicator() {
+                const progressFill = document.querySelector('.course-progress-fill');
+                const progressValue = document.querySelector('.course-progress-value');
+                const progressPoints = document.querySelector('.course-progress-points');
+                
+                if (progressFill && progressValue) {
+                    const percentage = ((currentCard + 1) / flashcards.length) * 100;
+                    progressFill.style.width = `${percentage}%`;
+                    progressValue.textContent = `${currentCard + 1}/${flashcards.length}`;
+                    
+                    // Ensure XP points are always visible
+                    if (progressPoints) {
+                        progressPoints.textContent = '20 XP';
+                    }
+                }
+            }
+            
+            // Answer option selection
+            const answerOptions = document.querySelectorAll('.answer-option');
+            answerOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Get all options in this question
+                    const options = this.parentNode.querySelectorAll('.answer-option');
+                    
+                    // If already answered, do nothing
+                    if (options[0].classList.contains('correct') || 
+                        options[0].classList.contains('incorrect')) {
+                        return;
+                    }
+                    
+                    // Remove selected class from all options
+                    options.forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Check if answer is correct
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    
+                    // Add correct/incorrect class after a short delay
+                    setTimeout(() => {
+                        if (isCorrect) {
+                            this.classList.add('correct');
+                            showNotification('Correct!', 'success');
+                        } else {
+                            this.classList.add('incorrect');
+                            
+                            // Highlight the correct answer
+                            options.forEach(opt => {
+                                if (opt.getAttribute('data-correct') === 'true') {
+                                    opt.classList.add('correct');
+                                }
+                            });
+                            
+                            showNotification('Incorrect', 'error');
+                        }
+                    }, 500);
+                });
+            });
+            
+            // Hint buttons
+            const hintButtons = document.querySelectorAll('.hint-button');
+            hintButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    // Show different hints based on the question number
+                    const hints = [
+                        "Focus on technical vs. managerial responsibilities",
+                        "Consider what metrics provide a complete picture",
+                        "Think about the end-user perspective",
+                        "Consider what data is essential for machine learning",
+                        "Think about fairness and representation",
+                        "Consider how data changes over time",
+                        "Think about continuous improvement",
+                        "Consider transparency in AI systems",
+                        "Think about evidence-based decision making",
+                        "Consider risk management strategies"
+                    ];
+                    
+                    showNotification(`Hint: ${hints[index]}`, 'info');
+                });
+            });
+            
+            // Navigation buttons
+            if (nextButton) {
+                nextButton.addEventListener('click', function() {
+                    if (currentCard < flashcards.length - 1) {
+                        flashcards[currentCard].classList.remove('active');
+                        currentCard++;
+                        flashcards[currentCard].classList.add('active');
+                        
+                        // Update buttons state
+                        prevButton.disabled = false;
+                        nextButton.disabled = currentCard === flashcards.length - 1;
+                        
+                        // Update progress indicator
+                        updateProgressIndicator();
+                    }
+                });
+            }
+            
+            if (prevButton) {
+                prevButton.addEventListener('click', function() {
+                    if (currentCard > 0) {
+                        flashcards[currentCard].classList.remove('active');
+                        currentCard--;
+                        flashcards[currentCard].classList.add('active');
+                        
+                        // Update buttons state
+                        nextButton.disabled = false;
+                        prevButton.disabled = currentCard === 0;
+                        
+                        // Update progress indicator
+                        updateProgressIndicator();
+                    }
+                });
+            }
+            
+            // Bottom nav click handlers
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    navItems.forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                });
+            });
+            
+            // Challenge button click handler
+            const challengeButton = document.querySelector('.challenge-button');
+            if (challengeButton) {
+                challengeButton.addEventListener('click', function() {
+                    alert('Challenge started! Complete today\'s task to earn 25 XP.');
+                });
+            }
+            
+            // Function to show notification for feature clicks
+            function showFeatureNotification(featureName) {
+                showNotification(`Opening ${featureName}...`, 'info');
+            }
+            
+            // Unified notification function
+            function showNotification(message, type = 'info') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.style.position = 'fixed';
+                notification.style.top = '80px';
+                notification.style.left = '50%';
+                notification.style.transform = 'translateX(-50%)';
+                notification.style.padding = '10px 20px';
+                notification.style.borderRadius = '20px';
+                notification.style.zIndex = '1000';
+                notification.style.fontSize = '14px';
+                notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                notification.innerText = message;
+                
+                // Set colors based on type
+                if (type === 'success') {
+                    notification.style.backgroundColor = 'rgba(76, 175, 80, 0.9)';
+                    notification.style.color = 'white';
+                } else if (type === 'error') {
+                    notification.style.backgroundColor = 'rgba(244, 67, 54, 0.9)';
+                    notification.style.color = 'white';
+                } else if (type === 'info') {
+                    notification.style.backgroundColor = 'rgba(0,0,0,0.7)';
+                    notification.style.color = 'white';
+                }
+                
+                // Add to body
+                document.body.appendChild(notification);
+                
+                // Remove after 2 seconds
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 500);
+                }, 1500);
+            }
+            
+            // Demo Mode Functionality
+            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const launchDemoButton = document.getElementById('launchDemoButton');
+            const exitDemoButton = document.getElementById('exitDemoButton');
+            const qrModal = document.getElementById('qrModal');
+            const closeQrModal = document.getElementById('closeQrModal');
+            const qrCodeContainer = document.getElementById('qrCodeContainer');
+            
+            // Auto-launch demo mode for mobile visitors
+            if (isMobileDevice && !window.location.href.includes('?desktop=true')) {
+                enableDemoMode();
+            }
+            
+            // Launch demo button click handler
+            if (launchDemoButton) {
+                launchDemoButton.addEventListener('click', function() {
+                    if (isMobileDevice) {
+                        enableDemoMode();
+                    } else {
+                        showQRModal();
+                    }
+                });
+            }
+            
+            // Exit demo button click handler
+            if (exitDemoButton) {
+                exitDemoButton.addEventListener('click', function() {
+                    disableDemoMode();
+                });
+            }
+            
+            // Close QR modal button click handler
+            if (closeQrModal) {
+                closeQrModal.addEventListener('click', function() {
+                    qrModal.classList.remove('active');
+                });
+            }
+            
+            // Enable demo mode
+            function enableDemoMode() {
+                document.body.classList.add('mobile-demo-view');
+                
+                // Request fullscreen if available
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+                
+                // Prevent scrolling
+                document.body.style.overflow = 'hidden';
+                
+                // Reset screens to loading state for demo experience
+                loadingScreen.classList.add('active');
+                loginScreen.classList.remove('active');
+                homeScreen.classList.remove('active');
+                
+                // Simulate app loading again
+                setTimeout(() => {
+                    loadingScreen.classList.remove('active');
+                    loginScreen.classList.add('active');
+                }, 2500);
+            }
+            
+            // Disable demo mode
+            function disableDemoMode() {
+                document.body.classList.remove('mobile-demo-view');
+                
+                // Exit fullscreen if active
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                
+                // Allow scrolling again
+                document.body.style.overflow = '';
+            }
+            
+            // Show QR Modal with dynamic QR code
+            function showQRModal() {
+                // Generate QR code for current URL
+                let demoUrl = window.location.href;
+                if (demoUrl.includes('?')) {
+                    demoUrl = demoUrl.split('?')[0];
+                }
+                demoUrl = demoUrl.replace(/\/$/, ''); // Remove trailing slash if present
+                
+                // Create the QR code
+                if (!qrCodeContainer.querySelector('img')) {
+                    // Load QR code library if needed
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+                    script.onload = function() {
+                        // Generate QR code
+                        const typeNumber = 0;
+                        const errorCorrectionLevel = 'L';
+                        const qr = qrcode(typeNumber, errorCorrectionLevel);
+                        qr.addData(demoUrl);
+                        qr.make();
+                        const qrImg = qr.createImgTag(5);
+                        
+                        // Insert QR code to the container
+                        qrCodeContainer.innerHTML = qrImg;
+                    };
+                    document.head.appendChild(script);
+                }
+                
+                // Show the modal
+                qrModal.classList.add('active');
+            }
+
+            // Make navigation links functional
+            const tabLinks = document.querySelectorAll('.tab-link');
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get the target tab ID
+                    const targetTabId = this.getAttribute('data-tab');
+                    
+                    // Redirect to the corresponding page in index.html
+                    window.location.href = `index.html#${targetTabId}`;
+                });
+            });
+
+            // Handle login and signup buttons
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'index.html#login';
+                });
+            }
+
+            if (signupBtn) {
+                signupBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'index.html#signup';
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

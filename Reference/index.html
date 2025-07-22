@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHatch - Hatch your career. Together.</title>
+    <link rel="icon" href="src/assets/images/LOGO.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/modal.css">
+    <link rel="stylesheet" href="src/css/onboarding.css">
+    <link rel="stylesheet" href="src/css/about.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="src/assets/images/LOGO.jpg" alt="JobHatch Logo" style="height:40px; width:auto;">
+                <span class="logo-text">JOBHATCH</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="tab-link active" data-tab="home">Home</a></li>
+                    <!-- <li><a href="#about" class="tab-link" data-tab="about">About</a></li> -->
+                    <!-- <li><a href="#testimonials" class="tab-link" data-tab="testimonials">Testimonials</a></li> -->
+                    <li><a href="#download" class="tab-link" data-tab="download">Download</a></li>
+                    <li><a href="webapp.html" class="app-link">Web App<i class="fas fa-external-link-alt"></i></a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn login-btn" id="loginBtn">Log in</a>
+                <a href="#" class="btn signup-btn" id="signupBtn">Sign up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tab Content - Home (Default Active) -->
+    <div class="tab-content active" id="home">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <h1 class="home-slogan">
+                        <span class="slogan-orange">Hatch</span> <span class="slogan-blue">your</span> <span class="slogan-orange">career</span><br>
+                        <span class="slogan-blue">Together</span>
+                    </h1>
+                    <p class="hero-subtitle">Level up your career quest! 🐣 Team up, unlock daily wins, and hatch your dream job—no more solo grinding.</p>
+                    <div class="hero-buttons">
+                        <a href="webapp.html" class="btn btn-primary get-started-btn" id="getStartedBtn">Get Started !</a>
+                        <a href="#about" class="btn btn-outline tab-link" data-tab="about">Learn More</a>
+                    </div>
+                    <div class="users-count">
+                        <div class="users-avatars">
+                            <img src="src/assets/images/avatar-1.svg" alt="User">
+                            <img src="src/assets/images/avatar-2.svg" alt="User">
+                            <img src="src/assets/images/avatar-3.svg" alt="User">
+                            <img src="src/assets/images/avatar-4.svg" alt="User">
+                        </div>
+                        <p>Join 1,200+ career builders</p>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="src/assets/images/homepage-chick-offer.png" alt="Career Pet Chick" class="main-image" id="mainChick">
+                    <img src="src/assets/images/chick-hatch.gif" alt="Hatch Animation" class="hatch-anim" id="hatchAnim" style="display:none; position:absolute; left:0; top:0; z-index:10; width:180px;">
+                    <div class="feature-bubble resume">
+                        <img src="src/assets/images/missions-icon.svg" alt="Document Icon">
+                        <div class="bubble-content">
+                            <p class="bubble-title">Resume Updated</p>
+                            <p class="bubble-subtitle">+25 XP</p>
+                            <span class="xp-anim" id="xpAnim" style="display:none;">+25 XP</span>
+                        </div>
+                    </div>
+                    <div class="feature-bubble buddy">
+                        <img src="src/assets/images/buddy-icon.svg" alt="Buddy Icon">
+                        <div class="bubble-content">
+                            <p class="bubble-title">Buddy Matched!</p>
+                            <p class="bubble-subtitle">Meet your accountability partner</p>
+                        </div>
+                    </div>
+                    <div class="feature-bubble job">
+                        <img src="src/assets/images/mission-icon.svg" alt="Job Icon">
+                        <div class="bubble-content">
+                            <p class="bubble-title">Job Fair Attended</p>
+                            <p class="bubble-subtitle">3 new connections</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-bottom-curve">
+                <svg viewBox="0 0 1440 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 50C240 150 1200 0 1440 50V150H0V50Z" fill="white"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- How JobHatch Works Section (插入在Home Page下方) -->
+        <section class="how-jobhatch-works" style="max-width:900px;margin:60px auto 0 auto;padding:40px 20px 80px 20px;position:relative;">
+          <h2 style="text-align:center;font-size:2rem;font-weight:700;margin-bottom:8px;">How JobHatch Works</h2>
+          <p style="text-align:center;color:#888;font-size:1.05rem;margin-bottom:40px;">A quick, fun look at what makes us tick—no long reads, we promise</p>
+          
+          <!-- Desktop Layout -->
+          <div class="roadmap-desktop" style="position:relative;min-height:950px;">
+            <!-- 路径曲线 -->
+            <img src="src/assets/images/Road.png" alt="Road" style="position:absolute;left:50%;top:60px;transform:translateX(-50%);height:820px;width:auto;z-index:0;">
+            <!-- 节点1 -->
+            <div style="position:absolute;left:0;width:100%;display:flex;flex-direction:row;justify-content:space-between;align-items:center;">
+              <div style="width:38%;display:flex;justify-content:flex-end;">
+                <img src="src/assets/images/Design-Personal-Career-Plan.png" alt="Design Personal Career Plan" style="width:200px;height:auto;position: relative;bottom: 43px;left: 36px">
+              </div>
+              <button class="roadmap-star" style="position:relative;z-index:1;width:80px;height:80px;padding:0;border:none;background:transparent;cursor:pointer;transform:translateX(-15px);bottom: 20px;" aria-label="Design Personal Career Plan" onclick="alert('Design Personal Career Plan')">
+                <img src="src/assets/images/Button_default.png" alt="star1" class="default-star" style="width:80px;height:80px;pointer-events:none;">
+                <img src="src/assets/images/Button_Press.png" alt="star1 pressed" class="pressed-star" style="width:80px;height:80px;pointer-events:none;">
+              </button>
+              <div style="width:38%;display:flex;justify-content:flex-start;">
+                <div style="margin-left:48px;max-width:260px;">
+                  <div style="font-weight:700;font-size:1.1rem;margin-bottom:4px;">
+                    <span style="color:#4da3ff;">Design</span> <span style="color:#f39c12;">Personal</span> <span style="color:#4da3ff;">Career</span> <span style="color:#f39c12;">Plan</span>
+                  </div>
+                  <div style="color:#888;font-size:0.98rem;">Not sure where to start? Just upload your resume and let our AI hatch a custom career roadmap for you.</div>
+                </div>
+              </div>
+            </div>
+            <!-- 节点2 -->
+            <div style="position:absolute;top: 232px;left:0;width:100%;height:150px;display:flex;flex-direction:row;justify-content:space-between;align-items:center;">
+              <div style="width:38%;display:flex;justify-content:flex-end;">
+                <div style="margin-right:48px;max-width:260px;text-align:right;">
+                  <div style="font-weight:700;font-size:1.1rem;margin-bottom:4px;">
+                    <span style="color:#4da3ff;">Set Up</span> <span style="color:#f39c12;">Daily Goals</span>
+                  </div>
+                  <div style="color:#888;font-size:0.98rem;">Choose your intensity — chill or power mode. Our mission planner turns your career goals into fun daily quests (XP included)!</div>
+                </div>
+              </div>
+              <button class="roadmap-star" style="position:relative;z-index:1;width:80px;height:80px;padding:0;border:none;background:transparent;left:20px;cursor:pointer;transform:translateX(25px);" aria-label="Set Up Daily Goals" onclick="alert('Set Up Daily Goals')">
+                <img src="src/assets/images/Button_default.png" alt="star2" class="default-star" style="width:80px;height:80px;pointer-events:none;">
+                <img src="src/assets/images/Button_Press.png" alt="star2 pressed" class="pressed-star" style="width:80px;height:80px;pointer-events:none;">
+              </button>
+              <div style="width:38%;display:flex;justify-content:flex-start;">
+                <img src="src/assets/images/Set-Up-Daily-Goals.png" alt="Set Up Daily Goals" style="width:0px;height:auto;margin-left:48px;">
+              </div>
+            </div>
+            <!-- 节点3 -->
+            <div style="position:absolute;top:390px;left:0;width:100%;display:flex;flex-direction:row;justify-content:space-between;align-items:center;">
+              <div style="width:38%;display:flex;justify-content:flex-end;">
+                <img src="src/assets/images/Apply-with-AI-Track-Jobs.png" alt="Apply with AI &amp; Track Jobs" style="width: 180px;height:auto;margin-right:48px;">
+              </div>
+              <button class="roadmap-star" style="position:relative;z-index:1;width:80px;height:80px;padding:0;border:none;background:transparent;cursor:pointer;transform:translateX(-22px);left: 45px;" aria-label="Apply with AI &amp; Track Jobs" onclick="alert('Apply with AI &amp; Track Jobs')">
+                <img src="src/assets/images/Button_default.png" alt="star3" class="default-star" style="width:80px;height:80px;pointer-events:none;">
+                <img src="src/assets/images/Button_Press.png" alt="star3 pressed" class="pressed-star" style="width:80px;height:80px;pointer-events:none;">
+              </button>
+              <div style="width:38%;display:flex;justify-content:flex-start;">
+                <div style="margin-left:48px;max-width:260px;">
+                  <div style="font-weight:700;font-size:1.1rem;margin-bottom:4px;">
+                    <span style="color:#4da3ff;">Apply with</span> <span style="color:#f39c12;">AI &amp; Track Jobs</span>
+                  </div>
+                  <div style="color:#888;font-size:0.98rem;">Tired of copy-pasting? Our AI matches you to jobs, rewrites your resume, and applies for you. You sit back and watch the offers roll in.</div>
+                </div>
+              </div>
+            </div>
+            <!-- 节点4 -->
+            <div style="position:absolute;top: 551px;left: 73px;width:100%;height:200px;display:flex;flex-direction:row;justify-content:space-between;align-items:center;">
+              <div style="width:38%;display:flex;justify-content:flex-end;">
+                <div style="margin-right:48px;max-width:260px;text-align:right;">
+                  <div style="font-weight:700;font-size:1.1rem;margin-bottom:4px;">
+                    <span style="color:#4da3ff;">Enhance</span> <span style="color:#f39c12;">Skills</span>
+                  </div>
+                  <div style="color:#888;font-size:0.98rem;">Get ready to level up. We'll show you where your skills fall short and guide you through practice, courses, and mock interviews.</div>
+                </div>
+              </div>
+              <button class="roadmap-star" style="position:relative;z-index:1;width:80px;height:80px;padding:0;border:none;background:transparent;cursor:pointer;transform:translateX(20px);" aria-label="Enhance Skills" onclick="alert('Enhance Skills')">
+                <img src="src/assets/images/Button_default.png" alt="star4" class="default-star" style="width:80px;height:80px;pointer-events:none;">
+                <img src="src/assets/images/Button_Press.png" alt="star4 pressed" class="pressed-star" style="width:80px;height:80px;pointer-events:none;">
+              </button>
+              <div style="width:38%;display:flex;justify-content:flex-start;">
+                <img src="src/assets/images/Enhance-Skills.png" alt="Enhance Skills" style="width: 183px;height:auto;position: relative;">
+              </div>
+            </div>
+            <!-- 节点5 -->
+            <div style="position:absolute;top: 728px;right: 36px;width:100%;height:300px;display:flex;flex-direction:row;justify-content:space-between;align-items:center;">
+              <div style="width:38%;display:flex;justify-content:flex-end;">
+                <img src="src/assets/images/FindabuddyMentor.png" alt="Find a buddy &amp; Mentor" style="width: 200px;height:auto;left: 31px;position: relative;">
+              </div>
+              <button class="roadmap-star" style="position:relative;z-index:1;width:80px;height:80px;padding:0;border:none;background:transparent;cursor:pointer;transform:translateX(-5px);" aria-label="Find a buddy &amp; Mentor" onclick="alert('Find a buddy &amp; Mentor')">
+                <img src="src/assets/images/Button_default.png" alt="star5" class="default-star" style="width:80px;height:80px;pointer-events:none;">
+                <img src="src/assets/images/Button_Press.png" alt="star5 pressed" class="pressed-star" style="width:80px;height:80px;pointer-events:none;">
+              </button>
+              <div style="width:38%;display:flex;justify-content:flex-start;">
+                <div style="margin-left:48px;max-width:260px;">
+                  <div style="font-weight:700;font-size:1.1rem;margin-bottom:4px;">
+                    <span style="color:#4da3ff;">Find a buddy</span> <span style="color:#f39c12;">&amp; Mentor</span>
+                  </div>
+                  <div style="color:#888;font-size:0.98rem;">Don't job hunt alone! Get matched with a buddy or a real mentor to keep you motivated, supported, and on track to the finish line.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mobile Layout -->
+          <div class="roadmap-mobile" style="display:none;">
+            <div class="roadmap-step" style="margin-bottom:40px;text-align:center;">
+              <img src="src/assets/images/Design-Personal-Career-Plan.png" alt="Design Personal Career Plan" style="width:150px;height:auto;margin-bottom:20px;">
+              <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px;">
+                <span style="color:#4da3ff;">Design</span> <span style="color:#f39c12;">Personal</span> <span style="color:#4da3ff;">Career</span> <span style="color:#f39c12;">Plan</span>
+              </div>
+              <div style="color:#888;font-size:0.98rem;max-width:300px;margin:0 auto;">Not sure where to start? Just upload your resume and let our AI hatch a custom career roadmap for you.</div>
+            </div>
+            
+            <div class="roadmap-step" style="margin-bottom:40px;text-align:center;">
+              <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px;">
+                <span style="color:#4da3ff;">Set Up</span> <span style="color:#f39c12;">Daily Goals</span>
+              </div>
+              <div style="color:#888;font-size:0.98rem;max-width:300px;margin:0 auto 20px auto;">Choose your intensity — chill or power mode. Our mission planner turns your career goals into fun daily quests (XP included)!</div>
+            </div>
+            
+            <div class="roadmap-step" style="margin-bottom:40px;text-align:center;">
+              <img src="src/assets/images/Apply-with-AI-Track-Jobs.png" alt="Apply with AI &amp; Track Jobs" style="width:150px;height:auto;margin-bottom:20px;">
+              <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px;">
+                <span style="color:#4da3ff;">Apply with</span> <span style="color:#f39c12;">AI &amp; Track Jobs</span>
+              </div>
+              <div style="color:#888;font-size:0.98rem;max-width:300px;margin:0 auto;">Tired of copy-pasting? Our AI matches you to jobs, rewrites your resume, and applies for you. You sit back and watch the offers roll in.</div>
+            </div>
+            
+            <div class="roadmap-step" style="margin-bottom:40px;text-align:center;">
+              <img src="src/assets/images/Enhance-Skills.png" alt="Enhance Skills" style="width:150px;height:auto;margin-bottom:20px;">
+              <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px;">
+                <span style="color:#4da3ff;">Enhance</span> <span style="color:#f39c12;">Skills</span>
+              </div>
+              <div style="color:#888;font-size:0.98rem;max-width:300px;margin:0 auto;">Get ready to level up. We'll show you where your skills fall short and guide you through practice, courses, and mock interviews.</div>
+            </div>
+            
+            <div class="roadmap-step" style="margin-bottom:40px;text-align:center;">
+              <img src="src/assets/images/FindabuddyMentor.png" alt="Find a buddy &amp; Mentor" style="width:150px;height:auto;margin-bottom:20px;">
+              <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px;">
+                <span style="color:#4da3ff;">Find a buddy</span> <span style="color:#f39c12;">&amp; Mentor</span>
+              </div>
+              <div style="color:#888;font-size:0.98rem;max-width:300px;margin:0 auto;">Don't job hunt alone! Get matched with a buddy or a real mentor to keep you motivated, supported, and on track to the finish line.</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="homepage-bottom-top-curve">
+            <svg viewBox="0 0 1440 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0C240 150 1200 0 1440 0V150H0V0Z" fill="#181e3a"></path>
+                </svg>
+        </div>
+
+        <!-- 蓝色路径流程区下方新内容 -->
+        <section class="homepage-bottom">
+          <div class="homepage-bottom-main">
+            <img src="src/assets/images/Trophy.png" alt="Trophy" class="trophy-img">
+            <div class="stars-row">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <h2 class="what-they-said-title">What They Said</h2>
+            <div class="what-they-said-desc">Real feedback from users who want a better job search experience.</div>
+            <div class="testimonial-cards-row">
+              <!-- 留言卡片 ... -->
+            </div>
+          </div>
+        </section>
+    </div>
+
+    <!-- Tab Content - About -->
+    <div class="tab-content" id="about">
+        <!-- About Hero Section -->
+        <section class="about-hero">
+            <div class="container">
+                <h1 class="section-title">About JobHatch</h1>
+                <p class="hero-description">JobHatch is the next-gen job hunt accelerator—a gamified, AI-powered platform that teaches in-demand skills, automates job applications, and connects users to AI-integrated roles.</p>
+            </div>
+        </section>
+
+        <!-- Our Story Section -->
+        <section class="our-story">
+            <div class="container">
+                <div class="story-content">
+                    <div class="story-image">
+                        <img src="src/assets/images/team-working.png" alt="Team collaborating on laptops">
+                    </div>
+                    <div class="story-text">
+                        <h2>A Platform Born from Real Struggles</h2>
+                        <p>Think Duolingo meets LinkedIn: we teach AI-relevant skills, then help users apply and get hired into AI-integrated roles.
+                          Starting with Gen Z, users build skills through daily tasks, AI coaching, and peer support — while our backend agent automates job applications and streamlines their workflow.
+                          Unlike traditional platforms that only show listings, JobHatch delivers end-to-end career support: teaching in-demand skills and connecting users to curated opportunities.
+                          With LLMs now able to teach and automate complex tasks, this is the moment to scale a platform that helps users to learn, grow, and get hired — all in one place.
+                          </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission & Values Section -->
+        <section class="mission-values">
+            <div class="container">
+                <h2 class="section-title">Our Mission & Values</h2>
+                
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon support">
+                            <i class="far fa-heart"></i>
+                        </div>
+                        <h3>Support</h3>
+                        <p>Create a supportive community that alleviates the emotional burden of job seeking</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon connection">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Connection</h3>
+                        <p>Foster meaningful connections between job seekers facing similar challenges</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon growth">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Growth</h3>
+                        <p>Transform career development into a rewarding journey of personal growth</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon innovation">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Innovation</h3>
+                        <p>Continuously innovate to make career building more engaging and effective</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meet Our Founders Section -->
+        <section class="founders">
+            <div class="container">
+                <h2 class="section-title">Meet Our Founders</h2>
+                
+                <div class="founders-grid">
+                    <div class="founder-card">
+                        <div class="founder-image">
+                            <img src="src/assets/images/founder-linlin.jpg" alt="Jacqueline Li">
+                        </div>
+                        <h3>Jacqueline Li</h3>
+                        <p class="founder-title">Co-Founder & CEO</p>
+                        <p class="founder-bio">Cornell University graduate with a degree in Information Science. Jacqueline identified the emotional challenges job seekers face and envisioned JobHatch as a solution to transform the job search experience.</p>
+                        <div class="founder-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="founder-card">
+                        <div class="founder-image">
+                            <img src="src/assets/images/founder-simon.jpeg" alt="Simon Tian">
+                        </div>
+                        <h3>Simon Tian</h3>
+                        <p class="founder-title">Co-Founder & CTO</p>
+                        <p class="founder-bio">Cornell University graduate with a degree in Systems Engineering. Simon brings technical expertise and innovative solutions to create an engaging platform that helps job seekers build clear goals and action plans.</p>
+                        <div class="founder-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Join Us Section -->
+        <section class="join-us">
+            <div class="container">
+                <h2 class="section-title">Join Us in Transforming Job Hunting</h2>
+                <p class="section-description">At JobHatch, we believe that job hunting doesn't have to be a lonely and anxious process. Join our community and turn your career journey into an engaging adventure filled with growth, connections, and achievement.</p>
+                
+                <div class="cta-buttons">
+                    <a href="webapp.html" class="btn btn-primary" id="aboutGetStarted">Get Started</a>
+                    <a href="#about" class="btn btn-outline tab-link" data-tab="about">Learn More</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Tab Content - Testimonials -->
+    <div class="tab-content" id="testimonials">
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="section-title">Success Stories & User Feedback</h2>
+                <p class="section-subtitle">Hear what job seekers are saying about their dream job-seeking platform</p>
+                
+                <div class="testimonial-grid">
+                    <!-- English Testimonials -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote">"My dream job-seeking product would be called CareerCraft—a platform that goes far beyond the traditional keyword-based job board. It would use AI to recommend jobs based not only on your resume, but also your values, skills, ideal work environment, and long-term career goals."</p>
+                            <div class="testimonial-author">
+                                <img src="src/assets/images/avatar-1.svg" alt="User Avatar">
+                                <div class="author-info">
+                                    <h4>Job Seeker</h4>
+                                    <p>Recent Graduate</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote">"Would be great to see a job search engine with the ability to handle highly specific requests/filters. One of the most time consuming and frustrating parts of the job app process is finding applicable jobs in the first place. Being able to avoid browsing through hundreds of irrelevant postings would be huge."</p>
+                            <div class="testimonial-author">
+                                <img src="src/assets/images/avatar-2.svg" alt="User Avatar">
+                                <div class="author-info">
+                                    <h4>Experienced Professional</h4>
+                                    <p>Tech Industry</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote">"Automatic application generation, connection with LinkedIn and other platforms to give me potential networking contacts and automatic email generation. Outreach tracker as well, and a brief pre-coffee chat to save research time. A guide with next steps to optimize my time."</p>
+                            <div class="testimonial-author">
+                                <img src="src/assets/images/avatar-3.svg" alt="User Avatar">
+                                <div class="author-info">
+                                    <h4>Sarah</h4>
+                                    <p>Career Switcher</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chinese Testimonials -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote">"自从修改简历，根据每个职位来优化简历，帮忙投递简历，针对性地提供面试辅导"</p>
+                            <p class="quote-translation">"Help with resume optimization for each position, automated application submission, and targeted interview coaching."</p>
+                            <div class="testimonial-author">
+                                <img src="src/assets/images/avatar-4.svg" alt="User Avatar">
+                                <div class="author-info">
+                                    <h4>International User</h4>
+                                    <p>Job Seeker</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote">"主要是能"督促"学习吧，帮助持续学习下去。基本都是最后落到"没有时间"而不继续。"</p>
+                            <p class="quote-translation">"A platform that can 'supervise' learning, helping users to continue learning consistently. Most people eventually stop because they 'don't have time'."</p>
+                            <div class="testimonial-author">
+                                <img src="src/assets/images/avatar-5.svg" alt="User Avatar">
+                                <div class="author-info">
+                                    <h4>Li Wei</h4>
+                                    <p>Student</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Tab Content - Download -->
+    <div class="tab-content" id="download">
+        <section class="download-section">
+            <div class="container">
+                <h2 class="section-title">Download Our Mobile App</h2>
+                <p class="section-subtitle">Take JobHatch with you everywhere and stay on top of your job search journey</p>
+                
+                <style>
+                    .download-flex { display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; margin-top: 40px; }
+                    .download-phone-svg { flex: 0 0 340px; position: relative; }
+                    .download-phone-svg svg { display: block; margin: 0 auto; }
+                    .download-right { flex: 1; min-width: 320px; max-width: 420px; }
+                    .download-title { font-size: 2.5rem; font-weight: 800; color: #222; margin-bottom: 0.2em; }
+                    .download-subtitle { font-size: 1.3rem; font-weight: 500; color: #1976d2; margin-bottom: 0.7em; }
+                    .download-desc { color: #6b7280; font-size: 1.05rem; margin-bottom: 1.5em; }
+                    .qr-row { display: flex; align-items: center; gap: 18px; margin-bottom: 1.2em; }
+                    .qr-svg { width: 70px; height: 70px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px 0 rgba(76,175,247,0.10); display: flex; align-items: center; justify-content: center; }
+                    .store-btns { display: flex; flex-direction: column; gap: 10px; }
+                    .store-btn { display: flex; align-items: center; background: #222; color: #fff; border-radius: 8px; padding: 10px 18px; font-size: 1.05rem; font-weight: 600; text-decoration: none; gap: 10px; transition: background 0.2s; }
+                    .store-btn:hover { background: #4fc3f7; color: #fff; }
+                    .store-btn i { font-size: 1.2em; }
+                    .qr-label { font-size: 0.98rem; color: #1976d2; font-weight: 600; margin-bottom: 2px; }
+                    .qr-caption { font-size: 0.92rem; color: #4fc3f7; }
+                    @media (max-width: 1100px) { .download-flex { flex-direction: column; gap: 32px; } }
+                </style>
+
+                <div class="download-flex">
+                    <div class="download-phone-svg">
+                        <!-- iPhone with gradient circle and app icon -->
+                        <svg width="340" height="680" viewBox="0 0 340 680" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="grad1" cx="50%" cy="50%" r="60%" fx="50%" fy="50%">
+                                    <stop offset="0%" stop-color="#fffae0"/>
+                                    <stop offset="100%" stop-color="#ffe268"/>
+                                </radialGradient>
+                                <linearGradient id="appicon" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#4fc3f7"/>
+                                    <stop offset="100%" stop-color="#1976d2"/>
+                                </linearGradient>
+                                <linearGradient id="phoneBackground" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#fffdf2"/>
+                                    <stop offset="100%" stop-color="#fff5c0"/>
+                                </linearGradient>
+                            </defs>
+                            <circle cx="170" cy="340" r="140" fill="url(#grad1)" fill-opacity="0.85"/>
+                            <rect x="30" y="40" width="280" height="600" rx="48" fill="url(#phoneBackground)" stroke="#222" stroke-width="4"/>
+                            <rect x="110" y="620" width="120" height="8" rx="4" fill="#111"/>
+                            <rect x="130" y="55" width="80" height="20" rx="10" fill="#111"/>
+                            <!-- App icon - replaced with image of logo -->
+                            <rect x="112.5" y="182.5" width="115" height="115" rx="14" fill="#fff"/>
+                            <image href="src/assets/images/LOGO.jpg" x="116" y="186" width="108" height="108" preserveAspectRatio="xMidYMid slice" rx="20"/>
+                            <text x="170" y="340" text-anchor="middle" font-size="32" font-family="Inter, sans-serif" font-weight="700" fill="#1976d2">Download</text>
+                            <text x="170" y="370" text-anchor="middle" font-size="18" font-family="Inter, sans-serif" font-weight="500" fill="#4fc3f7">JobHatch</text>
+                            <!-- Phone Demo Button Added Here -->
+                            <a href="phone.html" class="demo-link">
+                                <rect x="70" y="470" width="200" height="40" rx="20" fill="#ffffff" stroke="#4fc3f7" stroke-width="2"/>
+                                <text x="170" y="495" text-anchor="middle" font-size="16" font-family="Inter, sans-serif" font-weight="600" fill="#4fc3f7">View Phone Demo <tspan font-family="FontAwesome">&#xf08e;</tspan></text>
+                            </a>
+                        </svg>
+                    </div>
+                    <div class="download-right">
+                        <div class="download-title">Download<br>Our Mobile App</div>
+                        <div class="download-subtitle">Take JobHatch Everywhere</div>
+                        <div class="download-desc">Level up your career quest! Scan the QR code or tap below to download JobHatch for iOS or Android. Start your journey with a gamified, supportive job search experience.</div>
+                        <div class="qr-row">
+                            <div class="qr-svg">
+                                <!-- SVG QR code placeholder -->
+                                <svg width="60" height="60" viewBox="0 0 60 60"><rect width="60" height="60" rx="8" fill="#eee"/><rect x="8" y="8" width="12" height="12" fill="#222"/><rect x="40" y="8" width="12" height="12" fill="#222"/><rect x="8" y="40" width="12" height="12" fill="#222"/><rect x="24" y="24" width="12" height="12" fill="#222"/><rect x="40" y="40" width="8" height="8" fill="#222"/></svg>
+                            </div>
+                            <div>
+                                <div class="qr-label">iOS App</div>
+                                <div class="qr-caption">Scan to download</div>
+                                <div class="store-btns">
+                                    <a class="store-btn" href="#"><i class="fab fa-apple"></i> App Store</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="qr-row">
+                            <div class="qr-svg">
+                                <!-- SVG QR code placeholder -->
+                                <svg width="60" height="60" viewBox="0 0 60 60"><rect width="60" height="60" rx="8" fill="#eee"/><rect x="8" y="8" width="12" height="12" fill="#222"/><rect x="40" y="8" width="12" height="12" fill="#222"/><rect x="8" y="40" width="12" height="12" fill="#222"/><rect x="24" y="24" width="12" height="12" fill="#222"/><rect x="40" y="40" width="8" height="8" fill="#222"/></svg>
+                            </div>
+                            <div>
+                                <div class="qr-label">Android App</div>
+                                <div class="qr-caption">Scan to download</div>
+                                <div class="store-btns">
+                                    <a class="store-btn" href="#"><i class="fab fa-google-play"></i> Google Play</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- App Access Section - Visible in all tabs -->
+    <div id="react-app-button" class="app-button-container" style="position:fixed;bottom:30px;right:30px;z-index:999;">
+        <!-- Fallback button in case React doesn't load -->
+        <a href="webapp.html" class="fallback-app-btn" style="display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;font-size:1.05rem;font-weight:600;color:#fff;background-color:#1976d2;border-radius:28px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+            Enter App <i class="fas fa-arrow-right" style="font-size:0.9em;margin-left:4px;"></i>
+        </a>
+    </div>
+
+    
+
+    <!-- Modals -->
+    <!-- Login/Signup Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTabBtn">Log in</button>
+                <button class="auth-tab" id="signupTabBtn">Sign up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="auth-form-container active" id="loginForm">
+                <form class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            <label for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                    <div class="auth-separator">
+                        <span>Or continue with</span>
+                    </div>
+                    <button type="button" class="btn btn-social google">
+                        <img src="src/assets/images/google-icon.svg" alt="Google">
+                        Continue with Google
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Signup Form -->
+            <div class="auth-form-container" id="signupForm">
+                <form class="auth-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="fullName" placeholder="Your name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="signupPassword" placeholder="Create a password" required>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-meter">
+                                <div class="meter-section"></div>
+                                <div class="meter-section"></div>
+                                <div class="meter-section"></div>
+                                <div class="meter-section"></div>
+                            </div>
+                            <span class="strength-text">Password strength</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                        </div>
+                    </div>
+                    <div class="form-agreement">
+                        <input type="checkbox" id="termsAgreement" required>
+                        <label for="termsAgreement">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Create account</button>
+                    <div class="auth-separator">
+                        <span>Or continue with</span>
+                    </div>
+                    <button type="button" class="btn btn-social google">
+                        <img src="src/assets/images/google-icon.svg" alt="Google">
+                        Continue with Google
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    /* Auth Modal Tabs */
+    .auth-tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .auth-tab {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: 10px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        position: relative;
+        opacity: 0.7;
+    }
+    .auth-tab.active {
+        color: #4fc3f7;
+        opacity: 1;
+    }
+    .auth-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: #4fc3f7;
+    }
+    .auth-form-container {
+        display: none;
+    }
+    .auth-form-container.active {
+        display: block;
+    }
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+    .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .forgot-password {
+        color: #4fc3f7;
+        text-decoration: none;
+    }
+    .password-strength {
+        margin-top: 8px;
+    }
+    .strength-meter {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 4px;
+    }
+    .meter-section {
+        height: 4px;
+        flex: 1;
+        background: #e0e0e0;
+        border-radius: 2px;
+    }
+    .strength-text {
+        font-size: 0.8rem;
+        color: #666;
+    }
+    .form-agreement {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+    .form-agreement input {
+        margin-top: 3px;
+    }
+    .form-agreement a {
+        color: #4fc3f7;
+        text-decoration: none;
+    }
+    .testimonial-content p.quote,
+    .testimonial-content .quote,
+    .homepage-bottom .quote,
+    .homepage-bottom [style*='font-size:1rem;'][style*='color:#3a4266;'] {
+      text-align: justify !important;
+    }
+    </style>
+
+    <!-- 新全屏Onboarding页面 -->
+    <div id="onboardingPage" class="onboarding-page" style="display:none;">
+      <div class="onboarding-step" id="onboardingStep1">
+        <h2>🟢 Step 1: 🎯 Role Identification</h2>
+        <p>What brings you to JobHatch?</p>
+        <button class="onboarding-btn" data-role="mentee">👩‍💼 I'm looking for a job</button>
+        <button class="onboarding-btn" data-role="mentor">🌟 I'd like to mentor or support others</button>
+        <button class="onboarding-btn" data-role="both">🔁 I want to do both</button>
+      </div>
+      <div class="onboarding-step" id="onboardingStep2" style="display:none;">
+        <h2>🔵 Step 2: 🔍 Job Search Status</h2>
+        <p>Are you currently job hunting?</p>
+        <button class="onboarding-btn" data-status="active">✅ Actively applying</button>
+        <button class="onboarding-btn" data-status="exploring">👀 Just exploring</button>
+        <button class="onboarding-btn" data-status="notnow">❌ Not right now</button>
+      </div>
+      <div class="onboarding-step" id="onboardingStep3" style="display:none;">
+        <h2>🟡 Step 3: 🧭 Career Clarity Check</h2>
+        <p>Do you have a specific job role or industry in mind?</p>
+        <button class="onboarding-btn" data-clarity="yes">✅ Yes, I know what I'm targeting</button>
+        <button class="onboarding-btn" data-clarity="notSure">❓ Not sure yet</button>
+        <div id="resumeUploadSection" style="display:none; margin-top:1em;">
+          <p>No worries! Our AI Career Coach can guide you based on your background. Please upload your resume to get started.</p>
+          <input type="file" id="resumeUploadInput" accept=".pdf,.doc,.docx" style="display:none;">
+          <button id="resumeUploadBtn"><span style="font-size:1.2em;">➕</span> Upload Resume</button>
+          <button id="noResumeBtn" style="margin-top:10px; background:#fff; color:#4fc3f7; border:2px solid #4fc3f7; border-radius:10px; padding:10px 18px; font-size:1rem; font-weight:600; cursor:pointer;">Build My Resume Now!</button>
+        </div>
+      </div>
+      <div class="onboarding-step" id="onboardingStep4" style="display:none;">
+        <h2>🔴 Step 4: ⏱️ Urgency & Planning</h2>
+        <p>How urgent is your job search?</p>
+        <button class="onboarding-btn" data-urgency="asap">🧨 I need a job ASAP</button>
+        <button class="onboarding-btn" data-urgency="timing">📅 I'm taking my time</button>
+        <button class="onboarding-btn" data-urgency="exploring">🧘 Just exploring possibilities</button>
+      </div>
+      <div class="onboarding-step" id="onboardingComplete" style="display:none;">
+        <h2>Welcome to JobHatch!</h2>
+        <p>Your onboarding is complete. You will be routed to the appropriate features or agents based on your answers.</p>
+        <button id="onboardingFinishBtn" class="onboarding-btn">Finish</button>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/js/main.js"></script>
+    <script src="src/js/auth.js"></script>
+    <script src="src/js/onboarding.js"></script>
+    <style>
+    .roadmap-star:hover img {
+      filter: brightness(1.15) drop-shadow(0 0 8px #4d8cf5aa);
+      transition: filter 0.2s;
+    }
+    .roadmap-star img.default-star { display: block; }
+    .roadmap-star img.pressed-star { display: none; }
+    .roadmap-star:active img.default-star { display: none; }
+    .roadmap-star:active img.pressed-star { display: block; }
+    
+    /* Phone Demo Link Style */
+    .demo-link {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .demo-link:hover {
+      transform: translateY(-2px);
+    }
+    .demo-link:hover rect {
+      fill: #f8fdff;
+      filter: drop-shadow(0 2px 4px rgba(79, 195, 247, 0.3));
+    }
+
+    /* Responsive Layout Improvements */
+    @media (max-width: 1024px) {
+      .how-jobhatch-works {
+        max-width: 100% !important;
+        padding: 40px 15px 80px 15px !important;
+      }
+      
+      .roadmap-desktop {
+        display: none !important;
+      }
+      
+      .roadmap-mobile {
+        display: block !important;
+      }
+      
+      .header-container {
+        padding: 0 15px;
+      }
+      
+      .hero-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 0 15px;
+      }
+      
+      .hero-content {
+        margin-bottom: 40px;
+      }
+      
+      .hero-image {
+        order: -1;
+        margin-bottom: 30px;
+      }
+      
+      .hero-image img.main-image {
+        max-width: 250px;
+      }
+      
+      .feature-bubble {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-nav {
+        display: none;
+      }
+      
+      .header-container {
+        justify-content: space-between;
+      }
+      
+      .auth-buttons {
+        gap: 10px;
+      }
+      
+      .auth-buttons .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+      
+      .home-slogan {
+        font-size: 2.5rem !important;
+        line-height: 1.2;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 25px;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+      }
+      
+      .hero-buttons .btn {
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+      }
+      
+      .users-count {
+        margin-top: 20px;
+      }
+      
+      .users-avatars img {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .how-jobhatch-works h2 {
+        font-size: 1.75rem !important;
+      }
+      
+      .how-jobhatch-works p {
+        font-size: 1rem !important;
+      }
+      
+      .roadmap-step img {
+        width: 120px !important;
+      }
+      
+      .roadmap-step div[style*="font-size:1.1rem"] {
+        font-size: 1rem !important;
+      }
+      
+      .roadmap-step div[style*="font-size:0.98rem"] {
+        font-size: 0.9rem !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 10px;
+      }
+      
+      .header-container {
+        padding: 0 10px;
+      }
+      
+      .logo-text {
+        font-size: 1.2rem;
+      }
+      
+      .logo img {
+        height: 30px !important;
+      }
+      
+      .home-slogan {
+        font-size: 2rem !important;
+      }
+      
+      .hero-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .how-jobhatch-works {
+        padding: 30px 10px 60px 10px !important;
+      }
+      
+      .how-jobhatch-works h2 {
+        font-size: 1.5rem !important;
+      }
+      
+      .roadmap-step {
+        margin-bottom: 30px !important;
+      }
+      
+      .roadmap-step img {
+        width: 100px !important;
+      }
+      
+      .download-flex {
+        flex-direction: column !important;
+        gap: 20px !important;
+      }
+      
+      .download-phone-svg svg {
+        width: 280px !important;
+        height: auto !important;
+      }
+      
+      .download-title {
+        font-size: 2rem !important;
+      }
+      
+      .download-subtitle {
+        font-size: 1.1rem !important;
+      }
+      
+      .app-button-container {
+        bottom: 15px !important;
+        right: 15px !important;
+      }
+      
+      .fallback-app-btn {
+        padding: 10px 20px !important;
+        font-size: 0.95rem !important;
+      }
+    }
+
+    /* Container and general responsive improvements */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    @media (min-width: 1200px) {
+      .container {
+        padding: 0 40px;
+      }
+    }
+    
+    /* Hero section responsive improvements */
+    .hero-container {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      min-height: 80vh;
+    }
+    
+    .hero-content, .hero-image {
+      flex: 1;
+    }
+    
+    /* Feature bubbles responsive */
+    .feature-bubble {
+      position: absolute;
+      background: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      font-size: 0.9rem;
+      max-width: 200px;
+    }
+    
+    /* Ensure images are responsive */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    </style>
+
+    <!-- React Component for Web App Button -->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        // Simple React component for the App Button
+        const AppButton = () => {
+            const [isHovered, setIsHovered] = React.useState(false);
+            
+            const buttonStyle = {
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '12px 24px',
+                fontSize: '1.05rem',
+                fontWeight: '600',
+                color: '#fff',
+                backgroundColor: isHovered ? '#4fc3f7' : '#1976d2',
+                borderRadius: '28px',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                textDecoration: 'none',
+                boxShadow: isHovered ? '0 4px 12px rgba(76, 175, 247, 0.3)' : '0 2px 8px rgba(0, 0, 0, 0.15)',
+                gap: '8px'
+            };
+
+            return (
+                <a 
+                    href="webapp.html" 
+                    style={buttonStyle}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                >
+                    Enter App 
+                    <i className="fas fa-arrow-right" style={{fontSize: '0.9em', marginLeft: '4px'}}></i>
+                </a>
+            );
+        };
+
+        // Wrap in a try/catch to prevent uncaught errors
+        try {
+            // Make sure the DOM is loaded before rendering
+            document.addEventListener('DOMContentLoaded', function() {
+                const mountNode = document.getElementById('react-app-button');
+                if (mountNode) {
+                    // Hide the fallback button when React takes over
+                    const fallbackBtn = mountNode.querySelector('.fallback-app-btn');
+                    if (fallbackBtn) {
+                        fallbackBtn.style.display = 'none';
+                    }
+                    
+                    ReactDOM.render(<AppButton />, mountNode);
+                } else {
+                    console.error('React app button mount node not found');
+                }
+            });
+        } catch (error) {
+            console.error('Error rendering React component:', error);
+        }
+    </script>
+
+    <!-- Login/Signup Tab Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginTabBtn = document.getElementById('loginTabBtn');
+            const signupTabBtn = document.getElementById('signupTabBtn');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            // Switch between login and signup tabs
+            loginTabBtn.addEventListener('click', function() {
+                loginTabBtn.classList.add('active');
+                signupTabBtn.classList.remove('active');
+                loginForm.classList.add('active');
+                signupForm.classList.remove('active');
+            });
+            
+            signupTabBtn.addEventListener('click', function() {
+                signupTabBtn.classList.add('active');
+                loginTabBtn.classList.remove('active');
+                signupForm.classList.add('active');
+                loginForm.classList.remove('active');
+            });
+            
+            // Link the signup button to open modal with signup tab active
+            document.getElementById('signupBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('loginModal').style.display = 'block';
+                signupTabBtn.click();
+            });
+            
+            // Link the login button to open modal with login tab active
+            document.getElementById('loginBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('loginModal').style.display = 'block';
+                loginTabBtn.click();
+            });
+            
+            // Simple password strength meter
+            const passwordInput = document.getElementById('signupPassword');
+            const meterSections = document.querySelectorAll('.meter-section');
+            const strengthText = document.querySelector('.strength-text');
+            
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                if (password.length >= 8) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                
+                // Update meter visuals
+                meterSections.forEach((section, index) => {
+                    if (index < strength) {
+                        section.style.background = 
+                            strength === 1 ? '#ff5252' : 
+                            strength === 2 ? '#ff9800' : 
+                            strength === 3 ? '#4caf50' : 
+                            '#2196f3';
+                    } else {
+                        section.style.background = '#e0e0e0';
+                    }
+                });
+                
+                // Update strength text
+                strengthText.textContent = 
+                    strength === 0 ? 'Password strength' :
+                    strength === 1 ? 'Weak' :
+                    strength === 2 ? 'Medium' :
+                    strength === 3 ? 'Strong' :
+                    'Very strong';
+                
+                strengthText.style.color = 
+                    strength === 0 ? '#666' :
+                    strength === 1 ? '#ff5252' :
+                    strength === 2 ? '#ff9800' :
+                    strength === 3 ? '#4caf50' :
+                    '#2196f3';
+            });
+        });
+    </script>
+
+    <!-- 留言区下方footer新设计 -->
+    <section class="homepage-footer">
+      <div class="footer-main-row">
+        <img src="src/assets/images/LOGO.jpg" alt="JobHatch Logo" class="footer-logo-img">
+        <div class="footer-brand-title logo-text">JOBHATCH</div>
+        <div class="footer-links-row">
+          <!-- Quick Links -->
+          <div style="min-width:140px;text-align:left;">
+            <div style="font-weight:700;color:#32336e;font-size:1.13rem;margin-bottom:12px;">🧭 Quick Links</div>
+            <ul style="list-style:none;padding:0;margin:0;line-height:2;">
+              <li><a href="webapp.html" style="color:#3a4266;text-decoration:none;">Web App</a></li>
+              <li><a href="#download" class="tab-link" data-tab="download" style="color:#3a4266;text-decoration:none;">Download Mobile App</a></li>
+            </ul>
+          </div>
+          <!-- Community -->
+          <div style="min-width:180px;text-align:left;">
+            <div style="font-weight:700;color:#32336e;font-size:1.13rem;margin-bottom:12px;">👥 Community</div>
+            <ul style="list-style:none;padding:0;margin:0;line-height:2;">
+              <li><a href="#" style="color:#3a4266;text-decoration:none;">Ambassador Program</a></li>
+              <li><a href="#" style="color:#3a4266;text-decoration:none;">Refer a Friend</a></li>
+            </ul>
+          </div>
+          <!-- Company -->
+          <div style="min-width:180px;text-align:left;">
+            <div style="font-weight:700;color:#32336e;font-size:1.13rem;margin-bottom:12px;">🏢 Company</div>
+            <ul style="list-style:none;padding:0;margin:0;line-height:2;">
+              <li><a href="#about" style="color:#3a4266;text-decoration:none;">About Us</a></li>
+              <li><a href="#" style="color:#3a4266;text-decoration:none;">Join Us</a></li>
+            </ul>
+          </div>
+          <!-- 社交蛋图标 -->
+          <div style="min-width:220px;display:flex;flex-direction:column;align-items:center;gap:0;margin-left:40px;">
+            <div style="position:relative;width:180px;height:170px;">
+              <img src="src/assets/images/Tiktok.png" alt="Tiktok" style="position:absolute;top:0;left:50%;transform:translateX(-50%) rotate(-10deg);width:90px;height:90px;z-index:3;">
+              <img src="src/assets/images/Linkedln.png" alt="LinkedIn" style="position:absolute;bottom:18px;left:22px;transform:rotate(-18deg);width:100px;height:75px;z-index:2;">
+              <img src="src/assets/images/Ins.png" alt="Instagram" style="position:absolute;bottom:8px;right:22px;transform:rotate(12deg);width:75px;height:75px;z-index:2;">
+            </div>
+          </div>
+        </div>
+        <form class="footer-contact-form">
+          <input type="email" placeholder="Enter your Email">
+          <button type="submit">Contact Us</button>
+        </form>
+        <div class="footer-stars-row">
+          <span>★</span><span>★</span><span>★</span>
+        </div>
+        <div class="footer-bottom">
+          <p>Designed with <i class="fas fa-heart"></i> by the JobHatch Team</p>
+          <p>Copyright &copy; 2025 L3 INNO INC</p>
+        </div>
+      </div>
+    </section>
+</body>
+</html> 

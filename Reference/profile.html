@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | JobHatch</title>
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/app.css">
+    <link rel="stylesheet" href="src/css/profile.css">
+    <link rel="stylesheet" href="src/css/statusChart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="src/js/statusChart.js"></script>
+    <script src="src/js/fallbackChart.js"></script>
+    <!-- API Service - Load this before userDataSync.js -->
+    <script src="src/js/apiService.js"></script>
+    <script src="src/js/userDataSync.js"></script>
+    <script src="src/js/userDataUpdate.js"></script>
+    <script src="src/js/profileTrends.js"></script>
+    <script src="src/js/profileEditor.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Additional layout styles */
+        .profile-content {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .profile-main {
+            flex: 1;
+            width: 100%;
+        }
+        
+        .profile-sidebar {
+            display: none; /* Hide the original sidebar */
+        }
+        
+        /* Hide duplicate progress section at the bottom */
+        .profile-sidebar + .profile-section h2 i.fa-chart-line + .progress-over-time {
+            display: none;
+        }
+        
+        /* Make sure the skills and other tags look nice */
+        .skill-tag, .language-tag, .interest-tag, .role-tag {
+            display: inline-block;
+            background-color: #f0f5ff;
+            color: #3366cc;
+            border-radius: 16px;
+            padding: 4px 12px;
+            margin: 0 8px 8px 0;
+            font-size: 0.85rem;
+        }
+        
+        .skills-list, .languages-list, .interests-list, .roles-list {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .experience-item, .education-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .experience-item:last-child, .education-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .company-name, .institution-name {
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .date-range {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .item-description {
+            margin-top: 8px;
+            color: #444;
+        }
+        
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #3366cc;
+            padding: 6px 0;
+        }
+        
+        .social-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .preferences-group {
+            margin-bottom: 15px;
+        }
+        
+        .preferences-label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        /* Styles for the sidebar sections */
+        .sidebar-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-section h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .sidebar-section h3 i {
+            color: #5C93ED;
+        }
+        
+        .sidebar-progress-chart {
+            height: 150px;
+            margin: 10px 0;
+        }
+        
+        .sidebar-status-summary {
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .sidebar-status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .sidebar-tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        
+        .sidebar-tag {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background-color: #f0f5ff;
+            color: #3366cc;
+        }
+        
+        .mini-progress-bar {
+            width: 100%;
+            height: 5px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .mini-progress-fill {
+            height: 100%;
+            background-color: #5C93ED;
+            border-radius: 3px;
+        }
+        
+        /* Compact styles for smaller viewports */
+        @media (max-width: 1024px) {
+            .profile-content {
+                flex-direction: column;
+            }
+            
+            .profile-main {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="app-body">
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="container">
+            <div class="app-header-left">
+                <a href="index.html" class="logo">
+                    <img src="src/assets/images/jobhatch-logo.svg" alt="JobHatch Logo">
+                    <span>JobHatch</span>
+                </a>
+            </div>
+            
+            <nav class="app-nav">
+                <a href="webapp.html" class="app-nav-link" id="homeTab">
+                                <i class="fas fa-home"></i>
+                                <span>Home</span>
+                            </a>
+                <a href="webapp.html#plannerTab" class="app-nav-link" id="plannerTab">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Planner</span>
+                            </a>
+                <a href="webapp.html#resumeTab" class="app-nav-link" id="resumeTab">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Resume</span>
+                            </a>
+                <a href="webapp.html#jobsTab" class="app-nav-link" id="jobsTab">
+                                <i class="fas fa-briefcase"></i>
+                                <span>Jobs</span>
+                            </a>
+                <a href="webapp.html#buddiesTab" class="app-nav-link" id="buddiesTab">
+                                <i class="fas fa-users"></i>
+                                <span>Buddies</span>
+                            </a>
+                </nav>
+            
+            <div class="app-header-right">
+                <div class="notifications">
+                    <button class="notification-btn" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                    </button>
+                    
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                            <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+                </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>New job matching your profile at <strong>Tech Solutions Inc.</strong></p>
+                                    <span class="notification-time">2 hours ago</span>
+                                </div>
+                                <button class="notification-dismiss">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>Upcoming deadline: <strong>Complete mock interview preparation</strong></p>
+                                    <span class="notification-time">Yesterday</span>
+                                </div>
+                                <button class="notification-dismiss">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>You've earned <strong>50 points</strong> for updating your resume!</p>
+                                    <span class="notification-time">3 days ago</span>
+                                </div>
+                                <button class="notification-dismiss">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="#" class="view-all-notifications">View all notifications</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="user-menu">
+                    <a href="profile.html" class="user-avatar-link">
+                    <div class="user-avatar">
+                            <img src="src/assets/images/founder-simon.jpeg" alt="User Avatar" id="header-profile-picture">
+                    </div>
+                        <span class="user-name" id="header-user-name">Simon</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <div class="container">
+            <!-- Sidebar -->
+            <aside class="app-sidebar">
+                <div class="user-profile">
+                    <h3 id="sidebar-welcome">Welcome, Simon</h3>
+                    <div class="upcoming-deadlines-mini">
+                        <div id="sidebar-deadlines-container">
+                            <!-- Sidebar deadlines will be loaded dynamically -->
+                        </div>
+                        <a href="#" class="sidebar-link" id="view-all-deadlines">
+                            <i class="fas fa-tasks"></i>
+                            <span>View all deadlines</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Progress Over Time section (moved from right sidebar) -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-chart-line"></i> Progress Over Time</h3>
+                    <div class="sidebar-progress-chart">
+                        <canvas id="userTrendsChart" width="100%" height="100%"></canvas>
+                    </div>
+                    <div class="sidebar-status-summary">
+                        <div class="sidebar-status-item">
+                            <span>Technical Skills</span>
+                            <span class="status-value">3/10</span>
+                        </div>
+                        <div class="sidebar-status-item">
+                            <span>Interview Preparation</span>
+                            <span class="status-value">2/10</span>
+                        </div>
+                        <div class="sidebar-status-item">
+                            <span>Resume Readiness</span>
+                            <span class="status-value">2/10</span>
+                        </div>
+                        <div class="sidebar-status-item">
+                            <span>Job Search Activity</span>
+                            <span class="status-value">1/10</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Update Your Status section (moved from right sidebar) -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-edit"></i> Update Your Status</h3>
+                    <div class="status-rating-control">
+                        <label>Technical Skills</label>
+                        <div class="rating-slider-container">
+                            <input type="range" min="0" max="10" value="3" class="status-rating-slider" data-category="technicalSkills">
+                            <span id="technicalSkillsRating">3</span>
+                        </div>
+                    </div>
+                    <div class="status-rating-control">
+                        <label>Interview Preparation</label>
+                        <div class="rating-slider-container">
+                            <input type="range" min="0" max="10" value="2" class="status-rating-slider" data-category="interviewPreparation">
+                            <span id="interviewPreparationRating">2</span>
+                        </div>
+                    </div>
+                    <div class="status-rating-control">
+                        <label>Resume Readiness</label>
+                        <div class="rating-slider-container">
+                            <input type="range" min="0" max="10" value="2" class="status-rating-slider" data-category="resumeReadiness">
+                            <span id="resumeReadinessRating">2</span>
+                        </div>
+                    </div>
+                    <div class="status-rating-control">
+                        <label>Job Search Activity</label>
+                        <div class="rating-slider-container">
+                            <input type="range" min="0" max="10" value="1" class="status-rating-slider" data-category="jobSearchActivity">
+                            <span id="jobSearchActivityRating">1</span>
+                        </div>
+                    </div>
+                    <button id="saveRatingsBtn" class="btn-primary btn-save-ratings">Save Changes</button>
+                </div>
+
+                <!-- Skills section (moved from right sidebar) -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-code"></i> Skills</h3>
+                    <div class="sidebar-tag-list skills-list">
+                        <!-- Skills will be populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Languages section (moved from right sidebar) -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-language"></i> Languages</h3>
+                    <div class="sidebar-tag-list languages-list">
+                        <!-- Languages will be populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Interests section (moved from right sidebar) -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-heart"></i> Interests</h3>
+                    <div class="sidebar-tag-list interests-list">
+                        <!-- Interests will be populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Links section (moved from right sidebar) -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-link"></i> Links</h3>
+                    <div class="social-links">
+                        <!-- Links will be populated by JS -->
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Account</h3>
+                    <ul class="sidebar-list">
+                        <li>
+                            <a href="profile.html" class="sidebar-nav-link active">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Profile & Status</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="sidebar-nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="sidebar-nav-link">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Help & Support</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="app-content">
+                <!-- Profile Header -->
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-picture">
+                            <img src="src/assets/images/founder-simon.jpeg" alt="Profile Picture" id="profile-picture">
+                        </div>
+                        <div class="profile-info">
+                            <h1 class="profile-name" id="profile-name">Loading...</h1>
+                            <p class="profile-title" id="profile-title">Loading...</p>
+                            <div class="profile-location" id="profile-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Loading...</span>
+                            </div>
+                            <div class="profile-contact">
+                                <div class="contact-item" id="profile-email">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>Loading...</span>
+                                </div>
+                                <div class="contact-item" id="profile-phone">
+                                    <i class="fas fa-phone"></i>
+                                    <span>Loading...</span>
+                                </div>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="btn-edit-profile" id="edit-profile-btn">
+                                    <i class="fas fa-edit"></i>
+                                    Edit Profile
+                                </button>
+                                <button class="btn-share-profile">
+                                    <i class="fas fa-share-alt"></i>
+                                    Share Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Content -->
+                    <div class="profile-content">
+                        <div class="profile-main">
+                            <!-- Profile Summary -->
+                            <div class="profile-section profile-summary">
+                                <h2><i class="fas fa-user"></i> About Me</h2>
+                                <p>Loading...</p>
+                            </div>
+
+                            <!-- Experience Section -->
+                            <div class="profile-section">
+                                <h2><i class="fas fa-briefcase"></i> Work Experience</h2>
+                                <!-- Content will be loaded dynamically -->
+                            </div>
+
+                            <!-- Education Section -->
+                            <div class="profile-section">
+                                <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+                                <!-- Content will be loaded dynamically -->
+                            </div>
+
+                            <!-- Job Preferences -->
+                            <div class="profile-section">
+                                <h2><i class="fas fa-bullseye"></i> Job Preferences</h2>
+                                <div class="preferences-group">
+                                    <div class="preferences-label">Roles I'm interested in:</div>
+                                    <div class="preferences-value">
+                                        <div class="roles-list">
+                                            <!-- Content will be loaded dynamically -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="preferences-group">
+                                    <div class="preferences-label">Preferred locations:</div>
+                                    <div class="preferences-value">Loading...</div>
+                                </div>
+                                <div class="preferences-group">
+                                    <div class="preferences-label">Salary expectation:</div>
+                                    <div class="preferences-value">Loading...</div>
+                                </div>
+                                <div class="preferences-group">
+                                    <div class="preferences-label">Work mode preference:</div>
+                                    <div class="preferences-value">Loading...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Original sidebar content kept but hidden via CSS -->
+                        <div class="profile-sidebar">
+                            <!-- Progress Over Time replacing Job Readiness -->
+                            <div class="profile-section progress-section">
+                                <h2><i class="fas fa-chart-line"></i> Progress Over Time</h2>
+                                <div class="trends-chart-container">
+                                    <canvas id="originalTrendsChart" width="250" height="250"></canvas>
+                                </div>
+                                <div class="status-summary">
+                                    <div class="status-summary-item">
+                                        <div class="status-summary-title">Technical Skills</div>
+                                        <div class="status-summary-value">0/10</div>
+                                    </div>
+                                    <div class="status-summary-item">
+                                        <div class="status-summary-title">Interview Preparation</div>
+                                        <div class="status-summary-value">0/10</div>
+                                    </div>
+                                    <div class="status-summary-item">
+                                        <div class="status-summary-title">Resume Readiness</div>
+                                        <div class="status-summary-value">0/10</div>
+                                    </div>
+                                    <div class="status-summary-item">
+                                        <div class="status-summary-title">Job Search Activity</div>
+                                        <div class="status-summary-value">0/10</div>
+                                    </div>
+                                </div>
+                                <div class="status-update-section">
+                                    <h3>Update Your Status</h3>
+                                    <div class="status-rating-control">
+                                        <label>Technical Skills</label>
+                                        <div class="rating-slider-container">
+                                            <input type="range" min="0" max="10" value="0" class="status-rating-slider-original" data-category="technicalSkillsOriginal">
+                                            <span id="technicalSkillsRatingOriginal">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="status-rating-control">
+                                        <label>Interview Preparation</label>
+                                        <div class="rating-slider-container">
+                                            <input type="range" min="0" max="10" value="0" class="status-rating-slider-original" data-category="interviewPreparationOriginal">
+                                            <span id="interviewPreparationRatingOriginal">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="status-rating-control">
+                                        <label>Resume Readiness</label>
+                                        <div class="rating-slider-container">
+                                            <input type="range" min="0" max="10" value="0" class="status-rating-slider-original" data-category="resumeReadinessOriginal">
+                                            <span id="resumeReadinessRatingOriginal">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="status-rating-control">
+                                        <label>Job Search Activity</label>
+                                        <div class="rating-slider-container">
+                                            <input type="range" min="0" max="10" value="0" class="status-rating-slider-original" data-category="jobSearchActivityOriginal">
+                                            <span id="jobSearchActivityRatingOriginal">0</span>
+                                        </div>
+                                    </div>
+                                    <button id="saveRatingsBtnOriginal" class="btn-primary btn-save-ratings">Save Changes</button>
+                                </div>
+                            </div>
+
+                            <!-- Skills Section -->
+                            <div class="profile-section">
+                                <h2><i class="fas fa-code"></i> Skills</h2>
+                                <div class="skills-list-original">
+                                    <!-- Content will be loaded dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Languages Section -->
+                            <div class="profile-section">
+                                <h2><i class="fas fa-language"></i> Languages</h2>
+                                <div class="languages-list-original">
+                                    <!-- Content will be loaded dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Interests Section -->
+                            <div class="profile-section">
+                                <h2><i class="fas fa-heart"></i> Interests</h2>
+                                <div class="interests-list-original">
+                                    <!-- Content will be loaded dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Social Links -->
+                            <div class="profile-section">
+                                <h2><i class="fas fa-link"></i> Links</h2>
+                                <div class="social-links-original">
+                                    <a href="#" target="_blank" class="social-link">
+                                        <i class="fab fa-linkedin"></i> LinkedIn
+                                    </a>
+                                    <a href="#" target="_blank" class="social-link">
+                                        <i class="fab fa-github"></i> GitHub
+                                    </a>
+                                    <a href="#" target="_blank" class="social-link">
+                                        <i class="fas fa-globe"></i> Portfolio
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up notification dropdown
+            const notificationBtn = document.getElementById('notificationBtn');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const dismissButtons = document.querySelectorAll('.notification-dismiss');
+            const markAllReadBtn = document.getElementById('markAllRead');
+            
+            // Toggle notification dropdown
+            if (notificationBtn && notificationDropdown) {
+                notificationBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationDropdown.classList.toggle('show');
+                });
+                
+                // Close dropdown when clicking elsewhere
+                document.addEventListener('click', function(e) {
+                    if (notificationDropdown.classList.contains('show') && 
+                        !notificationDropdown.contains(e.target) && 
+                        e.target !== notificationBtn) {
+                        notificationDropdown.classList.remove('show');
+                    }
+                });
+            }
+            
+            // Dismiss individual notifications
+            dismissButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const notificationItem = this.closest('.notification-item');
+                    notificationItem.style.opacity = '0';
+                    setTimeout(() => {
+                        notificationItem.remove();
+                        updateNotificationCount();
+                    }, 300);
+                });
+            });
+            
+            // Mark all as read
+            if (markAllReadBtn) {
+                markAllReadBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const unreadItems = document.querySelectorAll('.notification-item.unread');
+                    unreadItems.forEach(item => {
+                        item.classList.remove('unread');
+                    });
+                    updateNotificationCount();
+                });
+            }
+            
+            // Update notification count
+            function updateNotificationCount() {
+                const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+                const badge = document.querySelector('.notification-badge');
+                if (badge) {
+                    badge.textContent = unreadCount;
+                    badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+                }
+            }
+            
+            // Load user profile data from the backend
+            function loadUserProfileData() {
+                return window.apiService.getUserProfile('user1')
+                    .then(data => {
+                        // Add additional profile fields as needed
+                        if (!data.bio) {
+                            data.bio = 'Experienced software engineer with a passion for building user-friendly applications.';
+                        }
+                        
+                        if (!data.phone) {
+                            data.phone = '(123) 456-7890';
+                        }
+                        
+                        if (!data.profileImage) {
+                            data.profileImage = 'src/assets/images/founder-simon.jpeg';
+                        }
+                        
+                        if (!data.languages) {
+                            data.languages = [
+                                { language: "English", proficiency: "Native" },
+                                { language: "Spanish", proficiency: "Intermediate" }
+                            ];
+                        }
+                        
+                        if (!data.interests) {
+                            data.interests = [
+                                "Web Development", "Mobile Apps", "UI/UX Design", "Open Source"
+                            ];
+                        }
+                        
+                        if (!data.jobPreferences) {
+                            data.jobPreferences = {
+                                roles: ["Frontend Developer", "Full Stack Developer", "UI Developer"],
+                                locations: "Remote",
+                                salary: "$80,000 - $120,000",
+                                workMode: "Hybrid"
+                            };
+                        }
+                        
+                        if (!data.links) {
+                            data.links = {
+                                linkedin: "https://linkedin.com",
+                                github: "https://github.com",
+                                portfolio: "https://portfolio.com"
+                            };
+                        }
+                        
+                        return data;
+                })
+                .catch(error => {
+                        console.error('Error loading profile data:', error);
+                        showErrorToast('Could not load profile data. Using fallback data.');
+                        
+                        // Return mock data as fallback
+                        return {
+                            userId: 'user1',
+                            fullName: 'Simon Johnson',
+                            title: 'Software Developer',
+                            profession: 'Software Developer', 
+                            location: 'San Francisco, CA',
+                            email: 'simon.johnson@example.com',
+                            phone: '(123) 456-7890',
+                            bio: 'Experienced software engineer with a passion for building user-friendly applications.',
+                            completionPercentage: 60,
+                            profileImage: 'src/assets/images/founder-simon.jpeg',
+                            experience: [
+                                {
+                                    company: "Tech Solutions Inc.",
+                                    role: "Junior Developer",
+                                    startDate: "2023-01-15",
+                                    endDate: null,
+                                    current: true,
+                                    description: "Developing web applications using modern JavaScript frameworks"
+                                },
+                                {
+                                    company: "Digital Creations",
+                                    role: "Intern",
+                                    startDate: "2022-05-10",
+                                    endDate: "2022-12-31",
+                                    current: false,
+                                    description: "Assisted in front-end development and UI design tasks"
+                                }
+                            ],
+                            education: [
+                                {
+                                    institution: "University of California, Berkeley",
+                                    degree: "B.S. Computer Science",
+                                    graduationDate: "2022-05-01"
+                                }
+                            ],
+                            skills: [
+                                "JavaScript", "React", "Node.js", "HTML/CSS", "Python"
+                            ],
+                            languages: [
+                                { language: "English", proficiency: "Native" },
+                                { language: "Spanish", proficiency: "Intermediate" }
+                            ],
+                            interests: [
+                                "Web Development", "Mobile Apps", "UI/UX Design", "Open Source"
+                            ],
+                            jobPreferences: {
+                                roles: ["Frontend Developer", "Full Stack Developer", "UI Developer"],
+                                locations: "Remote",
+                                salary: "$80,000 - $120,000",
+                                workMode: "Hybrid"
+                            },
+                            links: {
+                                linkedin: "https://linkedin.com",
+                                github: "https://github.com",
+                                portfolio: "https://portfolio.com"
+                            }
+                        };
+                    });
+            }
+            
+            // Load user status ratings
+            function loadUserStatusRatings() {
+                return window.apiService.getUserRatings('user1')
+                    .then(data => {
+                        return data;
+                    })
+                    .catch(error => {
+                        console.error('Error loading status ratings:', error);
+                        showErrorToast('Could not load status ratings. Using fallback data.');
+                        
+                        // Return mock data as fallback
+                        return {
+                            userId: 'user1',
+                            technicalSkills: 3,
+                            interviewPreparation: 2,
+                            resumeReadiness: 2,
+                            jobSearchActivity: 1,
+                            lastUpdated: new Date().toISOString(),
+                            history: [
+                                {
+                                    date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                                    technicalSkills: 2,
+                                    interviewPreparation: 1,
+                                    resumeReadiness: 1,
+                                    jobSearchActivity: 0
+                                },
+                                {
+                                    date: new Date().toISOString(),
+                                    technicalSkills: 3,
+                                    interviewPreparation: 2,
+                                    resumeReadiness: 2,
+                                    jobSearchActivity: 1
+                                }
+                            ]
+                        };
+                    });
+            }
+            
+            // Load todos for the sidebar - now global so it can be refreshed from any page
+            function loadUserTodos() {
+                return window.apiService.getUserTodos('user1')
+                    .then(data => {
+                        return data;
+                    })
+                    .catch(error => {
+                        console.error('Error loading todos:', error);
+                        showErrorToast('Could not load deadlines. Using fallback data.');
+                        
+                        // Return mock data as fallback with due dates relative to current date
+                        const today = new Date();
+                        const tomorrow = new Date(today);
+                        tomorrow.setDate(today.getDate() + 1);
+                        
+                        const nextWeek = new Date(today);
+                        nextWeek.setDate(today.getDate() + 7);
+                        
+                        return { 
+                            todos: [
+                                {
+                                    id: "todo1",
+                                    title: "Update resume with latest experience",
+                                    deadline: tomorrow.toISOString(),
+                                    completed: false,
+                                    priority: "high"
+                                },
+                                {
+                                    id: "todo2",
+                                    title: "Complete mock interview preparation",
+                                    deadline: nextWeek.toISOString(),
+                                    completed: false,
+                                    priority: "medium"
+                                },
+                                {
+                                    id: "todo3",
+                                    title: "Apply to TechSolutions Inc. job opening",
+                                    deadline: new Date(today.getTime() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+                                    completed: false,
+                                    priority: "high"
+                                }
+                            ] 
+                        };
+                    });
+            }
+            
+            // Display todos in the sidebar - improved to handle errors better
+            function displaySidebarTodos(todosData) {
+                const sidebarDeadlinesContainer = document.getElementById('sidebar-deadlines-container');
+                if (!sidebarDeadlinesContainer) return;
+                
+                sidebarDeadlinesContainer.innerHTML = '';
+                
+                if (!todosData || !todosData.todos || todosData.todos.length === 0) {
+                    sidebarDeadlinesContainer.innerHTML = '<p class="no-deadlines-message">No upcoming deadlines</p>';
+                    return;
+                }
+                
+                try {
+                    // Sort by deadline and take the first 3
+                    const sortedTodos = [...todosData.todos]
+                        .filter(todo => !todo.completed)
+                        .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+                        .slice(0, 3);
+                    
+                    if (sortedTodos.length === 0) {
+                        sidebarDeadlinesContainer.innerHTML = '<p class="no-deadlines-message">No upcoming deadlines</p>';
+                        return;
+                    }
+                    
+                    sortedTodos.forEach(todo => {
+                        const deadlineDate = new Date(todo.deadline);
+                        const today = new Date();
+                        const tomorrow = new Date(today);
+                        tomorrow.setDate(today.getDate() + 1);
+                        
+                        let dateText = '';
+                        if (deadlineDate.toDateString() === today.toDateString()) {
+                            dateText = 'Today';
+                        } else if (deadlineDate.toDateString() === tomorrow.toDateString()) {
+                            dateText = 'Tomorrow';
+                        } else {
+                            dateText = deadlineDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        }
+                        
+                        const deadlineItem = document.createElement('div');
+                        deadlineItem.className = 'deadline-item';
+                        deadlineItem.innerHTML = `
+                            <div class="deadline-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>${dateText}</span>
+                            </div>
+                            <p>${todo.title}</p>
+                        `;
+                        
+                        sidebarDeadlinesContainer.appendChild(deadlineItem);
+                    });
+                } catch (error) {
+                    console.error('Error displaying todos:', error);
+                    sidebarDeadlinesContainer.innerHTML = '<p class="no-deadlines-message">Error loading deadlines</p>';
+                }
+            }
+
+            // Function to load and display todos (can be called from any page)
+            function refreshSidebarTodos() {
+                loadUserTodos().then(todosData => {
+                    displaySidebarTodos(todosData);
+                }).catch(error => {
+                    console.error('Error refreshing todos:', error);
+                });
+            }
+            
+            // Update profile UI with data
+            function updateProfileUI(profileData) {
+                // Update header user picture
+                const headerProfilePic = document.getElementById('header-profile-picture');
+                if (headerProfilePic) {
+                    headerProfilePic.src = profileData.profileImage || 'src/assets/images/founder-simon.jpeg';
+                }
+                
+                // Update header elements
+                document.getElementById('header-user-name').textContent = profileData.fullName.split(' ')[0];
+                document.getElementById('sidebar-welcome').textContent = 'Welcome, ' + profileData.fullName.split(' ')[0];
+                
+                // Update profile image if available
+                const profileImage = profileData.profileImage || 'src/assets/images/founder-simon.jpeg';
+                const allProfileImages = document.querySelectorAll('#profile-picture');
+                allProfileImages.forEach(img => {
+                    img.src = profileImage;
+                    img.alt = profileData.fullName;
+                });
+                
+                // Update profile information
+                document.getElementById('profile-name').textContent = profileData.fullName;
+                document.getElementById('profile-title').textContent = profileData.profession || profileData.title || 'No title specified';
+                
+                // Update location
+                const locationElement = document.getElementById('profile-location');
+                if (locationElement) {
+                    locationElement.innerHTML = `
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${profileData.location || 'Location not specified'}</span>
+                    `;
+                }
+                
+                // Update contact information
+                const emailElement = document.getElementById('profile-email');
+                if (emailElement) {
+                    emailElement.innerHTML = `
+                        <i class="fas fa-envelope"></i>
+                        <span>${profileData.email || 'Email not specified'}</span>
+                    `;
+                }
+                
+                const phoneElement = document.getElementById('profile-phone');
+                if (phoneElement) {
+                    phoneElement.innerHTML = `
+                        <i class="fas fa-phone"></i>
+                        <span>${profileData.phone || 'Phone not specified'}</span>
+                    `;
+                }
+                
+                // Update bio/summary
+                const summaryElement = document.querySelector('.profile-summary p');
+                if (summaryElement) {
+                    summaryElement.textContent = profileData.bio || `${profileData.fullName} is a ${profileData.profession || 'professional'} based in ${profileData.location || 'the area'}.`;
+                }
+                
+                // Update skills section if available
+                if (profileData.skills && profileData.skills.length > 0) {
+                    const skillsList = document.querySelector('.skills-list');
+                    if (skillsList) {
+                        skillsList.innerHTML = '';
+                        profileData.skills.forEach(skill => {
+                            const skillTag = document.createElement('span');
+                            skillTag.className = 'skill-tag';
+                            skillTag.textContent = skill;
+                            skillsList.appendChild(skillTag);
+                        });
+                    }
+                }
+                
+                // Update languages section if available
+                if (profileData.languages && profileData.languages.length > 0) {
+                    const languagesList = document.querySelector('.languages-list');
+                    if (languagesList) {
+                        languagesList.innerHTML = '';
+                        profileData.languages.forEach(lang => {
+                            const langItem = document.createElement('div');
+                            langItem.className = 'language-item';
+                            
+                            const langName = typeof lang === 'string' ? lang : lang.language;
+                            const proficiency = typeof lang === 'string' ? '' : lang.proficiency ? ` - ${lang.proficiency}` : '';
+                            
+                            langItem.innerHTML = `
+                                <span class="language-tag">${langName}${proficiency}</span>
+                            `;
+                            
+                            languagesList.appendChild(langItem);
+                        });
+                    }
+                }
+                
+                // Update interests section if available
+                if (profileData.interests && profileData.interests.length > 0) {
+                    const interestsList = document.querySelector('.interests-list');
+                    if (interestsList) {
+                        interestsList.innerHTML = '';
+                        profileData.interests.forEach(interest => {
+                            const interestTag = document.createElement('span');
+                            interestTag.className = 'interest-tag';
+                            interestTag.textContent = interest;
+                            interestsList.appendChild(interestTag);
+                        });
+                    }
+                }
+                
+                // Update links section
+                if (profileData.links) {
+                    const socialLinks = document.querySelector('.social-links');
+                    if (socialLinks) {
+                        const links = [
+                            { name: 'linkedin', icon: 'fab fa-linkedin', label: 'LinkedIn' },
+                            { name: 'github', icon: 'fab fa-github', label: 'GitHub' },
+                            { name: 'portfolio', icon: 'fas fa-globe', label: 'Portfolio' }
+                        ];
+                        
+                        socialLinks.innerHTML = '';
+                        
+                        links.forEach(link => {
+                            if (profileData.links[link.name]) {
+                                const linkElement = document.createElement('a');
+                                linkElement.href = profileData.links[link.name];
+                                linkElement.className = 'social-link';
+                                linkElement.target = '_blank';
+                                linkElement.innerHTML = `
+                                    <i class="${link.icon}"></i> ${link.label}
+                                `;
+                                socialLinks.appendChild(linkElement);
+                            }
+                        });
+                    }
+                }
+                
+                // Update experience section if available
+                if (profileData.experience && profileData.experience.length > 0) {
+                    const experienceSection = document.querySelector('.profile-section:nth-of-type(2)');
+                    if (experienceSection) {
+                        // Keep the heading
+                        const heading = experienceSection.querySelector('h2');
+                        experienceSection.innerHTML = '';
+                        experienceSection.appendChild(heading);
+                        
+                        profileData.experience.forEach(exp => {
+                            const expItem = document.createElement('div');
+                            expItem.className = 'experience-item';
+                            
+                            // Format dates properly
+                            const startDate = new Date(exp.startDate);
+                            const formattedStartDate = startDate.toLocaleDateString('en-US', {year: 'numeric', month: 'short'});
+                            
+                            let dateRange = '';
+                            if (exp.current) {
+                                dateRange = `${formattedStartDate} - Present`;
+                            } else if (exp.endDate) {
+                                const endDate = new Date(exp.endDate);
+                                const formattedEndDate = endDate.toLocaleDateString('en-US', {year: 'numeric', month: 'short'});
+                                dateRange = `${formattedStartDate} - ${formattedEndDate}`;
+                            } else {
+                                dateRange = formattedStartDate;
+                            }
+                            
+                            expItem.innerHTML = `
+                                <div class="item-header">
+                                    <h3>${exp.role}</h3>
+                                    <span class="date-range">${dateRange}</span>
+                                </div>
+                                <p class="company-name">${exp.company}</p>
+                                <p class="item-description">${exp.description || ''}</p>
+                            `;
+                            
+                            experienceSection.appendChild(expItem);
+                        });
+                    }
+                }
+                
+                // Update education section if available
+                if (profileData.education && profileData.education.length > 0) {
+                    const educationSection = document.querySelector('.profile-section:nth-of-type(3)');
+                    if (educationSection) {
+                        // Keep the heading
+                        const heading = educationSection.querySelector('h2');
+                        educationSection.innerHTML = '';
+                        educationSection.appendChild(heading);
+                        
+                        profileData.education.forEach(edu => {
+                            const eduItem = document.createElement('div');
+                            eduItem.className = 'education-item';
+                            
+                            const graduationDate = new Date(edu.graduationDate);
+                            const graduationYear = graduationDate.getFullYear();
+                            
+                            eduItem.innerHTML = `
+                                <div class="item-header">
+                                    <h3>${edu.degree}</h3>
+                                    <span class="date-range">${graduationYear}</span>
+                                </div>
+                                <p class="institution-name">${edu.institution}</p>
+                            `;
+                            
+                            educationSection.appendChild(eduItem);
+                        });
+                    }
+                }
+                
+                // Update job preferences section
+                const updateJobPreference = (label, value) => {
+                    const preferenceGroups = document.querySelectorAll('.preferences-group');
+                    for (const group of preferenceGroups) {
+                        const labelElement = group.querySelector('.preferences-label');
+                        if (labelElement && labelElement.textContent.includes(label)) {
+                            const valueElement = group.querySelector('.preferences-value');
+                            if (valueElement) {
+                                if (Array.isArray(value)) {
+                                    const rolesList = group.querySelector('.roles-list');
+                                    if (rolesList) {
+                                        rolesList.innerHTML = '';
+                                        if (value.length === 0) {
+                                            valueElement.textContent = 'None specified';
+                                        } else {
+                                            value.forEach(role => {
+                                                const roleTag = document.createElement('span');
+                                                roleTag.className = 'role-tag';
+                                                roleTag.textContent = role;
+                                                rolesList.appendChild(roleTag);
+                                            });
+                                        }
+                                    } else {
+                                        valueElement.textContent = value.join(', ') || 'None specified';
+                                    }
+                                } else {
+                                    valueElement.textContent = value || 'Not specified';
+                                }
+                            }
+                            break;
+                        }
+                    }
+                };
+
+                // Set job preferences values
+                if (profileData.jobPreferences) {
+                    updateJobPreference('Roles', profileData.jobPreferences.roles || [profileData.profession || 'Software Developer']);
+                    updateJobPreference('locations', profileData.jobPreferences.locations || profileData.location);
+                    updateJobPreference('Salary', profileData.jobPreferences.salary || '$80,000 - $120,000');
+                    updateJobPreference('Work mode', profileData.jobPreferences.workMode || 'Hybrid');
+                } else {
+                    // Fallback for each preference if not found
+                    updateJobPreference('Roles', [profileData.profession || 'Software Developer']);
+                    updateJobPreference('locations', profileData.location || 'Remote');
+                    updateJobPreference('Salary', '$80,000 - $120,000');
+                    updateJobPreference('Work mode', 'Hybrid');
+                }
+            }
+            
+            // Update status UI with data
+        function updateStatusUI(statusData) {
+            // Update status summary items
+            const statusItems = document.querySelectorAll('.status-summary-item');
+                const sidebarStatusItems = document.querySelectorAll('.sidebar-status-item .status-value');
+            
+                if (statusItems.length >= 4) {
+            statusItems[0].querySelector('.status-summary-value').textContent = `${statusData.technicalSkills}/10`;
+            statusItems[1].querySelector('.status-summary-value').textContent = `${statusData.interviewPreparation}/10`;
+            statusItems[2].querySelector('.status-summary-value').textContent = `${statusData.resumeReadiness}/10`;
+            statusItems[3].querySelector('.status-summary-value').textContent = `${statusData.jobSearchActivity}/10`;
+                }
+                
+                if (sidebarStatusItems.length >= 4) {
+                    sidebarStatusItems[0].textContent = `${statusData.technicalSkills}/10`;
+                    sidebarStatusItems[1].textContent = `${statusData.interviewPreparation}/10`;
+                    sidebarStatusItems[2].textContent = `${statusData.resumeReadiness}/10`;
+                    sidebarStatusItems[3].textContent = `${statusData.jobSearchActivity}/10`;
+                }
+                
+                // Update slider controls - both original and new sliders
+                const techSkillsSlider = document.querySelector('[data-category="technicalSkills"]');
+                const techSkillsRating = document.querySelector('#technicalSkillsRating');
+                if (techSkillsSlider && techSkillsRating) {
+                    techSkillsSlider.value = statusData.technicalSkills;
+                    techSkillsRating.textContent = statusData.technicalSkills;
+                }
+                
+                const interviewSlider = document.querySelector('[data-category="interviewPreparation"]');
+                const interviewRating = document.querySelector('#interviewPreparationRating');
+                if (interviewSlider && interviewRating) {
+                    interviewSlider.value = statusData.interviewPreparation;
+                    interviewRating.textContent = statusData.interviewPreparation;
+                }
+                
+                const resumeSlider = document.querySelector('[data-category="resumeReadiness"]');
+                const resumeRating = document.querySelector('#resumeReadinessRating');
+                if (resumeSlider && resumeRating) {
+                    resumeSlider.value = statusData.resumeReadiness;
+                    resumeRating.textContent = statusData.resumeReadiness;
+                }
+                
+                const jobSearchSlider = document.querySelector('[data-category="jobSearchActivity"]');
+                const jobSearchRating = document.querySelector('#jobSearchActivityRating');
+                if (jobSearchSlider && jobSearchRating) {
+                    jobSearchSlider.value = statusData.jobSearchActivity;
+                    jobSearchRating.textContent = statusData.jobSearchActivity;
+                }
+            }
+            
+            // Set up event to refresh todos every minute
+            setInterval(refreshSidebarTodos, 60000);
+
+            // Load both profile and status data with improved error handling
+            let profileDataPromise = loadUserProfileData();
+            let statusDataPromise = loadUserStatusRatings();
+            let todosDataPromise = loadUserTodos();
+
+            // Set up initial loading state
+            document.getElementById('profile-name').textContent = 'Loading...';
+            document.getElementById('profile-title').textContent = 'Loading...';
+            
+            // Process all promises
+            Promise.all([profileDataPromise, statusDataPromise, todosDataPromise])
+                .then(([profileData, statusData, todosData]) => {
+                    // Clear any error messages
+                    const errorMessages = document.querySelectorAll('.error-message');
+                    errorMessages.forEach(msg => msg.remove());
+                    
+                    // Update UI with loaded data
+                    updateProfileUI(profileData);
+                    updateStatusUI(statusData);
+                    
+                    // Display todos in the sidebar
+                    displaySidebarTodos(todosData);
+                    
+                    // Initialize trends chart if data contains history
+                    if (statusData.history && statusData.history.length > 0) {
+                        updateTrendsChart(statusData.history);
+                    }
+                    
+                    // Set up status rating controls
+                    setupStatusRatingControls();
+                })
+                .catch(error => {
+                    console.error('Error initializing profile:', error);
+                    showErrorToast('Some profile data could not be loaded. Please refresh the page to try again.');
+                    
+                    // Remove any existing error message first
+                    const existingError = document.querySelector('.error-message');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                    
+                    // Show a more helpful error message on the page
+                    const profileContainer = document.querySelector('.profile-container');
+                    if (profileContainer) {
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'error-message';
+                        errorMessage.style.cssText = 'background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin: 10px 0; border: 1px solid #f5c6cb;';
+                        errorMessage.innerHTML = `
+                            <strong>Error loading data:</strong> Some profile data could not be loaded. 
+                            <button id="retryLoadBtn" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; margin-left: 10px; cursor: pointer;">
+                                Retry
+                            </button>
+                        `;
+                        profileContainer.prepend(errorMessage);
+                        
+                        // Add retry functionality
+                        document.getElementById('retryLoadBtn').addEventListener('click', function() {
+                            location.reload();
+                        });
+                    }
+                });
+            
+            // Updated event listener for View All Deadlines link
+            const viewAllDeadlinesLink = document.getElementById('view-all-deadlines');
+            if (viewAllDeadlinesLink) {
+                viewAllDeadlinesLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'webapp.html#deadlines';
+                });
+            }
+
+            // Set up status rating controls
+        function setupStatusRatingControls() {
+            const sliders = document.querySelectorAll('.status-rating-slider');
+            
+            sliders.forEach(slider => {
+                const category = slider.dataset.category;
+                const displayEl = document.getElementById(`${category}Rating`);
+                
+                slider.addEventListener('input', function() {
+                    if (displayEl) {
+                        displayEl.textContent = this.value;
+                    }
+                });
+            });
+            
+            // Handle form submission
+                const saveRatingsBtn = document.getElementById('saveRatingsBtn');
+                if (saveRatingsBtn) {
+                    saveRatingsBtn.addEventListener('click', function() {
+                // Get current values from sliders
+                const currentValues = {
+                    userId: 'user1',
+                    technicalSkills: parseInt(document.querySelector('[data-category="technicalSkills"]').value),
+                    interviewPreparation: parseInt(document.querySelector('[data-category="interviewPreparation"]').value),
+                    resumeReadiness: parseInt(document.querySelector('[data-category="resumeReadiness"]').value),
+                    jobSearchActivity: parseInt(document.querySelector('[data-category="jobSearchActivity"]').value),
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                        // Save to backend
+                        saveUserStatusRatings(currentValues)
+                            .then(() => {
+                        // Show success message
+                        showSuccessToast('Your progress has been updated!');
+                    })
+                    .catch(error => {
+                        console.error('Error saving status ratings:', error);
+                        // Show error message
+                        showErrorToast('Error updating progress. Please try again.');
+                    });
+            });
+                }
+            }
+            
+            // Function to save user status ratings with history
+            function saveUserStatusRatings(statusData) {
+                // First load the existing data to get the history
+                return loadUserStatusRatings()
+                    .then(existingData => {
+                        // Preserve the existing history, and add the new entry
+                        const history = existingData.history || [];
+                        
+                        // Add the current status as a new history entry
+                        history.push({
+                            date: statusData.lastUpdated,
+                            technicalSkills: statusData.technicalSkills,
+                            interviewPreparation: statusData.interviewPreparation,
+                            resumeReadiness: statusData.resumeReadiness,
+                            jobSearchActivity: statusData.jobSearchActivity
+                        });
+                        
+                        // Update status data with the new history
+                        const updatedData = {
+                            ...statusData,
+                            history: history
+                        };
+                        
+                        // Save to backend using the function from userDataSync.js
+                        return window.saveUserStatusRatings(updatedData)
+                            .then(() => {
+                                // Update UI elements with new values
+                                const summaryItems = document.querySelectorAll('.status-summary-item');
+                                if (summaryItems.length >= 4) {
+                                    summaryItems[0].querySelector('.status-summary-value').textContent = `${statusData.technicalSkills}/10`;
+                                    summaryItems[1].querySelector('.status-summary-value').textContent = `${statusData.interviewPreparation}/10`;
+                                    summaryItems[2].querySelector('.status-summary-value').textContent = `${statusData.resumeReadiness}/10`;
+                                    summaryItems[3].querySelector('.status-summary-value').textContent = `${statusData.jobSearchActivity}/10`;
+                                }
+                                
+                                // Also update the sidebar status items
+                                const sidebarStatusItems = document.querySelectorAll('.sidebar-status-item .status-value');
+                                if (sidebarStatusItems.length >= 4) {
+                                    sidebarStatusItems[0].textContent = `${statusData.technicalSkills}/10`;
+                                    sidebarStatusItems[1].textContent = `${statusData.interviewPreparation}/10`;
+                                    sidebarStatusItems[2].textContent = `${statusData.resumeReadiness}/10`;
+                                    sidebarStatusItems[3].textContent = `${statusData.jobSearchActivity}/10`;
+                                }
+                                
+                                // If we have a trends chart, update it with the new history data
+                                updateTrendsChart(updatedData.history);
+                                
+                                // Show success message
+                                showSuccessToast('Your progress has been updated!');
+                                
+                                return updatedData;
+                            });
+                    });
+            }
+            
+            // Updated function to display trend charts on both sidebar and original positions
+            function updateTrendsChart(historyData) {
+                // Main chart in new sidebar
+                const trendsChartCanvas = document.getElementById('userTrendsChart');
+                if (trendsChartCanvas) {
+                    // Clear any existing chart
+                    if (window.trendsChart) {
+                        window.trendsChart.destroy();
+                    }
+                    
+                    const ctx = trendsChartCanvas.getContext('2d');
+                    const labels = historyData.map(entry => {
+                        const date = new Date(entry.date);
+                        return `${date.getMonth()+1}/${date.getDate()}`;
+                    });
+                    
+                    window.trendsChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Technical Skills',
+                                    data: historyData.map(entry => entry.technicalSkills),
+                                    borderColor: 'rgba(92, 147, 237, 1)',
+                                    backgroundColor: 'rgba(92, 147, 237, 0.1)',
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Interview Prep',
+                                    data: historyData.map(entry => entry.interviewPreparation),
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Resume Readiness',
+                                    data: historyData.map(entry => entry.resumeReadiness),
+                                    borderColor: 'rgba(255, 159, 64, 1)',
+                                    backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Job Search',
+                                    data: historyData.map(entry => entry.jobSearchActivity),
+                                    borderColor: 'rgba(153, 102, 255, 1)',
+                                    backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                                    tension: 0.3
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 10,
+                                    ticks: {
+                                        stepSize: 2
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false // Hide legend to save space
+                                }
+                            }
+                        }
+                    });
+                }
+        }
+        
+        // Helper function to show success toast
+        function showSuccessToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast success-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Helper function to show error toast
+        function showErrorToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast error-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+            
+            // After the DOM is loaded, hide the duplicate progress section at the bottom
+            const progressSections = document.querySelectorAll('h2 i.fa-chart-line');
+            if (progressSections.length > 1) {
+                // Keep the first one, remove others
+                for (let i = 1; i < progressSections.length; i++) {
+                    const sectionTitle = progressSections[i].closest('h2');
+                    if (sectionTitle && sectionTitle.parentNode) {
+                        sectionTitle.parentNode.remove();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

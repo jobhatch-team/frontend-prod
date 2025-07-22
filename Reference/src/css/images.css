@@ -1,0 +1,117 @@
+/* Enhanced Image Handling and Gradients for JobHatch */
+
+/* Ensure all images display properly */
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Background gradient enhancements */
+body {
+    background: var(--background-gradient);
+}
+
+.hero {
+    background: linear-gradient(150deg, #f8f9fa, #e9f2ff);
+}
+
+.hero::before {
+    background: linear-gradient(135deg, rgba(255, 188, 87, 0.08), rgba(77, 140, 245, 0.08));
+}
+
+/* Enhanced text gradients */
+h1, h2, .section-title {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.accent {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Image animations and effects */
+.main-image {
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
+/* Feature cards with gradient overlay */
+.feature-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), rgba(77, 140, 245, 0.05));
+    z-index: -1;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+/* Card hover effects */
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Chicken image specific styling */
+.chicken-image {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transform: rotate(-3deg);
+    transition: var(--transition);
+}
+
+.chicken-image:hover {
+    transform: rotate(0deg) scale(1.02);
+}
+
+/* Make SVG icons colorful on hover */
+.feature-icon img,
+.step-icon img {
+    transition: filter 0.3s ease;
+}
+
+.feature-card:hover .feature-icon img,
+.step:hover .step-icon img {
+    filter: drop-shadow(0 0 5px rgba(77, 140, 245, 0.3));
+}
+
+/* Feature bubbles */
+.feature-bubble {
+    animation: float 5s ease-in-out infinite;
+}
+
+.feature-bubble.resume {
+    animation-delay: 0s;
+}
+
+.feature-bubble.buddy {
+    animation-delay: 1s;
+}
+
+.feature-bubble.job {
+    animation-delay: 2s;
+}
+
+/* Gradient card backgrounds */
+.testimonial-card {
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 1), rgba(233, 242, 255, 0.8));
+} 

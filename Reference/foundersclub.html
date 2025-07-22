@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founders' Club - JobHatch</title>
+    <link rel="icon" href="src/assets/images/LOGO.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+        }
+        .header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+        .logo img {
+            width: 32px;
+            height: 32px;
+            margin-right: 8px;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .header-btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .login-btn {
+            color: #666;
+            background: transparent;
+        }
+        .signup-btn {
+            background: #ffbc57;
+            color: white;
+        }
+        .main-content {
+            text-align: center;
+            padding: 80px 20px 60px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .egg-icon {
+            width: 240px;
+            height: 150px;
+            margin: 0 auto 30px;
+            display: block;
+        }
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 20px 0;
+        }
+        .main-description {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        .join-btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            min-width: 220px;
+            text-align: center;
+            display: inline-block;
+        }
+        .discord-btn {
+            background: #7289da;
+            color: white;
+        }
+        .whatsapp-btn {
+            background: #333;
+            color: white;
+        }
+        .footer {
+            background: linear-gradient(135deg, #a8e6ff 0%, #7dd3fc 100%);
+            padding: 60px 20px 40px;
+            margin-top: 80px;
+        }
+        .footer-animals {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .footer-animals img {
+            max-width: 200px;
+            height: auto;
+        }
+        .footer-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .footer-logo img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 8px;
+        }
+        .footer-logo-text {
+            font-weight: 700;
+            font-size: 18px;
+            color: #333;
+        }
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-section h4 {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+        .footer-section a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .social-icon.linkedin {
+            background: #0077b5;
+            color: white;
+        }
+        .social-icon.instagram {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white;
+        }
+        .social-icon.tiktok {
+            background: #000;
+            color: white;
+        }
+        .contribute-section {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 0 auto 30px;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .contribute-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .contribute-btn {
+            background: #ffbc57;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .copyright {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .main-title {
+                font-size: 2rem;
+            }
+            .button-group {
+                width: 100%;
+            }
+            .join-btn {
+                width: 90%;
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="src/assets/images/LOGO.jpg" alt="JobHatch Logo" style="height:40px; width:auto;">
+                <span class="logo-text">JOBHATCH</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html#home" class="tab-link" data-tab="home">Home</a></li>
+                    <li><a href="index.html#download" class="tab-link" data-tab="download">Download</a></li>
+                    <li><a href="webapp.html" class="app-link">Web App<i class="fas fa-external-link-alt"></i></a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn login-btn" id="loginBtn">Log in</a>
+                <a href="#" class="btn signup-btn" id="signupBtn">Sign up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <img src="src/assets/images/chick-pc-owl.png" alt="Chick and Owl Characters" class="egg-icon">
+        <h1 class="main-title">JobHatch Founders' Club</h1>
+        <p class="main-description">
+            Join us and find your next founding team member!
+        </p>
+        <div class="button-group">
+            <a href="https://discord.com/invite/PFyVg2FdaU" class="join-btn discord-btn">Join our Discord Group</a>
+            <a href="https://chat.whatsapp.com/LS8LjJSKLzsGsWb4zgqjmJ" class="join-btn whatsapp-btn">Join our WhatsApp Group</a>
+        </div>
+    </main>
+
+    <!-- 留言区下方footer新设计 -->
+    <section class="homepage-footer">
+      <div class="footer-main-row">
+        <img src="src/assets/images/LOGO.jpg" alt="JobHatch Logo" class="footer-logo-img">
+        <div class="footer-brand-title logo-text">JOBHATCH</div>
+        <div class="footer-links-row">
+          <!-- Quick Links -->
+          <div style="min-width:140px;text-align:left;">
+            <div style="font-weight:700;color:#32336e;font-size:1.13rem;margin-bottom:12px;">🧭 Quick Links</div>
+            <ul style="list-style:none;padding:0;margin:0;line-height:2;">
+              <li><a href="webapp.html" style="color:#3a4266;text-decoration:none;">Web App</a></li>
+              <li><a href="index.html#download" style="color:#3a4266;text-decoration:none;">Download Mobile App</a></li>
+            </ul>
+          </div>
+          <!-- Community -->
+          <div style="min-width:180px;text-align:left;">
+            <div style="font-weight:700;color:#32336e;font-size:1.13rem;margin-bottom:12px;">👥 Community</div>
+            <ul style="list-style:none;padding:0;margin:0;line-height:2;">
+              <li><a href="#" style="color:#3a4266;text-decoration:none;">Ambassador Program</a></li>
+              <li><a href="#" style="color:#3a4266;text-decoration:none;">Refer a Friend</a></li>
+            </ul>
+          </div>
+          <!-- Company -->
+          <div style="min-width:180px;text-align:left;">
+            <div style="font-weight:700;color:#32336e;font-size:1.13rem;margin-bottom:12px;">🏢 Company</div>
+            <ul style="list-style:none;padding:0;margin:0;line-height:2;">
+              <li><a href="index.html#about" style="color:#3a4266;text-decoration:none;">About Us</a></li>
+              <li><a href="#" style="color:#3a4266;text-decoration:none;">Join Us</a></li>
+            </ul>
+          </div>
+          <!-- 社交蛋图标 -->
+          <div style="min-width:220px;display:flex;flex-direction:column;align-items:center;gap:0;margin-left:40px;">
+            <div style="position:relative;width:180px;height:170px;">
+              <img src="src/assets/images/Tiktok.png" alt="Tiktok" style="position:absolute;top:0;left:50%;transform:translateX(-50%) rotate(-10deg);width:90px;height:90px;z-index:3;">
+              <img src="src/assets/images/Linkedln.png" alt="LinkedIn" style="position:absolute;bottom:18px;left:22px;transform:rotate(-18deg);width:100px;height:75px;z-index:2;">
+              <img src="src/assets/images/Ins.png" alt="Instagram" style="position:absolute;bottom:8px;right:22px;transform:rotate(12deg);width:75px;height:75px;z-index:2;">
+            </div>
+          </div>
+        </div>
+        <form class="footer-contact-form">
+          <input type="email" placeholder="Enter your Email">
+          <button type="submit">Contact Us</button>
+        </form>
+        <div class="footer-stars-row">
+          <span>★</span><span>★</span><span>★</span>
+        </div>
+        <div class="footer-bottom">
+          <p>Designed with <i class="fas fa-heart"></i> by the JobHatch Team</p>
+          <p>Copyright &copy; 2025 L3 INNO INC</p>
+        </div>
+      </div>
+    </section>
+</body>
+</html> 

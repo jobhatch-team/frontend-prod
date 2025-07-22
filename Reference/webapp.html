@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>JobHatch - Dashboard</title>
+        <link rel="icon" href="src/assets/images/favicon.svg" type="image/svg+xml">
+        <link rel="stylesheet" href="src/css/styles.css">
+        <link rel="stylesheet" href="src/css/app.css">
+        <link rel="stylesheet" href="src/css/statusChart.css">
+        <link rel="stylesheet" href="src/css/careerTracker.css">
+        <link rel="stylesheet" href="src/css/homeDashboard.css">
+        <link rel="stylesheet" href="src/css/buddyMatch.css">
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <!-- API Service - Load this before other scripts -->
+        <script src="src/js/apiService.js"></script>
+        <!-- Chart.js for radar chart - using a stable version -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+        <!-- Fallback chart rendering script -->
+        <script src="src/js/fallbackChart.js"></script>
+        <!-- Resume Service for API Integration -->
+        <script src="src/js/resume_service.js"></script>
+    </head>
+    <body class="app-body">
+        <!-- Ensure Chart.js is loaded -->
+        <script>
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js not loaded from head');
+                // Try to load it again
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+                script.async = false;
+                document.head.appendChild(script);
+            } else {
+                console.log('Chart.js already loaded in head');
+            }
+        </script>
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="container">
+                <div class="app-header-left">
+                    <a href="index.html" class="logo">
+                    <img src="src/assets/images/jobhatch-logo.svg" alt="JobHatch Logo">
+                    <span>JobHatch</span>
+                    </a>
+                </div>
+                <nav class="app-nav">
+                    <a href="#" class="app-nav-link active" id="homeTab">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                    </a>
+                    <a href="#" class="app-nav-link" id="plannerTab">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Planner</span>
+                    </a>
+                    <a href="#" class="app-nav-link" id="resumeTab">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resume</span>
+                    </a>
+                    <a href="#" class="app-nav-link" id="jobsTab">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Jobs</span>
+                    </a>
+                    <a href="#" class="app-nav-link" id="buddiesTab">
+                    <i class="fas fa-users"></i>
+                    <span>Buddies</span>
+                    </a>
+                </nav>
+                <div class="app-header-right">
+                    <div class="notifications">
+                        <button class="notification-btn" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">2</span>
+                        </button>
+                        <!-- Notification Dropdown -->
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h4>Notifications</h4>
+                                <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+                            </div>
+                            <div class="notification-list">
+                                <div class="notification-item unread">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>New job matching your profile at <strong>Tech Solutions Inc.</strong></p>
+                                        <span class="notification-time">2 hours ago</span>
+                                    </div>
+                                    <button class="notification-dismiss">
+                                    <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="notification-item unread">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>Upcoming deadline: <strong>Complete mock interview preparation</strong></p>
+                                        <span class="notification-time">Yesterday</span>
+                                    </div>
+                                    <button class="notification-dismiss">
+                                    <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-icon">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>You've earned <strong>50 points</strong> for updating your resume!</p>
+                                        <span class="notification-time">3 days ago</span>
+                                    </div>
+                                    <button class="notification-dismiss">
+                                    <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="notification-footer">
+                                <a href="#" class="view-all-notifications">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-menu">
+                        <a href="profile.html" class="user-avatar-link">
+                            <div class="user-avatar">
+                                <img src="src/assets/images/founder-simon.jpeg" alt="User Avatar">
+                            </div>
+                            <span class="user-name">Simon</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content -->
+        <main class="app-main">
+            <div class="container">
+                <!-- Sidebar -->
+                <aside class="app-sidebar">
+                    <!-- User Status Radar Chart Section (Moved to top of sidebar) -->
+                    <div class="status-chart-container">
+                        <div class="status-chart-header">
+                            <h2>Your Job Readiness Status</h2>
+                            <div class="status-actions">
+                                <button class="refresh-chart-btn" id="refreshChartBtn" title="Refresh chart data">
+                                <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button class="update-status-btn" id="updateStatusBtn">
+                                <i class="fas fa-edit"></i> Update Status
+                                </button>
+                            </div>
+                        </div>
+                        <div class="status-chart-content">
+                            <div class="radar-chart-wrapper" style="width: 100%; max-width: 450px; height: 300px;">
+                                <canvas id="userStatusChart" width="450" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-profile">
+                        <h3>Welcome, Simon</h3>
+                        <div class="upcoming-deadlines-mini">
+                            <div id="sidebar-deadlines-container">
+                                <!-- Sidebar deadlines will be loaded dynamically -->
+                            </div>
+                            <a href="#" class="sidebar-link" id="view-all-deadlines">
+                            <i class="fas fa-tasks"></i>
+                            <span>View all deadlines</span>
+                            <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="journey-map">
+                        <h3>Career Journey: The Tech Explorer's Path</h3>
+                        <div class="journey-path">
+                            <div class="journey-node active">
+                                <div class="node-icon">
+                                    <i class="fas fa-flag"></i>
+                                </div>
+                                <div class="node-info">
+                                    <span class="node-title">Goal Setting</span>
+                                    <span class="node-status">Completed</span>
+                                </div>
+                                <div class="node-line"></div>
+                            </div>
+                            <div class="journey-node active">
+                                <div class="node-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="node-info">
+                                    <span class="node-title">Resume Building</span>
+                                    <span class="node-status">8/10 Complete</span>
+                                </div>
+                                <div class="node-line"></div>
+                            </div>
+                            <div class="journey-node current">
+                                <div class="node-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <div class="node-info">
+                                    <span class="node-title">Job Applications</span>
+                                    <span class="node-status">4 Applied</span>
+                                </div>
+                                <div class="node-line"></div>
+                            </div>
+                            <div class="journey-node">
+                                <div class="node-icon">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <div class="node-info">
+                                    <span class="node-title">Networking</span>
+                                    <span class="node-status">Not Started</span>
+                                </div>
+                                <div class="node-line"></div>
+                            </div>
+                            <div class="journey-node">
+                                <div class="node-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="node-info">
+                                    <span class="node-title">Job Offers</span>
+                                    <span class="node-status">Upcoming</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="journey-info">
+                            <div class="pet-container">
+                                <img src="src/assets/images/egg.svg" alt="Career Pet" class="egg-image">
+                            </div>
+                            <div class="journey-stats">
+                                <div class="stat">
+                                    <i class="fas fa-star"></i>
+                                    <span>325 points</span>
+                                </div>
+                                <div class="stat">
+                                    <i class="fas fa-tasks"></i>
+                                    <span>12 tasks completed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>Get Started</h3>
+                        <ul class="sidebar-list">
+                            <li class="completed">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Tell us about yourself</span>
+                            </li>
+                            <li class="active">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span>What do you want to work on?</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-user-friends"></i>
+                                <span>Your background</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-heart"></i>
+                                <span>Personal challenges & values</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3>Account</h3>
+                        <ul class="sidebar-list">
+                            <li>
+                                <a href="profile.html" class="sidebar-nav-link">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Profile & Status</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="sidebar-nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="sidebar-nav-link">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Help & Support</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+                <!-- Main Content Area -->
+                <div class="app-content">
+                    <!-- Tab Content - Home (Default Active) -->
+                    <div class="tab-content active" id="homeContent">
+                        <div class="content-header">
+                            <h1>Your Dashboard</h1>
+                        </div>
+                        <!-- Top Dashboard Section -->
+                        <div class="dashboard-container">
+                            <!-- Left Column - Missions -->
+                            <div class="missions-card">
+                                <div class="missions-header">
+                                    <h2>Today's Missions</h2>
+                                    <span class="missions-progress">2 of 6 completed</span>
+                                </div>
+                                <div class="missions-progress-bar">
+                                    <div class="missions-progress-fill" style="width: 33%;"></div>
+                                </div>
+                                <div class="mission-list">
+                                    <div class="mission-item">
+                                        <div class="mission-checkbox">
+                                            <input type="checkbox" id="mission1">
+                                        </div>
+                                        <div class="mission-content">
+                                            <h3 class="mission-title">Update your resume with new skills</h3>
+                                            <div class="mission-meta">
+                                                <span class="mission-points">+20 points</span>
+                                                <span class="mission-difficulty difficulty-easy">Easy</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mission-item">
+                                        <div class="mission-checkbox">
+                                            <input type="checkbox" id="mission2">
+                                        </div>
+                                        <div class="mission-content">
+                                            <h3 class="mission-title">Optimize your LinkedIn profile</h3>
+                                            <div class="mission-meta">
+                                                <span class="mission-points">+15 points</span>
+                                                <span class="mission-difficulty difficulty-medium">Medium</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mission-item">
+                                        <div class="mission-checkbox">
+                                            <input type="checkbox" id="mission3">
+                                        </div>
+                                        <div class="mission-content">
+                                            <h3 class="mission-title">Connect with 3 people in your target industry</h3>
+                                            <div class="mission-meta">
+                                                <span class="mission-points">+25 points</span>
+                                                <span class="mission-difficulty difficulty-hard">Hard</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mission-item completed">
+                                        <div class="mission-checkbox">
+                                            <input type="checkbox" id="mission4" checked>
+                                        </div>
+                                        <div class="mission-content">
+                                            <h3 class="mission-title">Write a cover letter template</h3>
+                                            <div class="mission-meta">
+                                                <span class="mission-points">+15 points</span>
+                                                <span class="mission-difficulty difficulty-medium">Medium</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mission-item">
+                                        <div class="mission-checkbox">
+                                            <input type="checkbox" id="mission5">
+                                        </div>
+                                        <div class="mission-content">
+                                            <h3 class="mission-title">Apply to 2 job openings</h3>
+                                            <div class="mission-meta">
+                                                <span class="mission-points">+30 points</span>
+                                                <span class="mission-difficulty difficulty-hard">Hard</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mission-item completed">
+                                        <div class="mission-checkbox">
+                                            <input type="checkbox" id="mission6" checked>
+                                        </div>
+                                        <div class="mission-content">
+                                            <h3 class="mission-title">Practice answering 5 common interview questions</h3>
+                                            <div class="mission-meta">
+                                                <span class="mission-points">+20 points</span>
+                                                <span class="mission-difficulty difficulty-medium">Medium</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="add-task-button" id="addCustomTaskBtn">
+                                <i class="fas fa-plus-circle"></i> Add Custom Task
+                                </button>
+                            </div>
+                            <!-- Right Column - Pet and Stats -->
+                            <div class="right-column">
+                                <div class="pet-card">
+                                    <h2>Your Career Pet</h2>
+                                    <div class="pet-container">
+                                        <img src="src/assets/images/egg.svg" alt="Career Pet" class="egg-image">
+                                    </div>
+                                    <h3 class="pet-name">Jane's Career Egg</h3>
+                                    <p class="pet-description">Complete more tasks to hatch your pet!</p>
+                                    <div class="hatching-progress-bar">
+                                        <div class="hatching-progress-fill" style="width: 33%;"></div>
+                                    </div>
+                                    <p class="hatching-percentage">33% until hatching</p>
+                                </div>
+                                <div class="stats-card">
+                                    <h2>Your Stats</h2>
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <span class="stat-icon"><i class="fas fa-star"></i></span>
+                                            <h3 class="stat-value career-points-value">360</h3>
+                                            <p class="stat-label">Career Points</p>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-icon achievements-icon"><i class="fas fa-trophy"></i></span>
+                                            <h3 class="stat-value">5</h3>
+                                            <p class="stat-label">Achievements</p>
+                                        </div>
+                                        <div class="stat-item network-growth" style="grid-column: span 2;">
+                                            <span class="stat-icon network-icon"><i class="fas fa-users"></i></span>
+                                            <div class="network-value">
+                                                <h3 class="stat-value">+12</h3>
+                                                <span class="growth-indicator"><i class="fas fa-arrow-up"></i></span>
+                                                <span class="growth-percentage">+35% this week</span>
+                                            </div>
+                                            <p class="stat-label">Network Growth</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bottom Section - Schedule and Buddy -->
+                        <div class="bottom-section">
+                            <div class="schedule-card">
+                                <h2 class="section-header">Upcoming Schedule</h2>
+                                <div class="schedule-list">
+                                    <div class="schedule-item">
+                                        <div class="schedule-icon interview-icon">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                        <div class="schedule-details">
+                                            <h3 class="schedule-title">Mock Interview Practice</h3>
+                                            <p class="schedule-time">Tomorrow, 2:00 PM</p>
+                                        </div>
+                                    </div>
+                                    <div class="schedule-item">
+                                        <div class="schedule-icon webinar-icon">
+                                            <i class="fas fa-laptop"></i>
+                                        </div>
+                                        <div class="schedule-details">
+                                            <h3 class="schedule-title">Networking Webinar</h3>
+                                            <p class="schedule-time">Thu, Nov 12 • 6:30 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#" class="view-schedule-link">View full schedule <i class="fas fa-chevron-right"></i></a>
+                            </div>
+                            <div class="buddy-card">
+                                <h2 class="section-header">Your Buddy</h2>
+                                <div class="buddy-profile">
+                                    <div class="buddy-avatar">
+                                        <img src="src/assets/images/avatar-1.svg" alt="Alex Chen">
+                                    </div>
+                                    <div class="buddy-info">
+                                        <h3 class="buddy-name">Alex Chen</h3>
+                                        <p class="buddy-title">UX Designer • 98% compatible</p>
+                                        <span class="buddy-status">Online now</span>
+                                    </div>
+                                </div>
+                                <button class="message-button">Message</button>
+                                <a href="#" class="find-buddies-link">Find more buddies <i class="fas fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- User Status Radar Chart Section (Removed from home since it's now in sidebar) -->
+                    </div>
+                    <!-- Tab Content - Planner -->
+                    <div class="tab-content" id="plannerContent">
+                        <div class="content-header">
+                            <h1>Career Planner</h1>
+                            <div class="planner-header-actions">
+                                <button class="btn btn-primary" id="generatePlanBtn">
+                                <i class="fas fa-magic"></i>
+                                Generate Plan
+                                </button>
+                                <button class="btn btn-outline-primary regenerate-btn" id="regeneratePlanBtn">
+                                <i class="fas fa-sync-alt"></i>
+                                Regenerate Plan
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="planner-content">
+                            <div class="plan-empty-state" id="planEmptyState">
+                                <div class="plan-progress-card">
+                                    <h3>Let's make a personalized career plan</h3>
+                                    <p>We'll analyze your skills, experiences, and goals to craft your adventure map</p>
+                                    <button class="btn btn-primary btn-block" id="startPlanBtn">
+                                    Start Your Journey
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Career Plan Generation Form -->
+                            <div class="plan-generator-form" id="planGeneratorForm" style="display: none;">
+                                <div class="form-header">
+                                    <h2>Career Adventure Planner</h2>
+                                    <button type="button" class="close-form-btn" id="closePlanFormBtn">&times;</button>
+                                </div>
+                                <div class="form-content">
+                                    <div class="form-section">
+                                        <h3>Career Goals</h3>
+                                        <div class="form-group">
+                                            <label for="shortTermGoal">Short-term Goal (3-6 months)</label>
+                                            <input type="text" id="shortTermGoal" placeholder="e.g., Learn a new framework, Improve interview skills">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="longTermGoal">Long-term Goal (1-3 years)</label>
+                                            <input type="text" id="longTermGoal" placeholder="e.g., Become a senior developer, Change careers to UX design">
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <h3>Dream Jobs</h3>
+                                        <div class="form-group">
+                                            <label for="dreamRole">Dream Role</label>
+                                            <input type="text" id="dreamRole" placeholder="e.g., Full-stack Developer, Project Manager">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="dreamCompany">Dream Company/Industry</label>
+                                            <input type="text" id="dreamCompany" placeholder="e.g., Tech startup, Healthcare industry">
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <h3>Challenges & Preferences</h3>
+                                        <div class="form-group">
+                                            <label for="careerChallenges">Current Challenges</label>
+                                            <textarea id="careerChallenges" rows="3" placeholder="e.g., Lack of experience, Hard to network, Need more technical skills"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="workPreferences">Work Preferences</label>
+                                            <textarea id="workPreferences" rows="3" placeholder="e.g., Remote work, Work-life balance, Collaborative environment"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="button" class="btn btn-outline" id="cancelPlanBtn">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="createPlanBtn">
+                                        <i class="fas fa-magic"></i> Create My Plan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Career Progress Tracker Component -->
+                            <div class="career-progress-tracker" id="careerProgressTracker">
+                                <h2>Career Progress Tracker</h2>
+                                <!-- Overall Job Search Progress -->
+                                <div class="overall-progress">
+                                    <div class="overall-progress-label">
+                                        <span>Overall Job Search Progress</span>
+                                        <span class="progress-percentage">33%</span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill" style="width: 33%;"></div>
+                                    </div>
+                                    <div class="progress-status">IN PROGRESS</div>
+                                </div>
+                                <!-- Category Progress Bars -->
+                                <div class="category-progress">
+                                    <div class="category-item">
+                                        <span class="category-label">Resume & Profile</span>
+                                        <div class="category-progress-bar">
+                                            <div class="category-progress-fill resume-fill" style="width: 75%;"></div>
+                                        </div>
+                                        <span class="category-percentage resume-percentage">75%</span>
+                                    </div>
+                                    <div class="category-item">
+                                        <span class="category-label">Applications</span>
+                                        <div class="category-progress-bar">
+                                            <div class="category-progress-fill applications-fill" style="width: 40%;"></div>
+                                        </div>
+                                        <span class="category-percentage applications-percentage">40%</span>
+                                    </div>
+                                    <div class="category-item">
+                                        <span class="category-label">Interviews</span>
+                                        <div class="category-progress-bar">
+                                            <div class="category-progress-fill interviews-fill" style="width: 25%;"></div>
+                                        </div>
+                                        <span class="category-percentage interviews-percentage">25%</span>
+                                    </div>
+                                </div>
+                                <!-- Hatching Process Timeline -->
+                                <div class="hatching-process">
+                                    <h3>Hatching Process Timeline</h3>
+                                    <div class="timeline-container">
+                                        <!-- Timeline items will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Loading State -->
+                            <div class="plan-loading" id="planLoading" style="display: none;">
+                                <div class="loading-animation">
+                                    <svg width="170" height="170" viewBox="0 0 170 170" xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                            <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stop-color="#5C93ED"/>
+                                                <stop offset="100%" stop-color="#8AB4F8"/>
+                                            </linearGradient>
+                                            <linearGradient id="eggGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#FFF5DD"/>
+                                                <stop offset="100%" stop-color="#FFE8A3"/>
+                                            </linearGradient>
+                                            <linearGradient id="mountainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#5C93ED" stop-opacity="0.3"/>
+                                                <stop offset="100%" stop-color="#8AB4F8" stop-opacity="0.3"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <!-- Animated path -->
+                                        <path d="M10,120 Q30,80 50,100 Q70,120 90,70 Q110,20 140,40" 
+                                            stroke="url(#pathGradient)" 
+                                            stroke-width="3" 
+                                            fill="none" 
+                                            stroke-linecap="round"
+                                            stroke-dasharray="240"
+                                            stroke-dashoffset="240">
+                                            <animate attributeName="stroke-dashoffset" 
+                                                from="240" 
+                                                to="0" 
+                                                dur="2s" 
+                                                repeatCount="indefinite"/>
+                                        </path>
+                                        <!-- Mountain background -->
+                                        <path d="M0,150 L30,100 L50,120 L80,70 L110,110 L140,60 L170,90 L170,150 Z" 
+                                            fill="url(#mountainGradient)" 
+                                            stroke="none"/>
+                                        <!-- Moving chick/egg with animated expressions -->
+                                        <g transform="translate(-15, -15)">
+                                            <animateMotion dur="2s" repeatCount="indefinite"
+                                                path="M10,120 Q30,80 50,100 Q70,120 90,70 Q110,20 140,40"/>
+                                            <!-- Egg body -->
+                                            <ellipse cx="15" cy="15" rx="15" ry="18" fill="url(#eggGradient)" stroke="#FFB84D" stroke-width="1.5"/>
+                                            <!-- Eyes - animated blinking -->
+                                            <circle cx="10" cy="12" r="2.5" fill="#333">
+                                                <animate attributeName="ry" 
+                                                    values="2.5;0.5;2.5" 
+                                                    dur="3s" 
+                                                    repeatCount="indefinite" 
+                                                    begin="0.5s"/>
+                                            </circle>
+                                            <circle cx="20" cy="12" r="2.5" fill="#333">
+                                                <animate attributeName="ry" 
+                                                    values="2.5;0.5;2.5" 
+                                                    dur="3s" 
+                                                    repeatCount="indefinite" 
+                                                    begin="0.5s"/>
+                                            </circle>
+                                            <!-- Mouth - changes expressions -->
+                                            <path d="M12,18 Q15,22 18,18" stroke="#333" stroke-width="1.5" fill="none">
+                                                <animate attributeName="d" 
+                                                    values="M12,18 Q15,22 18,18; M12,19 Q15,17 18,19; M12,18 Q15,22 18,18" 
+                                                    dur="4s" 
+                                                    repeatCount="indefinite"/>
+                                            </path>
+                                            <!-- Small wing/arm that waves -->
+                                            <path d="M5,15 Q8,10 11,15" stroke="#FF9D42" stroke-width="2" fill="none">
+                                                <animate attributeName="d" 
+                                                    values="M5,15 Q8,10 11,15; M5,15 Q8,8 11,15; M5,15 Q8,10 11,15" 
+                                                    dur="1s" 
+                                                    repeatCount="indefinite"/>
+                                            </path>
+                                            <!-- Small crest on top -->
+                                            <path d="M15,0 L13,5 L17,5 Z" fill="#FF5C5C"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <h3>Mapping Your Career Adventure...</h3>
+                                <p>Our AI is analyzing your profile and creating a personalized plan</p>
+                            </div>
+
+                            <div class="planner-tabs">
+                                <div class="planner-tab active">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Planner</span>
+                                </div>
+                                <div class="planner-tab">
+                                    <i class="fas fa-star"></i>
+                                    <span>Shortlisted Colleges</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Career Plan Display -->
+                            <div class="career-plan-container" id="careerPlanContainer" style="display: none;">
+                                <div class="plan-header">
+                                    <h2 id="planTitle">Your Career Adventure Map</h2>
+                                    <div class="plan-actions">
+                                        <button class="btn btn-outline" id="editPlanBtn">
+                                        <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                        <button class="btn btn-outline" id="savePlanPDFBtn">
+                                        <i class="fas fa-download"></i> Save as PDF
+                                        </button>
+                                        <button class="btn btn-primary" id="sharePlanBtn">
+                                        <i class="fas fa-share-alt"></i> Share
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="plan-content">
+                                    <div class="plan-summary">
+                                        <div class="summary-icon">
+                                            <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                                <defs>
+                                                    <linearGradient id="eggGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#FFF5DD"/>
+                                                        <stop offset="100%" stop-color="#FFE8A3"/>
+                                                    </linearGradient>
+                                                    <linearGradient id="mountainGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#5C93ED"/>
+                                                        <stop offset="100%" stop-color="#8AB4F8"/>
+                                                    </linearGradient>
+                                                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.3"/>
+                                                    </filter>
+                                                </defs>
+                                                <!-- Mountains background with animated clouds -->
+                                                <path d="M0,75 L20,40 L30,50 L40,25 L60,60 L80,35 L100,50 L100,100 L0,100 Z" fill="url(#mountainGradient2)" opacity="0.3"/>
+                                                <!-- Cloud 1 with animation -->
+                                                <ellipse cx="20" cy="30" rx="10" ry="6" fill="white" opacity="0.7">
+                                                    <animate attributeName="cx" values="20;30;20" dur="12s" repeatCount="indefinite"/>
+                                                </ellipse>
+                                                <!-- Cloud 2 with animation -->
+                                                <ellipse cx="70" cy="25" rx="12" ry="7" fill="white" opacity="0.7">
+                                                    <animate attributeName="cx" values="70;60;70" dur="15s" repeatCount="indefinite"/>
+                                                </ellipse>
+                                                <!-- Map path -->
+                                                <path d="M10,75 Q20,60 30,65 Q40,70 50,50 Q60,30 70,40 Q80,50 90,45" 
+                                                    stroke="#5C93ED" stroke-width="2" fill="none" stroke-dasharray="3,3"
+                                                    filter="url(#shadow)"/>
+                                                <!-- Egg/chick character - thinking pose -->
+                                                <g transform="translate(40, 40) rotate(-5)">
+                                                    <!-- Body -->
+                                                    <ellipse cx="0" cy="0" rx="16" ry="20" fill="url(#eggGradient2)" stroke="#FFB84D" stroke-width="1.5"/>
+                                                    <!-- Eyes -->
+                                                    <ellipse cx="-5" cy="-5" rx="2.5" ry="3" fill="#333"/>
+                                                    <ellipse cx="5" cy="-5" rx="2.5" ry="3" fill="#333"/>
+                                                    <!-- Eyebrows in thoughtful expression -->
+                                                    <path d="-8,-8 Q-6,-10 -3,-8" stroke="#333" stroke-width="1" fill="none"/>
+                                                    <path d="3,-8 Q6,-11 8,-8" stroke="#333" stroke-width="1" fill="none"/>
+                                                    <!-- Thinking mouth -->
+                                                    <path d="-3,5 Q0,7 3,5" stroke="#333" stroke-width="1.5" fill="none"/>
+                                                    <!-- Wing/arm touching head in thinking gesture -->
+                                                    <path d="12,-2 Q15,-10 7,-12" stroke="#FFB84D" stroke-width="2" fill="none"/>
+                                                    <!-- Small crest -->
+                                                    <path d="-2,-20 L-4,-16 L0,-16 Z" fill="#FF5C5C"/>
+                                                    <path d="2,-20 L0,-16 L4,-16 Z" fill="#FF7E42"/>
+                                                    <!-- Thought bubble -->
+                                                    <circle cx="20" cy="-20" r="4" fill="white" stroke="#5C93ED" stroke-width="0.8"/>
+                                                    <circle cx="25" cy="-25" r="5" fill="white" stroke="#5C93ED" stroke-width="0.8"/>
+                                                    <ellipse cx="32" cy="-32" rx="8" ry="6" fill="white" stroke="#5C93ED" stroke-width="0.8"/>
+                                                    <!-- Question mark in thought bubble -->
+                                                    <path d="29,-34 Q32,-36 33,-33 Q34,-30 32,-30 L32,-29" stroke="#5C93ED" stroke-width="0.8" fill="none"/>
+                                                    <circle cx="32" cy="-27" r="0.5" fill="#5C93ED"/>
+                                                </g>
+                                                <!-- Start flag -->
+                                                <rect x="10" y="60" width="1.5" height="15" fill="#333"/>
+                                                <path d="M11.5,60 L18,63 L11.5,66 Z" fill="#FF5C5C"/>
+                                                <!-- Goal flag with animation -->
+                                                <rect x="90" y="30" width="1.5" height="15" fill="#333"/>
+                                                <path d="M91.5,30 L98,33 L91.5,36 Z" fill="#80D25B">
+                                                    <animate attributeName="fill" values="#80D25B;#92E86D;#80D25B" dur="3s" repeatCount="indefinite"/>
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <div class="summary-content">
+                                            <h3 id="planSummaryTitle">Your Next Software Development Adventure</h3>
+                                            <p id="planSummaryText">Based on your skills and goals, we've crafted a personalized plan to guide your career journey from Junior Developer to Senior Software Engineer.</p>
+                                        </div>
+                                    </div>
+                                    <div class="plan-sections">
+                                        <div class="plan-section" id="shortTermSection">
+                                            <div class="section-header">
+                                                <div class="section-icon">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="20" cy="20" r="18" fill="#F3F4F6" stroke="#5C93ED" stroke-width="2"/>
+                                                        <path d="M20,10 L20,20 L28,25" stroke="#5C93ED" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </div>
+                                                <h3>Short-term Goals (3-6 months)</h3>
+                                            </div>
+                                            <div class="section-content">
+                                                <ul class="plan-goals-list" id="shortTermGoalsList">
+                                                    <!-- Short-term goals will be inserted here -->
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="plan-section" id="midTermSection">
+                                            <div class="section-header">
+                                                <div class="section-icon">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect x="5" y="10" width="30" height="20" rx="2" fill="#F3F4F6" stroke="#5C93ED" stroke-width="2"/>
+                                                        <path d="M12,15 L28,15 M12,20 L20,20 M12,25 L24,25" stroke="#5C93ED" stroke-width="2" stroke-linecap="round"/>
+                                                    </svg>
+                                                </div>
+                                                <h3>Mid-term Goals (6-12 months)</h3>
+                                            </div>
+                                            <div class="section-content">
+                                                <ul class="plan-goals-list" id="midTermGoalsList">
+                                                    <!-- Mid-term goals will be inserted here -->
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="plan-section" id="longTermSection">
+                                            <div class="section-header">
+                                                <div class="section-icon">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20,5 L35,30 L5,30 Z" fill="#F3F4F6" stroke="#5C93ED" stroke-width="2"/>
+                                                        <circle cx="20" cy="15" r="3" fill="#5C93ED"/>
+                                                    </svg>
+                                                </div>
+                                                <h3>Long-term Goals (1-3 years)</h3>
+                                            </div>
+                                            <div class="section-content">
+                                                <ul class="plan-goals-list" id="longTermGoalsList">
+                                                    <!-- Long-term goals will be inserted here -->
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="plan-section" id="skillsGapSection">
+                                            <div class="section-header">
+                                                <div class="section-icon">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="20" cy="20" r="15" fill="#F3F4F6" stroke="#5C93ED" stroke-width="2"/>
+                                                        <path d="M15,15 L25,25 M25,15 L15,25" stroke="#5C93ED" stroke-width="2" stroke-linecap="round"/>
+                                                    </svg>
+                                                </div>
+                                                <h3>Skills Gap Analysis</h3>
+                                            </div>
+                                            <div class="section-content">
+                                                <div class="skills-gap-chart">
+                                                    <canvas id="skillsGapChart" width="500" height="200"></canvas>
+                                                </div>
+                                                <div class="skills-gap-recommendations" id="skillsGapRecommendations">
+                                                    <!-- Skills gap recommendations will be inserted here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="plan-section" id="actionItemsSection">
+                                            <div class="section-header">
+                                                <div class="section-icon">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect x="8" y="8" width="24" height="24" rx="2" fill="#F3F4F6" stroke="#5C93ED" stroke-width="2"/>
+                                                        <path d="M13,17 L16,21 L27,14" stroke="#5C93ED" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </div>
+                                                <h3>Action Items</h3>
+                                            </div>
+                                            <div class="section-content">
+                                                <div class="action-items" id="actionItemsList">
+                                                    <!-- Action items will be inserted here -->
+                                                </div>
+                                                <button class="btn btn-outline" id="addToTodosBtn">
+                                                <i class="fas fa-plus"></i> Add to My Todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="plan-section" id="resourcesSection">
+                                            <div class="section-header">
+                                                <div class="section-icon">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M10,10 L30,10 L30,30 L10,30 Z" fill="#F3F4F6" stroke="#5C93ED" stroke-width="2"/>
+                                                        <path d="M15,15 L25,15 M15,20 L25,20 M15,25 L25,25" stroke="#5C93ED" stroke-width="1.5" stroke-linecap="round"/>
+                                                    </svg>
+                                                </div>
+                                                <h3>Recommended Resources</h3>
+                                            </div>
+                                            <div class="section-content">
+                                                <div class="resources-list" id="resourcesList">
+                                                    <!-- Resources will be inserted here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="plan-adventure-map">
+                                        <h3>Your Career Adventure Map</h3>
+                                        <div class="adventure-map-container">
+                                            <svg width="800" height="300" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" id="careerPath">
+                                                <defs>
+                                                    <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                        <stop offset="0%" stop-color="#5C93ED"/>
+                                                        <stop offset="100%" stop-color="#8AB4F8"/>
+                                                    </linearGradient>
+                                                    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                        <stop offset="0%" stop-color="#E3F2FD"/>
+                                                        <stop offset="100%" stop-color="#F8FAFC"/>
+                                                    </linearGradient>
+                                                    <linearGradient id="eggGradientMap" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#FFF5DD"/>
+                                                        <stop offset="100%" stop-color="#FFE8A3"/>
+                                                    </linearGradient>
+                                                    <linearGradient id="goalGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#80D25B"/>
+                                                        <stop offset="100%" stop-color="#92E86D"/>
+                                                    </linearGradient>
+                                                    <filter id="mapShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.1"/>
+                                                    </filter>
+                                                </defs>
+                                                <!-- Background with day/night cycle -->
+                                                <rect x="0" y="0" width="800" height="300" fill="url(#skyGradient)" rx="8"/>
+                                                <!-- Sun with subtle animation -->
+                                                <circle cx="700" cy="60" r="30" fill="#FFE082" opacity="0.8">
+                                                    <animate attributeName="opacity" values="0.7;0.9;0.7" dur="8s" repeatCount="indefinite"/>
+                                                </circle>
+                                                <!-- Clouds -->
+                                                <g opacity="0.7">
+                                                    <ellipse cx="180" cy="50" rx="30" ry="15" fill="white">
+                                                        <animate attributeName="cx" values="180;200;180" dur="20s" repeatCount="indefinite"/>
+                                                    </ellipse>
+                                                    <ellipse cx="450" cy="40" rx="40" ry="20" fill="white">
+                                                        <animate attributeName="cx" values="450;430;450" dur="25s" repeatCount="indefinite"/>
+                                                    </ellipse>
+                                                    <ellipse cx="600" cy="70" rx="25" ry="12" fill="white">
+                                                        <animate attributeName="cx" values="600;620;600" dur="18s" repeatCount="indefinite"/>
+                                                    </ellipse>
+                                                </g>
+                                                <!-- Mountains with more detail -->
+                                                <path d="M0,250 L50,180 L80,220 L120,150 L180,220 L250,120 L300,180 L350,100 L400,150 L450,80 L500,150 L550,60 L600,150 L650,100 L700,180 L750,120 L800,200 L800,300 L0,300 Z" fill="#EBF2FD"/>
+                                                <!-- Trees along the path -->
+                                                <g>
+                                                    <path d="M70,240 L70,255 L75,255 L75,240 Z" fill="#8D6E63"/>
+                                                    <path d="M72.5,225 L65,240 L80,240 Z" fill="#66BB6A"/>
+                                                    <path d="M72.5,215 L67,230 L78,230 Z" fill="#66BB6A"/>
+                                                    <path d="M150,255 L150,270 L155,270 L155,255 Z" fill="#8D6E63"/>
+                                                    <ellipse cx="152.5" cy="245" rx="10" ry="15" fill="#66BB6A"/>
+                                                    <path d="M380,200 L380,215 L385,215 L385,200 Z" fill="#8D6E63"/>
+                                                    <path d="M382.5,185 L375,200 L390,200 Z" fill="#66BB6A"/>
+                                                    <path d="M382.5,175 L377,190 L388,190 Z" fill="#66BB6A"/>
+                                                    <path d="M520,170 L520,185 L525,185 L525,170 Z" fill="#8D6E63"/>
+                                                    <ellipse cx="522.5" cy="160" rx="10" ry="15" fill="#66BB6A"/>
+                                                    <path d="M670,140 L670,155 L675,155 L675,140 Z" fill="#8D6E63"/>
+                                                    <path d="M672.5,125 L665,140 L680,140 Z" fill="#66BB6A"/>
+                                                    <path d="M672.5,115 L667,130 L678,130 Z" fill="#66BB6A"/>
+                                                </g>
+                                                <!-- Enhanced path with dashed animation -->
+                                                <path d="M50,250 Q150,230 200,250 Q250,270 300,230 Q350,190 400,210 Q450,230 500,180 Q550,130 600,150 Q650,170 700,120 Q730,90 750,100" 
+                                                    stroke="url(#mapGradient)" 
+                                                    stroke-width="4" 
+                                                    fill="none" 
+                                                    stroke-linecap="round"
+                                                    stroke-dasharray="8,4"
+                                                    filter="url(#mapShadow)">
+                                                    <animate attributeName="stroke-dashoffset" values="100;0" dur="30s" repeatCount="indefinite"/>
+                                                </path>
+                                                <!-- Path nodes with pulse animation -->
+                                                <g>
+                                                    <circle cx="50" cy="250" r="8" fill="#5C93ED">
+                                                        <animate attributeName="r" values="8;9;8" dur="3s" repeatCount="indefinite"/>
+                                                    </circle>
+                                                    <text x="50" y="275" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" fill="#334155">Start</text>
+                                                    <!-- Path points will be dynamically added here -->
+                                                    <!-- End goal with glow animation -->
+                                                    <circle cx="750" cy="100" r="8" fill="url(#goalGlow)">
+                                                        <animate attributeName="r" values="8;10;8" dur="4s" repeatCount="indefinite"/>
+                                                    </circle>
+                                                    <text x="750" y="85" font-family="Inter, sans-serif" font-size="12" text-anchor="middle" fill="#334155">Goal</text>
+                                                </g>
+                                                <!-- Current position marker - Animated egg character on skateboard/hoverboard -->
+                                                <g id="currentPositionMarker">
+                                                    <!-- Hoverboard/skateboard with shadow -->
+                                                    <ellipse cx="50" cy="254" rx="15" ry="3" fill="#333" opacity="0.2"/>
+                                                    <rect x="40" y="250" width="20" height="4" rx="2" fill="#5C93ED"/>
+                                                    <!-- Egg character body -->
+                                                    <ellipse cx="50" cy="235" rx="12" ry="15" fill="url(#eggGradientMap)" stroke="#FFB84D" stroke-width="1.5"/>
+                                                    <!-- Character details - excited expression -->
+                                                    <g id="eggFace">
+                                                        <!-- Eyes with blinking animation -->
+                                                        <ellipse cx="45" cy="232" rx="2.5" ry="3" fill="#333">
+                                                            <animate attributeName="ry" values="3;0.5;3" dur="5s" repeatCount="indefinite" begin="1s"/>
+                                                        </ellipse>
+                                                        <ellipse cx="55" cy="232" rx="2.5" ry="3" fill="#333">
+                                                            <animate attributeName="ry" values="3;0.5;3" dur="5s" repeatCount="indefinite" begin="1s"/>
+                                                        </ellipse>
+                                                        <!-- Excited open mouth -->
+                                                        <ellipse cx="50" cy="240" rx="3" ry="2" fill="#333"/>
+                                                        <!-- Small crest/hair -->
+                                                        <path d="M50,220 L47,225 L53,225 Z" fill="#FF5C5C"/>
+                                                        <!-- Arms waving with animation -->
+                                                        <path d="M37,235 Q34,230 37,225" stroke="#FFB84D" stroke-width="2" fill="none">
+                                                            <animate attributeName="d" values="M37,235 Q34,230 37,225; M37,235 Q32,227 37,225; M37,235 Q34,230 37,225" dur="0.8s" repeatCount="indefinite"/>
+                                                        </path>
+                                                        <path d="M63,235 Q66,230 63,225" stroke="#FFB84D" stroke-width="2" fill="none">
+                                                            <animate attributeName="d" values="M63,235 Q66,230 63,225; M63,235 Q68,227 63,225; M63,235 Q66,230 63,225" dur="0.8s" repeatCount="indefinite" begin="0.4s"/>
+                                                        </path>
+                                                    </g>
+                                                    <!-- Speed lines -->
+                                                    <path d="M25,235 L35,235" stroke="#5C93ED" stroke-width="1" opacity="0.7">
+                                                        <animate attributeName="opacity" values="0.7;0;0.7" dur="0.5s" repeatCount="indefinite"/>
+                                                    </path>
+                                                    <path d="M28,240 L38,240" stroke="#5C93ED" stroke-width="1" opacity="0.7">
+                                                        <animate attributeName="opacity" values="0.7;0;0.7" dur="0.5s" repeatCount="indefinite" begin="0.2s"/>
+                                                    </path>
+                                                    <path d="M27,230 L37,230" stroke="#5C93ED" stroke-width="1" opacity="0.7">
+                                                        <animate attributeName="opacity" values="0.7;0;0.7" dur="0.5s" repeatCount="indefinite" begin="0.3s"/>
+                                                    </path>
+                                                </g>
+                                                <!-- Legend with styled background -->
+                                                <rect x="615" y="15" width="170" height="75" rx="8" fill="white" stroke="#E5E7EB" stroke-width="1" filter="url(#mapShadow)"/>
+                                                <text x="640" y="40" font-family="Inter, sans-serif" font-size="12" fill="#333" font-weight="500">Current Position</text>
+                                                <g transform="translate(630, 37) scale(0.4)">
+                                                    <ellipse cx="0" cy="-5" rx="12" ry="15" fill="url(#eggGradientMap)" stroke="#FFB84D" stroke-width="1.5"/>
+                                                    <circle cx="-5" cy="-8" r="2" fill="#333"/>
+                                                    <circle cx="5" cy="-8" r="2" fill="#333"/>
+                                                    <path d="-3,0 Q0,3 3,0" stroke="#333" stroke-width="1.5" fill="none"/>
+                                                </g>
+                                                <text x="640" y="60" font-family="Inter, sans-serif" font-size="12" fill="#333" font-weight="500">Milestone</text>
+                                                <circle cx="630" cy="57" r="6" fill="#5C93ED"/>
+                                                <text x="640" y="80" font-family="Inter, sans-serif" font-size="12" fill="#333" font-weight="500">Career Goal</text>
+                                                <circle cx="630" cy="77" r="6" fill="url(#goalGlow)"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- After the career plan container, but before the end of planner-content, I'll add a deadlines section -->
+                            <div class="career-deadlines-container" id="careerDeadlinesContainer">
+                                <h3 class="section-title">Career Deadlines</h3>
+                                <div class="deadlines-list">
+                                    <div class="deadline-date-card">
+                                        <div class="date-number">5</div>
+                                        <div class="date-month">Jan, Sunday</div>
+                                    </div>
+                                    <div class="deadline-details">
+                                        <div class="deadline-checkbox">
+                                            <input type="checkbox" id="deadline-1">
+                                            <label for="deadline-1"></label>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-icon art-icon">
+                                                <i class="fas fa-palette"></i>
+                                            </div>
+                                            <div class="deadline-title">UX Design Certification Deadline</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="deadlines-list">
+                                    <div class="deadline-date-card">
+                                        <div class="date-number">31</div>
+                                        <div class="date-month">Jul, Thursday</div>
+                                    </div>
+                                    <div class="deadline-details">
+                                        <div class="deadline-checkbox">
+                                            <input type="checkbox" id="deadline-2">
+                                            <label for="deadline-2"></label>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-icon mountain-icon">
+                                                <i class="fas fa-mountain"></i>
+                                            </div>
+                                            <div class="deadline-title">Frontend Developer Portfolio Completion</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="deadlines-list">
+                                    <div class="deadline-date-card">
+                                        <div class="date-number">14</div>
+                                        <div class="date-month">Aug, Friday</div>
+                                    </div>
+                                    <div class="deadline-details">
+                                        <div class="deadline-checkbox">
+                                            <input type="checkbox" id="deadline-3">
+                                            <label for="deadline-3"></label>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-icon document-icon">
+                                                <i class="fas fa-file-alt"></i>
+                                            </div>
+                                            <div class="deadline-title">Technical Resume Update Draft 1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="deadlines-list">
+                                    <div class="deadline-date-card">
+                                        <div class="date-number">6</div>
+                                        <div class="date-month">Nov, Thursday</div>
+                                    </div>
+                                    <div class="deadline-details">
+                                        <div class="deadline-checkbox">
+                                            <input type="checkbox" id="deadline-4">
+                                            <label for="deadline-4"></label>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-icon document-icon">
+                                                <i class="fas fa-file-alt"></i>
+                                            </div>
+                                            <div class="deadline-title">Technical Resume Update Draft 2</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="deadlines-list">
+                                    <div class="deadline-date-card">
+                                        <div class="date-number">10</div>
+                                        <div class="date-month">Jan, Saturday</div>
+                                    </div>
+                                    <div class="deadline-details">
+                                        <div class="deadline-checkbox">
+                                            <input type="checkbox" id="deadline-5">
+                                            <label for="deadline-5"></label>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-icon document-icon">
+                                                <i class="fas fa-file-alt"></i>
+                                            </div>
+                                            <div class="deadline-title">Technical Resume Update Draft 3</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="deadlines-list">
+                                    <div class="deadline-date-card">
+                                        <div class="date-number">30</div>
+                                        <div class="date-month">Jan, Friday</div>
+                                    </div>
+                                    <div class="deadline-details">
+                                        <div class="deadline-checkbox">
+                                            <input type="checkbox" id="deadline-6">
+                                            <label for="deadline-6"></label>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-icon document-icon">
+                                                <i class="fas fa-file-alt"></i>
+                                            </div>
+                                            <div class="deadline-title">Technical Resume Update Draft 4</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="deadlines-list">
+                                    <div class="deadline-date-card">
+                                        <div class="date-number">1</div>
+                                        <div class="date-month">Feb, Sunday</div>
+                                    </div>
+                                    <div class="deadline-details">
+                                        <div class="deadline-checkbox">
+                                            <input type="checkbox" id="deadline-7">
+                                            <label for="deadline-7"></label>
+                                        </div>
+                                        <div class="deadline-info">
+                                            <div class="deadline-icon document-icon">
+                                                <i class="fas fa-briefcase"></i>
+                                            </div>
+                                            <div class="deadline-title">Job Application Deadline</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Milestone Cards Section -->
+                            <div class="milestone-cards">
+                                <h3>Your Career Milestones</h3>
+                                <div class="milestone-cards-container">
+                                    <div class="milestone-card" id="milestone1Details">
+                                        <div class="milestone-header">
+                                            <div class="milestone-icon">
+                                                <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                                    <defs>
+                                                        <linearGradient id="eggGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                            <stop offset="0%" stop-color="#FFF5DD"/>
+                                                            <stop offset="100%" stop-color="#FFE8A3"/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <!-- Background circle -->
+                                                    <circle cx="30" cy="30" r="28" fill="#EBF2FD"/>
+                                                    <!-- Egg character - confident pose with clipboard -->
+                                                    <g transform="translate(30, 32)">
+                                                        <!-- Egg body -->
+                                                        <ellipse cx="0" cy="0" rx="15" ry="18" fill="url(#eggGradient3)" stroke="#FFB84D" stroke-width="1.5"/>
+                                                        <!-- Eyes with determined expression -->
+                                                        <ellipse cx="-5" cy="-7" rx="2.5" ry="3" fill="#333"/>
+                                                        <ellipse cx="5" cy="-7" rx="2.5" ry="3" fill="#333"/>
+                                                        <path d="-7,-10 Q-5,-12 -3,-10" stroke="#333" stroke-width="1" fill="none"/>
+                                                        <path d="3,-10 Q5,-12 7,-10" stroke="#333" stroke-width="1" fill="none"/>
+                                                        <!-- Confident smile -->
+                                                        <path d="-5,5 Q0,8 5,5" stroke="#333" stroke-width="1.5" fill="none"/>
+                                                        <!-- Small crest -->
+                                                        <path d="0,-18 L-3,-15 L3,-15 Z" fill="#FF5C5C"/>
+                                                        <!-- Clipboard -->
+                                                        <rect x="8" cy="-2" width="10" height="14" rx="1" fill="#FFF" stroke="#5C93ED" stroke-width="1"/>
+                                                        <rect x="10" cy="2" width="6" height="1" fill="#5C93ED"/>
+                                                        <rect x="10" cy="5" width="6" height="1" fill="#5C93ED"/>
+                                                        <rect x="10" cy="8" width="4" height="1" fill="#5C93ED"/>
+                                                        <!-- Arm holding clipboard -->
+                                                        <path d="5,0 Q10,0 12,4" stroke="#FFB84D" stroke-width="2" fill="none"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4>Mid-Level Developer</h4>
+                                                <span class="milestone-timeframe">1-2 years</span>
+                                            </div>
+                                        </div>
+                                        <p>Gain more advanced front-end skills and expand your back-end knowledge.</p>
+                                        <div class="milestone-detail">
+                                            <h5>Key Skills:</h5>
+                                            <ul class="milestone-skills">
+                                                <li>Advanced React</li>
+                                                <li>Node.js</li>
+                                                <li>Database Design</li>
+                                                <li>Testing</li>
+                                            </ul>
+                                        </div>
+                                        <div class="milestone-detail">
+                                            <h5>Recommended Actions:</h5>
+                                            <ul class="milestone-actions">
+                                                <li>Complete at least 3 full-stack projects</li>
+                                                <li>Contribute to open source</li>
+                                                <li>Learn a testing framework like Jest</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="milestone-card" id="milestone2Details">
+                                        <div class="milestone-header">
+                                            <div class="milestone-icon">
+                                                <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                                    <defs>
+                                                        <linearGradient id="eggGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                            <stop offset="0%" stop-color="#FFF5DD"/>
+                                                            <stop offset="100%" stop-color="#FFE8A3"/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <!-- Background circle -->
+                                                    <circle cx="30" cy="30" r="28" fill="#EBF2FD"/>
+                                                    <!-- Egg character - teaching pose -->
+                                                    <g transform="translate(30, 32)">
+                                                        <!-- Egg body -->
+                                                        <ellipse cx="0" cy="0" rx="15" ry="18" fill="url(#eggGradient4)" stroke="#FFB84D" stroke-width="1.5"/>
+                                                        <!-- Eyes with wise expression -->
+                                                        <ellipse cx="-5" cy="-7" rx="2.5" ry="2" fill="#333"/>
+                                                        <ellipse cx="5" cy="-7" rx="2.5" ry="2" fill="#333"/>
+                                                        <!-- Friendly smile -->
+                                                        <path d="-6,5 Q0,9 6,5" stroke="#333" stroke-width="1.5" fill="none"/>
+                                                        <!-- Graduation cap -->
+                                                        <rect x="-10" y="-20" width="20" height="5" rx="1" fill="#334155"/>
+                                                        <path d="0,-15 L12,-18 L12,-13 L0,-10 L-12,-13 L-12,-18 Z" fill="#334155"/>
+                                                        <rect x="-1" y="-20" width="2" height="10" fill="#334155"/>
+                                                        <circle cx="0" cy="-10" r="2" fill="#334155"/>
+                                                        <!-- Arm pointing/teaching -->
+                                                        <path d="10,0 Q15,-5 18,-2" stroke="#FFB84D" stroke-width="2" fill="none"/>
+                                                        <!-- Small notebook -->
+                                                        <rect x="-15" y="0" width="8" height="10" rx="1" fill="#FFF" stroke="#5C93ED" stroke-width="1"/>
+                                                        <path d="-15,3 L-7,3" stroke="#5C93ED" stroke-width="0.5"/>
+                                                        <path d="-15,6 L-7,6" stroke="#5C93ED" stroke-width="0.5"/>
+                                                        <!-- Arm holding notebook -->
+                                                        <path d="-5,2 Q-10,2 -12,3" stroke="#FFB84D" stroke-width="2" fill="none"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4>Senior Developer</h4>
+                                                <span class="milestone-timeframe">3-4 years</span>
+                                            </div>
+                                        </div>
+                                        <p>Develop architectural expertise and leadership skills.</p>
+                                        <div class="milestone-detail">
+                                            <h5>Key Skills:</h5>
+                                            <ul class="milestone-skills">
+                                                <li>System Architecture</li>
+                                                <li>Team Leadership</li>
+                                                <li>Performance Optimization</li>
+                                                <li>CI/CD</li>
+                                            </ul>
+                                        </div>
+                                        <div class="milestone-detail">
+                                            <h5>Recommended Actions:</h5>
+                                            <ul class="milestone-actions">
+                                                <li>Lead a medium-sized project</li>
+                                                <li>Mentor junior developers</li>
+                                                <li>Become proficient in cloud services</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="milestone-card" id="milestone3Details">
+                                        <div class="milestone-header">
+                                            <div class="milestone-icon">
+                                                <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                                                    <defs>
+                                                        <linearGradient id="eggGradient5" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                            <stop offset="0%" stop-color="#FFF5DD"/>
+                                                            <stop offset="100%" stop-color="#FFE8A3"/>
+                                                        </linearGradient>
+                                                        <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                            <stop offset="0%" stop-color="#80D25B" stop-opacity="0.3"/>
+                                                            <stop offset="100%" stop-color="#92E86D" stop-opacity="0.3"/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <!-- Background circle with glow -->
+                                                    <circle cx="30" cy="30" r="28" fill="#EBF2FD"/>
+                                                    <circle cx="30" cy="30" r="25" fill="url(#glowGradient)">
+                                                        <animate attributeName="r" values="23;25;23" dur="3s" repeatCount="indefinite"/>
+                                                    </circle>
+                                                    <!-- Egg character - leadership pose -->
+                                                    <g transform="translate(30, 32)">
+                                                        <!-- Egg body -->
+                                                        <ellipse cx="0" cy="0" rx="15" ry="18" fill="url(#eggGradient5)" stroke="#FFB84D" stroke-width="1.5"/>
+                                                        <!-- Eyes with visionary expression -->
+                                                        <ellipse cx="-5" cy="-7" rx="2.5" ry="3" fill="#333"/>
+                                                        <ellipse cx="5" cy="-7" rx="2.5" ry="3" fill="#333"/>
+                                                        <path d="-7,-10 Q-5,-13 -3,-10" stroke="#333" stroke-width="1" fill="none"/>
+                                                        <path d="3,-10 Q5,-13 7,-10" stroke="#333" stroke-width="1" fill="none"/>
+                                                        <!-- Confident smile -->
+                                                        <path d="-6,5 Q0,8 6,5" stroke="#333" stroke-width="1.5" fill="none"/>
+                                                        <!-- Leadership crown/gear -->
+                                                        <path d="-10,-18 L-5,-13 L0,-18 L5,-13 L10,-18 L8,-12 L-8,-12 Z" fill="#80D25B" stroke="#5A9B41" stroke-width="0.5"/>
+                                                        <circle cx="0" cy="-15" r="2" fill="#FFF"/>
+                                                        <!-- Strategic document/plan -->
+                                                        <rect x="8" y="-5" width="12" height="15" rx="1" fill="#FFF" stroke="#5C93ED" stroke-width="1"/>
+                                                        <path d="10,-2 L18,-2" stroke="#5C93ED" stroke-width="0.5"/>
+                                                        <path d="10,1 L18,1" stroke="#5C93ED" stroke-width="0.5"/>
+                                                        <path d="10,4 L18,4" stroke="#5C93ED" stroke-width="0.5"/>
+                                                        <path d="10,7 L15,7" stroke="#5C93ED" stroke-width="0.5"/>
+                                                        <!-- Arm gesture - leadership -->
+                                                        <path d="-8,-2 Q-13,-7 -15,-3" stroke="#FFB84D" stroke-width="2" fill="none"/>
+                                                        <!-- Arm holding strategic plan -->
+                                                        <path d="5,2 Q8,0 10,2" stroke="#FFB84D" stroke-width="2" fill="none"/>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4>Lead Engineer</h4>
+                                                <span class="milestone-timeframe">5+ years</span>
+                                            </div>
+                                        </div>
+                                        <p>Guide technical direction and mentor other developers.</p>
+                                        <div class="milestone-detail">
+                                            <h5>Key Skills:</h5>
+                                            <ul class="milestone-skills">
+                                                <li>Technical Leadership</li>
+                                                <li>Project Management</li>
+                                                <li>System Design</li>
+                                                <li>Strategic Planning</li>
+                                            </ul>
+                                        </div>
+                                        <div class="milestone-detail">
+                                            <h5>Recommended Actions:</h5>
+                                            <ul class="milestone-actions">
+                                                <li>Define technical roadmaps</li>
+                                                <li>Evaluate emerging technologies</li>
+                                                <li>Drive architectural decisions</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="plan-metrics">
+                                <div class="metrics-card">
+                                    <div class="metric">
+                                        <h4>Estimated Time</h4>
+                                        <div class="metric-value">
+                                            <span id="timeEstimate">5</span>
+                                            <span class="metric-unit">years</span>
+                                        </div>
+                                    </div>
+                                    <div class="metric">
+                                        <h4>Skills Gap</h4>
+                                        <div class="metric-value">
+                                            <span id="skillsGap">12</span>
+                                            <span class="metric-unit">skills</span>
+                                        </div>
+                                    </div>
+                                    <div class="metric">
+                                        <h4>Milestones</h4>
+                                        <div class="metric-value">
+                                            <span>3</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab Content - Resume -->
+                    <div class="tab-content" id="resumeContent">
+                        <div class="content-header">
+                            <h1>Resume Builder</h1>
+                            <button class="btn btn-primary" id="newResumeBtn">
+                            <i class="fas fa-plus"></i>
+                            New Resume
+                            </button>
+                        </div>
+                        <!-- Resume/Cover Letter Toggle Tabs -->
+                        <div class="resume-tabs">
+                            <button class="resume-tab-btn active" id="resumeTabBtn">
+                            <i class="fas fa-file-alt"></i> Resumes
+                            </button>
+                            <button class="resume-tab-btn" id="coverLetterTabBtn">
+                            <i class="fas fa-envelope-open-text"></i> Cover Letters
+                            </button>
+                        </div>
+                        <!-- Resume Content Section -->
+                        <div class="resume-tab-content active" id="resumeTabContent">
+                            <div class="resume-options">
+                                <div class="option-card" id="freeWriteOption">
+                                    <div class="option-icon">
+                                        <i class="fas fa-pen"></i>
+                                    </div>
+                                    <h3>Free Write</h3>
+                                    <p>Create a resume from scratch with our guided editor</p>
+                                </div>
+                                <div class="option-card" id="uploadResumeOption">
+                                    <div class="option-icon">
+                                        <i class="fas fa-file-upload"></i>
+                                    </div>
+                                    <h3>Upload Existing</h3>
+                                    <p>Upload and enhance your existing resume</p>
+                                    <div class="ai-option">
+                                        <input type="checkbox" id="useAI" checked>
+                                        <label for="useAI">Use AI to enhance</label>
+                                    </div>
+                                    <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;">
+                                </div>
+                                <div class="option-card" id="aiGeneratorOption">
+                                    <div class="option-icon">
+                                        <i class="fas fa-magic"></i>
+                                    </div>
+                                    <h3>AI Resume Generator</h3>
+                                    <p>Let our AI create a tailored resume based on your profile</p>
+                                </div>
+                            </div>
+                            <!-- Add template preview container here -->
+                            <div class="template-preview-section">
+                                <h3>Selected Template</h3>
+                                <div id="templatePreviewContainer" class="template-preview-container">
+                                    <div class="no-template-selected">
+                                        <p>No template selected. Please choose a template to preview.</p>
+                                        <button class="btn btn-outline" id="showResumeTemplatesBtn">
+                                        <i class="fas fa-palette"></i> Browse Templates
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Resume Parser Section -->
+                            <div class="resume-parser-section" id="resumeParserSection" style="display: none;">
+                                <div class="parser-header">
+                                    <h2>Resume Parser</h2>
+                                    <p>We're analyzing your resume to extract your experiences</p>
+                                </div>
+                                <div class="parser-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="parserProgressBar"></div>
+                                    </div>
+                                    <p id="parserStatusText">Processing your resume...</p>
+                                </div>
+                                <div class="parsed-resume" id="parsedResumeContainer" style="display: none;">
+                                    <h2>Your Experiences</h2>
+                                    <div id="parsedExperiencesList">
+                                        <!-- Parsed experiences will be added here -->
+                                    </div>
+                                    <div class="parser-actions">
+                                        <button class="btn btn-outline" id="reuploadResumeBtn">
+                                        <i class="fas fa-sync-alt"></i> Reupload Resume
+                                        </button>
+                                        <button class="btn btn-primary" id="editParsedResumeBtn">
+                                        <i class="fas fa-edit"></i> Edit Resume
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Resume Editor Section -->
+                            <div class="resume-editor-section" id="resumeEditorSection" style="display: none;">
+                                <div class="editor-header">
+                                    <h2>Resume Editor</h2>
+                                    <p>Create a professional resume with our guided editor</p>
+                                    <div class="ai-enhancement-option">
+                                        <input type="checkbox" id="enhanceWithAI" checked>
+                                        <label for="enhanceWithAI">Enhance with AI</label>
+                                        <span class="tooltip">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="tooltip-text">Our AI will improve your resume content with better wording and added metrics</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="resume-form">
+                                    <div class="form-section">
+                                        <h3>Personal Information</h3>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="resumeName">Full Name</label>
+                                                <input type="text" id="resumeName" placeholder="e.g. John Doe">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="resumeTitle">Professional Title</label>
+                                                <input type="text" id="resumeTitle" placeholder="e.g. Software Engineer">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="resumeEmail">Email</label>
+                                                <input type="email" id="resumeEmail" placeholder="e.g. john.doe@example.com">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="resumePhone">Phone</label>
+                                                <input type="tel" id="resumePhone" placeholder="e.g. (123) 456-7890">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="resumeLocation">Location</label>
+                                            <input type="text" id="resumeLocation" placeholder="e.g. San Francisco, CA">
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <h3>Professional Summary</h3>
+                                        <div class="form-group">
+                                            <textarea id="resumeSummary" rows="4" placeholder="Write a brief summary of your professional background and key qualifications..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <div class="section-header">
+                                            <h3>Work Experience</h3>
+                                            <button type="button" class="btn btn-sm btn-outline" id="addExperienceBtn">
+                                            <i class="fas fa-plus"></i> Add Experience
+                                            </button>
+                                        </div>
+                                        <div id="experiencesList">
+                                            <!-- Experience items will be added here -->
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <div class="section-header">
+                                            <h3>Education</h3>
+                                            <button type="button" class="btn btn-sm btn-outline" id="addEducationBtn">
+                                            <i class="fas fa-plus"></i> Add Education
+                                            </button>
+                                        </div>
+                                        <div id="educationList">
+                                            <!-- Education items will be added here -->
+                                        </div>
+                                    </div>
+                                    <div class="form-section">
+                                        <div class="section-header">
+                                            <h3>Skills</h3>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="skills-input-container">
+                                                <input type="text" id="skillInput" placeholder="Add a skill and press Enter">
+                                                <button type="button" class="btn btn-sm btn-outline" id="addSkillBtn">
+                                                <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                            <div class="skills-tags" id="skillsList">
+                                                <!-- Skills will be added here as tags -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Add the Generate button between the resume editor and resume list -->
+                            <div class="generate-resume-section">
+                                <button class="btn btn-primary" id="generateTempResumeBtn">
+                                <i class="fas fa-file-download"></i> Generate Resume
+                                </button>
+                                <p class="generate-hint">Save a temporary copy of your resume with current changes</p>
+                            </div>
+                            <div class="resume-list">
+                                <h2>Your Resumes</h2>
+                                <div class="empty-state" id="noResumesState">
+                                    <div class="empty-illustration">
+                                        <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                                            <defs>
+                                                <linearGradient id="resumeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stop-color="#5C93ED" stop-opacity="0.2"/>
+                                                    <stop offset="100%" stop-color="#8AB4F8" stop-opacity="0.2"/>
+                                                </linearGradient>
+                                                <linearGradient id="resumeAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stop-color="#5C93ED"/>
+                                                    <stop offset="100%" stop-color="#8AB4F8"/>
+                                                </linearGradient>
+                                            </defs>
+                                            <!-- Main document -->
+                                            <rect x="35" y="25" width="70" height="90" rx="4" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+                                            <!-- Document header -->
+                                            <rect x="45" y="35" width="50" height="8" rx="4" fill="url(#resumeGradient)"/>
+                                            <rect x="45" y="48" width="30" height="6" rx="3" fill="#F3F4F6"/>
+                                            <!-- Document content lines -->
+                                            <rect x="45" y="60" width="50" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="45" y="67" width="50" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="45" y="74" width="40" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="45" y="84" width="50" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="45" y="91" width="50" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="45" y="98" width="30" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <!-- Document with accent -->
+                                            <rect x="50" y="15" width="55" height="75" rx="4" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+                                            <rect x="50" y="15" width="55" height="12" rx="4" fill="url(#resumeAccent)"/>
+                                            <!-- Profile image placeholder -->
+                                            <circle cx="63" cy="37" r="8" fill="url(#resumeGradient)" stroke="url(#resumeAccent)" stroke-width="1.5"/>
+                                            <!-- Content lines -->
+                                            <rect x="60" y="52" width="35" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="60" y="59" width="35" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="60" y="66" width="25" height="3" rx="1.5" fill="#F3F4F6"/>
+                                            <rect x="60" y="77" width="35" height="3" rx="1.5" fill="#F3F4F6"/>
+                                        </svg>
+                                    </div>
+                                    <p>You haven't created any resumes yet</p>
+                                    <button class="btn btn-outline" id="createResumeBtn">Create Resume</button>
+                                </div>
+                                <div id="resumesList" style="display: none;">
+                                    <!-- Resume items will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Cover Letter Content Section -->
+                        <div class="resume-tab-content" id="coverLetterTabContent" style="display: none;">
+                            <div class="resume-options">
+                                <div class="option-card" id="freeWriteCoverOption">
+                                    <div class="option-icon">
+                                        <i class="fas fa-pen"></i>
+                                    </div>
+                                    <h3>Write From Scratch</h3>
+                                    <p>Create a tailored cover letter with our guided editor</p>
+                                </div>
+                                <div class="option-card" id="uploadCoverLetterOption">
+                                    <div class="option-icon">
+                                        <i class="fas fa-file-upload"></i>
+                                    </div>
+                                    <h3>Upload Existing</h3>
+                                    <p>Upload and enhance your existing cover letter</p>
+                                    <input type="file" id="coverLetterFileInput" accept=".pdf,.doc,.docx" style="display: none;">
+                                </div>
+                                <div class="option-card" id="aiCoverLetterOption">
+                                    <div class="option-icon">
+                                        <i class="fas fa-magic"></i>
+                                    </div>
+                                    <h3>AI Cover Letter</h3>
+                                    <p>Let our AI create a customized cover letter for any job</p>
+                                </div>
+                            </div>
+                            <!-- Add template preview container for cover letters -->
+                            <div class="template-preview-section">
+                                <h3>Selected Template</h3>
+                                <div id="coverTemplatePreviewContainer" class="template-preview-container">
+                                    <div class="no-template-selected">
+                                        <p>No template selected. Please choose a template to preview.</p>
+                                        <button class="btn btn-outline" id="showCoverTemplatesBtn">
+                                        <i class="fas fa-palette"></i> Browse Templates
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cover-letter-list">
+                                <h2>Your Cover Letters</h2>
+                                <div class="empty-state" id="noCoverLettersState">
+                                    <!-- Empty state content for cover letters -->
+                                    <div class="empty-illustration">
+                                        <!-- Similar SVG illustration for cover letters -->
+                                    </div>
+                                    <p>You haven't created any cover letters yet</p>
+                                    <button class="btn btn-primary" id="createCoverLetterBtn">Create Cover Letter</button>
+                                </div>
+                                <div id="coverLettersList" class="resume-items"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add template selector modal -->
+                    <div id="templateSelectorModal" class="modal template-selector-modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Select Template</h2>
+                                <button class="close-btn" id="closeTemplateSelector">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="resumeTemplatesContainer" class="templates-grid"></div>
+                                <div id="coverTemplatesContainer" class="templates-grid" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab Content - Jobs -->
+                    <div class="tab-content" id="jobsContent">
+                        <div class="content-header">
+                            <h1>Find the right jobs for you</h1>
+                            <div class="search-container">
+                                <input type="text" placeholder="Search for jobs and companies">
+                                <button class="search-btn">
+                                <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="job-filters">
+                            <div class="filter-section">
+                                <h3>Filters</h3>
+                                <button class="btn btn-text">Clear All</button>
+                            </div>
+                            <div class="filter-options">
+                                <div class="filter-group">
+                                    <label>Location</label>
+                                    <select>
+                                        <option value="">Select Location</option>
+                                        <option value="remote">Remote</option>
+                                        <option value="onsite">On-site</option>
+                                        <option value="hybrid">Hybrid</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Salary Range</label>
+                                    <input type="range" min="0" max="200000" value="100000" class="salary-range">
+                                    <span class="range-value">$100,000</span>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Job Type</label>
+                                    <select>
+                                        <option value="">All Types</option>
+                                        <option value="fulltime">Full-time</option>
+                                        <option value="parttime">Part-time</option>
+                                        <option value="contract">Contract</option>
+                                        <option value="internship">Internship</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Experience Level</label>
+                                    <select>
+                                        <option value="">All Levels</option>
+                                        <option value="entry">Entry Level</option>
+                                        <option value="mid">Mid Level</option>
+                                        <option value="senior">Senior Level</option>
+                                        <option value="executive">Executive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="job-listings">
+                            <div class="job-card">
+                                <div class="company-logo">
+                                    <img src="src/assets/images/company-logo1.svg" alt="Company Logo">
+                                </div>
+                                <div class="job-details">
+                                    <h3>UX Designer</h3>
+                                    <p class="company-name">Creative Design Co.</p>
+                                    <div class="job-meta">
+                                        <span class="location"><i class="fas fa-map-marker-alt"></i> San Francisco, CA</span>
+                                        <span class="salary"><i class="fas fa-money-bill-wave"></i> $85,000 - $110,000</span>
+                                    </div>
+                                    <div class="job-description">
+                                        <p>Looking for a talented UX designer to create innovative user experiences...</p>
+                                    </div>
+                                    <div class="job-tags">
+                                        <span class="tag">UX Design</span>
+                                        <span class="tag">Figma</span>
+                                        <span class="tag">User Research</span>
+                                    </div>
+                                </div>
+                                <div class="job-actions">
+                                    <div class="match-percentage">
+                                        <div class="match-circle">85%</div>
+                                        <span>Match</span>
+                                    </div>
+                                    <button class="btn btn-outline btn-shortlist">
+                                    <i class="far fa-heart"></i>
+                                    </button>
+                                    <button class="btn btn-primary">Apply</button>
+                                </div>
+                            </div>
+                            <div class="job-card">
+                                <div class="company-logo">
+                                    <img src="src/assets/images/company-logo2.svg" alt="Company Logo">
+                                </div>
+                                <div class="job-details">
+                                    <h3>Frontend Developer</h3>
+                                    <p class="company-name">Tech Innovations Inc.</p>
+                                    <div class="job-meta">
+                                        <span class="location"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                                        <span class="salary"><i class="fas fa-money-bill-wave"></i> $90,000 - $120,000</span>
+                                    </div>
+                                    <div class="job-description">
+                                        <p>Seeking a skilled frontend developer to build responsive web applications...</p>
+                                    </div>
+                                    <div class="job-tags">
+                                        <span class="tag">React</span>
+                                        <span class="tag">JavaScript</span>
+                                        <span class="tag">CSS</span>
+                                    </div>
+                                </div>
+                                <div class="job-actions">
+                                    <div class="match-percentage">
+                                        <div class="match-circle">92%</div>
+                                        <span>Match</span>
+                                    </div>
+                                    <button class="btn btn-outline btn-shortlist">
+                                    <i class="far fa-heart"></i>
+                                    </button>
+                                    <button class="btn btn-primary">Apply</button>
+                                </div>
+                            </div>
+                            <div class="job-card">
+                                <div class="company-logo">
+                                    <img src="src/assets/images/company-logo3.svg" alt="Company Logo">
+                                </div>
+                                <div class="job-details">
+                                    <h3>Product Manager</h3>
+                                    <p class="company-name">Startup Growth Ltd.</p>
+                                    <div class="job-meta">
+                                        <span class="location"><i class="fas fa-map-marker-alt"></i> New York, NY</span>
+                                        <span class="salary"><i class="fas fa-money-bill-wave"></i> $110,000 - $140,000</span>
+                                    </div>
+                                    <div class="job-description">
+                                        <p>Join our team as a product manager to lead product development initiatives...</p>
+                                    </div>
+                                    <div class="job-tags">
+                                        <span class="tag">Product Strategy</span>
+                                        <span class="tag">Agile</span>
+                                        <span class="tag">Roadmapping</span>
+                                    </div>
+                                </div>
+                                <div class="job-actions">
+                                    <div class="match-percentage">
+                                        <div class="match-circle">78%</div>
+                                        <span>Match</span>
+                                    </div>
+                                    <button class="btn btn-outline btn-shortlist">
+                                    <i class="far fa-heart"></i>
+                                    </button>
+                                    <button class="btn btn-primary">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab Content - Buddies -->
+                    <div class="tab-content" id="buddiesContent">
+                        <div class="content-header">
+                            <h1>Find Accountability Partners</h1>
+                            <button class="btn btn-primary" id="matchMeBtn">
+                            <i class="fas fa-users"></i>
+                            Match Me
+                            </button>
+                        </div>
+                        <div class="buddies-content">
+                            <div class="buddies-filters">
+                                <div class="filter-options">
+                                    <div class="filter-group">
+                                        <label>Industry</label>
+                                        <select>
+                                            <option value="">All Industries</option>
+                                            <option value="tech">Technology</option>
+                                            <option value="design">Design</option>
+                                            <option value="marketing">Marketing</option>
+                                            <option value="finance">Finance</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-group">
+                                        <label>Experience Level</label>
+                                        <select>
+                                            <option value="">All Levels</option>
+                                            <option value="student">Student</option>
+                                            <option value="entry">Entry Level</option>
+                                            <option value="mid">Mid Level</option>
+                                            <option value="senior">Senior Level</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-group">
+                                        <label>Meeting Frequency</label>
+                                        <select>
+                                            <option value="">Any Frequency</option>
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="biweekly">Bi-weekly</option>
+                                            <option value="monthly">Monthly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buddy-types">
+                                <div class="type-tabs">
+                                    <button class="type-tab active">Peers</button>
+                                    <button class="type-tab">Mentors</button>
+                                    <button class="type-tab">My Connections</button>
+                                </div>
+                            </div>
+                            <div class="buddy-cards">
+                                <div class="buddy-card">
+                                    <div class="buddy-header">
+                                        <div class="buddy-avatar">
+                                            <img src="src/assets/images/avatar-1.svg" alt="Buddy Avatar">
+                                        </div>
+                                        <div class="buddy-info">
+                                            <h3>Sarah Johnson</h3>
+                                            <p>UX Designer at Creative Studios</p>
+                                            <div class="match-badge">92% Match</div>
+                                        </div>
+                                    </div>
+                                    <div class="buddy-details">
+                                        <div class="detail-item">
+                                            <i class="fas fa-briefcase"></i>
+                                            <span>3 years experience</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>San Francisco, CA (Remote)</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-calendar-check"></i>
+                                            <span>Available for weekly check-ins</span>
+                                        </div>
+                                    </div>
+                                    <div class="buddy-interests">
+                                        <span class="interest-tag">UI/UX</span>
+                                        <span class="interest-tag">Product Design</span>
+                                        <span class="interest-tag">Career Growth</span>
+                                    </div>
+                                    <div class="buddy-actions">
+                                        <button class="btn btn-outline">View Profile</button>
+                                        <button class="btn btn-primary">Connect</button>
+                                    </div>
+                                </div>
+                                <div class="buddy-card">
+                                    <div class="buddy-header">
+                                        <div class="buddy-avatar">
+                                            <img src="src/assets/images/avatar-2.svg" alt="Buddy Avatar">
+                                        </div>
+                                        <div class="buddy-info">
+                                            <h3>Michael Chen</h3>
+                                            <p>Frontend Developer at Tech Solutions</p>
+                                            <div class="match-badge">85% Match</div>
+                                        </div>
+                                    </div>
+                                    <div class="buddy-details">
+                                        <div class="detail-item">
+                                            <i class="fas fa-briefcase"></i>
+                                            <span>2 years experience</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Boston, MA (Remote)</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-calendar-check"></i>
+                                            <span>Available for bi-weekly check-ins</span>
+                                        </div>
+                                    </div>
+                                    <div class="buddy-interests">
+                                        <span class="interest-tag">JavaScript</span>
+                                        <span class="interest-tag">React</span>
+                                        <span class="interest-tag">Interview Prep</span>
+                                    </div>
+                                    <div class="buddy-actions">
+                                        <button class="btn btn-outline">View Profile</button>
+                                        <button class="btn btn-primary">Connect</button>
+                                    </div>
+                                </div>
+                                <div class="buddy-card">
+                                    <div class="buddy-header">
+                                        <div class="buddy-avatar">
+                                            <img src="src/assets/images/avatar-3.svg" alt="Buddy Avatar">
+                                        </div>
+                                        <div class="buddy-info">
+                                            <h3>Jessica Taylor</h3>
+                                            <p>Marketing Specialist at Brand Inc.</p>
+                                            <div class="match-badge">78% Match</div>
+                                        </div>
+                                    </div>
+                                    <div class="buddy-details">
+                                        <div class="detail-item">
+                                            <i class="fas fa-briefcase"></i>
+                                            <span>4 years experience</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Chicago, IL</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <i class="fas fa-calendar-check"></i>
+                                            <span>Available for weekly check-ins</span>
+                                        </div>
+                                    </div>
+                                    <div class="buddy-interests">
+                                        <span class="interest-tag">Digital Marketing</span>
+                                        <span class="interest-tag">Content Strategy</span>
+                                        <span class="interest-tag">Resume Building</span>
+                                    </div>
+                                    <div class="buddy-actions">
+                                        <button class="btn btn-outline">View Profile</button>
+                                        <button class="btn btn-primary">Connect</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Scripts -->
+        <script src="src/js/app.js"></script>
+        <script src="src/js/statusChart.js"></script>
+        <script src="src/js/resume_handler.js"></script>
+        <script src="src/js/careerPlanner.js"></script>
+        <script src="src/js/careerTracker.js"></script>
+        <script src="src/js/homeDashboard.js"></script>
+        <script src="src/js/buddyMatch.js"></script>
+        <!-- Buddy Match Modal -->
+        <div id="buddyMatchModal" class="modal">
+            <div class="modal-content buddy-match-modal">
+                <div class="modal-header">
+                    <h2>Find Your Accountability Buddy</h2>
+                    <button class="close-btn" id="closeBuddyMatchBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="buddy-carousel-container">
+                        <div class="buddy-card-stack">
+                            <!-- Cards will be stacked here -->
+                            <div class="buddy-match-card active" data-index="0">
+                                <div class="buddy-header-bg primary-gradient">
+                                    <img src="src/assets/images/buddy-bg.jpg" alt="Buddy System Background" class="buddy-bg-image">
+                                    <div class="buddy-avatar-container">
+                                        <div class="buddy-avatar-circle">
+                                            <img src="src/assets/images/avatar-1.svg" alt="Alex Chen">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buddy-match-content">
+                                    <div class="buddy-match-info">
+                                        <h2>Alex Chen</h2>
+                                        <div class="buddy-match-title">UX Designer</div>
+                                        <div class="buddy-match-percentage">98% Match</div>
+                                    </div>
+                                    <p class="buddy-match-bio">Creative designer transitioning from graphic design to UX/UI. Looking for accountability in job applications and portfolio reviews.</p>
+                                    <div class="buddy-match-details">
+                                        <div class="buddy-match-section">
+                                            <h3>Skills & Expertise</h3>
+                                            <div class="buddy-match-tags">
+                                                <span class="buddy-tag">UI/UX</span>
+                                                <span class="buddy-tag">Product Design</span>
+                                                <span class="buddy-tag">User Research</span>
+                                            </div>
+                                        </div>
+                                        <div class="buddy-match-section">
+                                            <h3>Career Goal</h3>
+                                            <p>Land a mid-level UX position at a tech company</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buddy-match-card" data-index="1">
+                                <div class="buddy-header-bg primary-gradient">
+                                    <img src="src/assets/images/buddy-bg.jpg" alt="Buddy System Background" class="buddy-bg-image">
+                                    <div class="buddy-avatar-container">
+                                        <div class="buddy-avatar-circle">
+                                            <img src="src/assets/images/avatar-2.svg" alt="Sarah Wilson">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buddy-match-content">
+                                    <div class="buddy-match-info">
+                                        <h2>Sarah Wilson</h2>
+                                        <div class="buddy-match-title">Marketing Specialist</div>
+                                        <div class="buddy-match-percentage">87% Match</div>
+                                    </div>
+                                    <p class="buddy-match-bio">Digital marketer with 2 years experience. Seeking to improve networking and interview skills while searching for my next role.</p>
+                                    <div class="buddy-match-details">
+                                        <div class="buddy-match-section">
+                                            <h3>Skills & Expertise</h3>
+                                            <div class="buddy-match-tags">
+                                                <span class="buddy-tag">Content Marketing</span>
+                                                <span class="buddy-tag">Social Media</span>
+                                                <span class="buddy-tag">SEO</span>
+                                            </div>
+                                        </div>
+                                        <div class="buddy-match-section">
+                                            <h3>Career Goal</h3>
+                                            <p>Find a remote marketing position with growth potential</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buddy-match-card" data-index="2">
+                                <div class="buddy-header-bg primary-gradient">
+                                    <img src="src/assets/images/buddy-bg.jpg" alt="Buddy System Background" class="buddy-bg-image">
+                                    <div class="buddy-avatar-container">
+                                        <div class="buddy-avatar-circle">
+                                            <img src="src/assets/images/avatar-3.svg" alt="Michael Brown">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="buddy-match-content">
+                                    <div class="buddy-match-info">
+                                        <h2>Michael Brown</h2>
+                                        <div class="buddy-match-title">Software Engineer</div>
+                                        <div class="buddy-match-percentage">92% Match</div>
+                                    </div>
+                                    <p class="buddy-match-bio">Recently graduated bootcamp developer looking for peers to practice technical interviews and code challenges.</p>
+                                    <div class="buddy-match-details">
+                                        <div class="buddy-match-section">
+                                            <h3>Skills & Expertise</h3>
+                                            <div class="buddy-match-tags">
+                                                <span class="buddy-tag">JavaScript</span>
+                                                <span class="buddy-tag">React</span>
+                                                <span class="buddy-tag">Node.js</span>
+                                            </div>
+                                        </div>
+                                        <div class="buddy-match-section">
+                                            <h3>Career Goal</h3>
+                                            <p>Get hired as a junior developer within 2 months</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buddy-match-actions">
+                            <button class="buddy-action-btn reject-btn" id="rejectBuddyBtn">
+                            <i class="fas fa-times"></i>
+                            </button>
+                            <button class="buddy-action-btn accept-btn" id="acceptBuddyBtn">
+                            <i class="fas fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
